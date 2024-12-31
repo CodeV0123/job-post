@@ -1,8 +1,10 @@
+import React from "react";
+import CreateJob from "./components/CreateJob";
 function App() {
   return (
-    <>
-      <h1 className="text-center">Create Job component will go here!</h1>
-    </>
+    <React.Fragment>
+      <CreateJob />
+    </React.Fragment>
   );
 }
 
