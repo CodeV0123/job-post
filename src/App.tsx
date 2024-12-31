@@ -1,7 +1,7 @@
 function App() {
   return (
     <>
-      <h1 className="text-center bg-slate-200">Hello Job Create!</h1>
+      <h1 className="text-center">Create Job component will go here!</h1>
     </>
   );
 }
