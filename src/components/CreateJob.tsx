@@ -10,6 +10,7 @@ const CreateJobPost: React.FC = () => {
   );
 
   const [file, setFile] = useState<File | null>(null);
+  const [message, setMessage] = useState<string | null>(null);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
@@ -20,7 +21,10 @@ const CreateJobPost: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!file) {
-      alert("Please select file to upload");
+      setTimeout(() => {
+        setMessage(null);
+      }, 3000);
+      setMessage("Please select file to upload");
       return;
     }
     const formData = new FormData();
@@ -72,19 +76,119 @@ const CreateJobPost: React.FC = () => {
             Reset
           </button>
         </div>
+        <p className="mt-2 text-sm text-red-800">{message}</p>
       </form>
 
       {status === "succeeded" && job && (
-        <div className="mt-6 p-4 bg-green-50 border border-green-200 rounded">
-          <h2 className="text-lg font-medium text-green-700">
-            Job Post Created Successfully!
-          </h2>
-          <pre className="mt-4 text-sm text-gray-800 overflow-auto bg-gray-100 p-4 rounded">
-            {JSON.stringify(job, null, 2)}
-          </pre>
+        <div className="mt-6 p-4 bg-gray-50 border border-gray-200 rounded">
+          <h2 className="text-lg font-medium text-blue-700">{job.headline}</h2>
+          <p className="mt-2 text-gray-700">{job.introduction}</p>
+
+          <h3 className="mt-4 text-md font-semibold text-gray-800">
+            Introduction of the Job:
+          </h3>
+          <p>{job.introductionOfJob}</p>
+
+          <h3 className="mt-4 text-md font-semibold text-gray-800">
+            Personal Address:
+          </h3>
+          <p>{job.personalAddress}</p>
+
+          <h3 className="mt-4 text-md font-semibold text-gray-800">Tasks:</h3>
+          <ul className="list-disc pl-6">
+            {job.tasks.map(
+              (task, index) => (
+                console.log(task), (<li key={index}>{task}</li>)
+              )
+            )}
+          </ul>
+
+          <h3 className="mt-4 text-md font-semibold text-gray-800">
+            Qualifications:
+          </h3>
+          <ul className="list-disc pl-6">
+            {job.qualifications.map(
+              (qualification, index) => (
+                console.log(qualification),
+                (<li key={index}>{qualification}</li>)
+              )
+            )}
+          </ul>
+
+          <h3 className="mt-4 text-md font-semibold text-gray-800">
+            Benefits:
+          </h3>
+          <ul className="list-disc pl-6">
+            {job.benefits.map(
+              (benefit, index) => (
+                console.log(benefit), (<li key={index}>{benefit}</li>)
+              )
+            )}
+          </ul>
+
+          <h3 className="mt-4 text-md font-semibold text-gray-800">
+            Call to Action:
+          </h3>
+          <p>{job.callToAction}</p>
+
+          <h3 className="mt-4 text-md font-semibold text-gray-800">
+            Voice Details:
+          </h3>
+          <p>
+            <strong>Script:</strong> {job.voiceScript}
+          </p>
+          <p>
+            <strong>Tone:</strong> {job.voiceTone}
+          </p>
+          <p>
+            <strong>Call To Action:</strong> {job.voiceCTA}
+          </p>
+          <p>
+            <strong>Location:</strong> {job.voiceLocation}
+          </p>
+          <p>
+            <strong>Benefits:</strong> {job.voiceBenefits}
+          </p>
+
+          <h3 className="mt-4 text-md font-semibold text-gray-800">
+            Contact Details:
+          </h3>
+          <p>
+            <strong>Email:</strong> {job.contactDetails.email}
+          </p>
+          <p>
+            <strong>Phone:</strong> {job.contactDetails.phone}
+          </p>
+          <p>
+            <strong>Address:</strong> {job.contactDetails.address}
+          </p>
+          <p>
+            <strong>Website:</strong> {job.contactDetails.website}
+          </p>
+
+          <h3 className="mt-4 text-md font-semibold text-gray-800">
+            Image Details:
+          </h3>
+          <p>
+            <strong>Keywords:</strong> {job.imageKeyword}
+          </p>
+          <p>
+            <strong>Headline:</strong> {job.imageHeadline}
+          </p>
+          <h4 className="mt-2 font-semibold text-gray-700">Taglines:</h4>
+          <ul className="list-disc pl-6">
+            {job.taglines.map((tagline, index) => (
+              <li key={index}>{tagline}</li>
+            ))}
+          </ul>
+          <h4 className="mt-2 font-semibold text-gray-700">Body Copy:</h4>
+          <ul className="list-disc pl-6">
+            {job.bodyCopy.map((copy, index) => (
+              <li key={index}>{copy}</li>
+            ))}
+          </ul>
         </div>
       )}
-
       {status === "failed" && error && (
         <div className="mt-6 p-4 bg-red-50 border border-red-200 rounded">
           <h2 className="text-lg font-medium text-red-700">Error</h2>
@@ -94,4 +198,5 @@ const CreateJobPost: React.FC = () => {
     </div>
   );
 };
+
 export default CreateJobPost;
