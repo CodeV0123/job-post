@@ -172,9 +172,6 @@ const CreateJobPost: React.FC = () => {
           <p>
             <strong>Keywords:</strong> {job.imageKeyword}
           </p>
-          <p>
-            <strong>Headline:</strong> {job.imageHeadline}
-          </p>
           <h4 className="mt-2 font-semibold text-gray-700">Taglines:</h4>
           <ul className="list-disc pl-6">
             {job.taglines.map((tagline, index) => (

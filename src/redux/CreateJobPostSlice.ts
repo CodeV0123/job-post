@@ -45,7 +45,6 @@ interface Job {
     website: string;
   };
   imageKeyword: string;
-  imageHeadline: string;
   taglines: string[];
   bodyCopy: string[];
 }
@@ -110,7 +109,6 @@ const createJobPostSlice = createSlice({
             website: "No website provided",
           },
           imageKeyword: image.image_keyword || "No image keyword provided",
-          imageHeadline: image.image_headline || "No image headline provided",
           taglines: image.taglines || [],
           bodyCopy: image.body_copy || [],
         };
