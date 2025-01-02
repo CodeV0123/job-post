@@ -85,15 +85,18 @@ const createJobPostSlice = createSlice({
             "No job introduction available",
           personalAddress:
             jobPost["Personal Address"] || "No personal address provided",
-          tasks: (
-            jobPost.Tasks?.split("\n▶").map((task: string) => task.trim()) || []
+
+          tasks: (typeof jobPost.Tasks === "string"
+            ? jobPost.Tasks.split("\n▶").map((task: string) => task.trim())
+            : []
           ).filter(Boolean),
-          qualifications: (
-            jobPost.Qualifications?.split("\n▶").map((q: string) => q.trim()) ||
-            []
+          qualifications: (typeof jobPost.Qualifications === "string"
+            ? jobPost.Qualifications.split("\n▶").map((q: string) => q.trim())
+            : []
           ).filter(Boolean),
-          benefits: (
-            jobPost.Benefits?.split("\n▶").map((b: string) => b.trim()) || []
+          benefits: (typeof jobPost.Benefits === "string"
+            ? jobPost.Benefits.split("\n▶").map((b: string) => b.trim())
+            : []
           ).filter(Boolean),
           callToAction:
             jobPost["Call to Action"] || "No call to action provided",
