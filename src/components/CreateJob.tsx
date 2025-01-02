@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../redux/store/store";
 import { createJobPost, resetState } from "../redux/slice/CreateJobPostSlice";
+import ChatStream from "./ChatStream";
 
 const CreateJobPost: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -185,6 +186,7 @@ const CreateJobPost: React.FC = () => {
           <p className="mt-2 text-sm text-red-800">{error}</p>
         </div>
       )}
+      <ChatStream />
     </div>
   );
 };
