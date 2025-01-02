@@ -96,34 +96,27 @@ const CreateJobPost: React.FC = () => {
 
           <h3 className="mt-4 text-md font-semibold text-gray-800">Tasks:</h3>
           <ul className="list-disc pl-6">
-            {job.tasks.map(
-              (task, index) => (
-                console.log(task), (<li key={index}>{task}</li>)
-              )
-            )}
+            {job.tasks.map((task, index) => (
+              <li key={index}>{task}</li>
+            ))}
           </ul>
 
           <h3 className="mt-4 text-md font-semibold text-gray-800">
             Qualifications:
           </h3>
           <ul className="list-disc pl-6">
-            {job.qualifications.map(
-              (qualification, index) => (
-                console.log(qualification),
-                (<li key={index}>{qualification}</li>)
-              )
-            )}
+            {job.qualifications.map((qualification, index) => (
+              <li key={index}>{qualification}</li>
+            ))}
           </ul>
 
           <h3 className="mt-4 text-md font-semibold text-gray-800">
             Benefits:
           </h3>
           <ul className="list-disc pl-6">
-            {job.benefits.map(
-              (benefit, index) => (
-                console.log(benefit), (<li key={index}>{benefit}</li>)
-              )
-            )}
+            {job.benefits.map((benefit, index) => (
+              <li key={index}>{benefit}</li>
+            ))}
           </ul>
 
           <h3 className="mt-4 text-md font-semibold text-gray-800">
