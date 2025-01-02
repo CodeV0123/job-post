@@ -1,9 +1,11 @@
 import { configureStore } from "@reduxjs/toolkit";
 import createJobPostReducer from "../slice/CreateJobPostSlice";
+import chatStreamReducer from "../slice/CreateStreamSlice";
 
 export const store = configureStore({
   reducer: {
     createJobPost: createJobPostReducer,
+    chatStream: chatStreamReducer,
   },
 });
 
