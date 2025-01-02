@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../redux/store/store";
-import { createJobPost, resetState } from "../redux/CreateJobPostSlice";
+import { createJobPost, resetState } from "../redux/slice/CreateJobPostSlice";
 
 const CreateJobPost: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
