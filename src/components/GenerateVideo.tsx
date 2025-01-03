@@ -8,7 +8,6 @@ import {
 
 // Utility function to generate a random product ID
 const generateRandomId = () => Math.floor(Math.random() * 100).toString();
-console.log(generateRandomId());
 
 const GenerateVideo: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
