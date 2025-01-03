@@ -14,11 +14,13 @@ const ChatStream: React.FC = () => {
   const { job } = useSelector((state: RootState) => state.createJobPost);
 
   const [prompt, setPrompt] = useState("");
+  const [message, setMessage] = useState("");
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!job) {
-      alert("Please create a job post first!");
+      setTimeout(() => setMessage(""), 3000);
+      setMessage("Please create a job post first!");
       return;
     }
     dispatch(fetchChatStream({ prompt, job_description: job }));
@@ -65,6 +67,7 @@ const ChatStream: React.FC = () => {
             Reset
           </button>
         </div>
+        <p className="text-sm text-red-800">{message}</p>
       </form>
 
       {status === "succeeded" && chatResponse && (
