@@ -5,12 +5,18 @@ const API_URL = "https://image-job.assemblr.ai/chat-stream/";
 
 export const fetchChatStream = createAsyncThunk(
   "chatStream/fetch",
-  async (payload: { job_description: object; prompt: string }) => {
+  async ({
+    prompt,
+    job_description,
+  }: {
+    prompt: string;
+    job_description: object;
+  }) => {
     try {
       const response = await axios.get(API_URL, {
         params: {
-          job_description: JSON.stringify(payload.job_description), // Correctly stringify the JSON object
-          prompt: payload.prompt,
+          prompt,
+          job_description: JSON.stringify(job_description), // Provide an empty object as a placeholder
         },
       });
       return response.data;
@@ -27,12 +33,14 @@ interface ChatStreamState {
   chatResponse: string | null;
   status: "idle" | "loading" | "succeeded" | "failed";
   error: string | null;
+  prompt: string;
 }
 
 const initialState: ChatStreamState = {
   chatResponse: null,
   status: "idle",
   error: null,
+  prompt: "",
 };
 
 const chatStreamSlice = createSlice({
@@ -43,6 +51,10 @@ const chatStreamSlice = createSlice({
       state.chatResponse = null;
       state.status = "idle";
       state.error = null;
+      state.prompt = "";
+    },
+    setPrompt: (state, action) => {
+      state.prompt = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -61,6 +73,6 @@ const chatStreamSlice = createSlice({
   },
 });
 
-export const { resetChatState } = chatStreamSlice.actions;
+export const { resetChatState, setPrompt } = chatStreamSlice.actions;
 
 export default chatStreamSlice.reducer;
