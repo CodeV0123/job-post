@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../redux/store/store";
 import { createJobPost, resetState } from "../redux/slice/CreateJobPostSlice";
 import ChatStream from "./ChatStream";
+import GenerateVideo from "./GenerateVideo";
 
 const CreateJobPost: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -187,6 +188,7 @@ const CreateJobPost: React.FC = () => {
         </div>
       )}
       <ChatStream />
+      <GenerateVideo />
     </div>
   );
 };
