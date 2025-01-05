@@ -11,33 +11,23 @@ const ChatStream: React.FC = () => {
   const { chatResponse, status, error } = useSelector(
     (state: RootState) => state.chatStream
   );
-  const [jobDescription, setJobDescription] = useState("");
+  const { job } = useSelector((state: RootState) => state.createJobPost);
+
   const [prompt, setPrompt] = useState("");
   const [message, setMessage] = useState("");
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-
-    try {
-      const parsedJobDescription = JSON.parse(jobDescription);
-      if (!parsedJobDescription || !prompt.trim()) {
-        setTimeout(() => setMessage(""), 3000);
-        setMessage("Job Description and Prompt are required.");
-        return;
-      }
-      dispatch(
-        fetchChatStream({ job_description: parsedJobDescription, prompt })
-      );
-    } catch (error) {
-      console.log("Invalid JSON format:", error);
+    if (!job) {
       setTimeout(() => setMessage(""), 3000);
-      setMessage("Invalid JSON format in Job Description!");
+      setMessage("Please create a job post first!");
+      return;
     }
+    dispatch(fetchChatStream({ prompt, job_description: job }));
   };
 
   const handleReset = () => {
     dispatch(resetChatState());
-    setJobDescription("");
     setPrompt("");
   };
 
@@ -45,22 +35,6 @@ const ChatStream: React.FC = () => {
     <div className="max-w-3xl mx-auto mt-10 p-6 bg-white shadow-md rounded-md">
       <h1 className="text-2xl font-semibold text-gray-700 mb-6">Chat Stream</h1>
       <form onSubmit={handleSubmit} className="space-y-6">
-        <div>
-          <label
-            htmlFor="jobDescription"
-            className="block text-gray-700 font-medium mb-2"
-          >
-            Job Description:
-          </label>
-          <textarea
-            id="jobDescription"
-            value={jobDescription}
-            onChange={(e) => setJobDescription(e.target.value)}
-            placeholder="Enter any property from CreateJob"
-            className="w-full p-2 border rounded"
-            rows={4}
-          />
-        </div>
         <div>
           <label
             htmlFor="prompt"
@@ -93,7 +67,7 @@ const ChatStream: React.FC = () => {
             Reset
           </button>
         </div>
-        <p className="mt-2 text-sm text-red-800">{message}</p>
+        <p className="text-sm text-red-800">{message}</p>
       </form>
 
       {status === "succeeded" && chatResponse && (

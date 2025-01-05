@@ -6,16 +6,18 @@ import {
   resetVideoState,
 } from "../redux/slice/GenerateVideoSlice";
 
+// Utility function to generate a random product ID
+const generateRandomId = () => Math.floor(Math.random() * 100).toString();
+
 const GenerateVideo: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
   const { videoResponse, status, error } = useSelector(
     (state: RootState) => state.generateVideo
   );
+  const { job } = useSelector((state: RootState) => state.createJobPost);
 
   const [templatePath, setTemplatePath] = useState<File | null>(null);
-  const [productId, setProductId] = useState("");
-  const [imageKeyword, setImageKeyword] = useState("");
-  const [script, setScript] = useState("");
+  const [message, setMessage] = useState<string | null>(null);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
@@ -26,33 +28,27 @@ const GenerateVideo: React.FC = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (
-      !templatePath ||
-      !productId.trim() ||
-      !imageKeyword.trim() ||
-      !script.trim()
-    ) {
-      alert("All fields are required");
+    if (!templatePath || !job) {
+      setTimeout(() => setMessage(null), 3000);
+      setMessage("File and job details are required");
       return;
     }
 
-    dispatch(
-      generateVideo({
-        template_path: templatePath,
-        product_id: productId,
-        image_keyword: imageKeyword,
-        script,
-      })
-    );
+    const payload = {
+      template_path: templatePath,
+      product_id: generateRandomId(),
+      image_keyword: job.imageKeyword,
+      script: job.voiceScript,
+    };
+
+    dispatch(generateVideo(payload));
   };
 
   const handleReset = () => {
     dispatch(resetVideoState());
     setTemplatePath(null);
-    setProductId("");
-    setImageKeyword("");
-    setScript("");
   };
+
   return (
     <div className="max-w-3xl mx-auto mt-10 p-6 bg-white shadow-md rounded-md">
       <h1 className="text-2xl font-semibold text-gray-700 mb-6">
@@ -75,52 +71,12 @@ const GenerateVideo: React.FC = () => {
           />
         </div>
         <div>
-          <label
-            htmlFor="productId"
-            className="block text-gray-700 font-medium mb-2"
-          >
-            Product ID
-          </label>
-          <input
-            type="text"
-            id="productId"
-            value={productId}
-            onChange={(e) => setProductId(e.target.value)}
-            placeholder="Enter Product ID"
-            className="w-full p-2 border rounded"
-          />
-        </div>
-        <div>
-          <label
-            htmlFor="imageKeyword"
-            className="block text-gray-700 font-medium mb-2"
-          >
-            Image Keyword
-          </label>
-          <input
-            type="text"
-            id="imageKeyword"
-            value={imageKeyword}
-            onChange={(e) => setImageKeyword(e.target.value)}
-            placeholder="Enter Image Keyword"
-            className="w-full p-2 border rounded"
-          />
-        </div>
-        <div>
-          <label
-            htmlFor="script"
-            className="block text-gray-700 font-medium mb-2"
-          >
-            Script
-          </label>
-          <textarea
-            id="script"
-            value={script}
-            onChange={(e) => setScript(e.target.value)}
-            placeholder="Enter Script"
-            className="w-full p-2 border rounded"
-            rows={4}
-          />
+          <p className="text-gray-700">
+            <strong>Image Keyword:</strong> {job?.imageKeyword || "N/A"}
+          </p>
+          <p className="text-gray-700">
+            <strong>Script:</strong> {job?.voiceScript || "N/A"}
+          </p>
         </div>
         <div className="flex space-x-4">
           <button
@@ -138,6 +94,7 @@ const GenerateVideo: React.FC = () => {
             Reset
           </button>
         </div>
+        <p className="mt-2 text-sm text-red-800">{message}</p>
       </form>
 
       {status === "succeeded" && videoResponse && (
@@ -145,14 +102,13 @@ const GenerateVideo: React.FC = () => {
           <h2 className="text-lg font-medium text-blue-700">
             Video Generated Successfully
           </h2>
-          <video
+          {/* <video
             controls
             className="mt-4 w-full"
             src={videoResponse.video_path}
           >
             Your browser does not support the video tag.
-          </video>
-          {/* <p className="mt-2 text-gray-700">{videoResponse.video_path}</p> */}
+          </video> */}
         </div>
       )}
 
