@@ -17,6 +17,7 @@ const GenerateVideo: React.FC = () => {
   const { job } = useSelector((state: RootState) => state.createJobPost);
 
   const [templatePath, setTemplatePath] = useState<File | null>(null);
+  const [message, setMessage] = useState<string | null>(null);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
@@ -28,7 +29,8 @@ const GenerateVideo: React.FC = () => {
     e.preventDefault();
 
     if (!templatePath || !job) {
-      alert("File and job details are required");
+      setTimeout(() => setMessage(null), 3000);
+      setMessage("File and job details are required");
       return;
     }
 
@@ -92,6 +94,7 @@ const GenerateVideo: React.FC = () => {
             Reset
           </button>
         </div>
+        <p className="mt-2 text-sm text-red-800">{message}</p>
       </form>
 
       {status === "succeeded" && videoResponse && (
@@ -99,13 +102,13 @@ const GenerateVideo: React.FC = () => {
           <h2 className="text-lg font-medium text-blue-700">
             Video Generated Successfully
           </h2>
-          <video
+          {/* <video
             controls
             className="mt-4 w-full"
             src={videoResponse.video_path}
           >
             Your browser does not support the video tag.
-          </video>
+          </video> */}
         </div>
       )}
 
