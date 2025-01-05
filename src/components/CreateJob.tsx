@@ -4,11 +4,16 @@ import { AppDispatch, RootState } from "../redux/store/store";
 import { createJobPost, resetState } from "../redux/slice/CreateJobPostSlice";
 import ChatStream from "./ChatStream";
 import GenerateVideo from "./GenerateVideo";
+import { FaPlay, FaPause } from "react-icons/fa";
 
 const CreateJobPost: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
   const { job, status, error } = useSelector(
     (state: RootState) => state.createJobPost
+  );
+
+  const { videoResponse } = useSelector(
+    (state: RootState) => state.generateVideo
   );
 
   const [file, setFile] = useState<File | null>(null);
@@ -120,13 +125,133 @@ const CreateJobPost: React.FC = () => {
               <li key={index}>{benefit}</li>
             ))}
           </ul>
+          {/* Generated Video Section */}
+          {videoResponse && (
+            <div className="relative mt-6">
+              {/* Dark Overlay */}
+              <div className="absolute inset-0 bg-black bg-opacity-50 z-10 flex items-center justify-center">
+                <button
+                  onClick={() => {
+                    const videoElement = document.getElementById(
+                      "video-player"
+                    ) as HTMLVideoElement;
+                    if (videoElement.paused) {
+                      videoElement.play();
+                      document
+                        .getElementById("play-icon")!
+                        .classList.add("hidden");
+                      document
+                        .getElementById("pause-icon")!
+                        .classList.remove("hidden");
+                    } else {
+                      videoElement.pause();
+                      document
+                        .getElementById("play-icon")!
+                        .classList.remove("hidden");
+                      document
+                        .getElementById("pause-icon")!
+                        .classList.add("hidden");
+                    }
+                  }}
+                  className="p-4 rounded-full bg-white bg-opacity-90 shadow-lg hover:bg-opacity-100 hover:scale-110 transition-all duration-300"
+                >
+                  {/* Play Icon */}
+                  <FaPlay id="play-icon" className="h-8 w-8 text-gray-800" />
 
-          <h3 className="mt-4 text-md font-semibold text-gray-800">
+                  {/* Pause Icon */}
+                  <FaPause
+                    id="pause-icon"
+                    className="hidden h-8 w-8 text-gray-800"
+                  />
+                </button>
+              </div>
+
+              {/* Video Element */}
+              <video
+                id="video-player"
+                className="w-full rounded shadow-lg"
+                src={videoResponse.video_path}
+                controls
+              >
+                Your browser does not support the video tag.
+              </video>
+
+              {/* Bottom Red Section Overlay */}
+              <div className="absolute bottom-0 left-0 w-full bg-red-600 text-white p-4 rounded-b">
+                <h3 className="text-lg font-semibold">Image Details</h3>
+
+                <h4 className="mt-2 font-semibold">Taglines:</h4>
+                <ul className="list-disc pl-6">
+                  {job.taglines.slice(0, 4).map((tagline, index) => (
+                    <li key={index}>{tagline}</li>
+                  ))}
+                </ul>
+
+                <h4 className="mt-2 font-semibold">Body Copy:</h4>
+                <ul className="list-disc pl-6">
+                  {job.bodyCopy.slice(0, 4).map((copy, index) => (
+                    <li key={index}>{copy}</li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          )}
+          {/* {videoResponse && (
+            <div className="relative mt-6 inset-0 bg-black bg-opacity-50">
+              <video
+                controls
+                className="w-full rounded shadow-lg"
+                src={videoResponse.video_path}
+              >
+                Your browser does not support the video tag.
+              </video> */}
+
+          {/* Bottom Red Section Overlay */}
+          {/* <div className="absolute bottom-0 left-0 w-full bg-red-600 text-white p-4 rounded-b">
+                <h3 className="text-lg font-semibold">Image Details</h3>
+
+                <h4 className="mt-2 font-semibold">Taglines:</h4>
+                <ul className="list-disc pl-6">
+                  {job.taglines.map((tagline, index) => (
+                    <li key={index}>{tagline}</li>
+                  ))}
+                </ul>
+
+                <h4 className="mt-2 font-semibold">Body Copy:</h4>
+                <ul className="list-disc pl-6">
+                  {job.bodyCopy.map((copy, index) => (
+                    <li key={index}>{copy}</li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          )} */}
+
+          {/* Image Details Section */}
+          {/* <div className="mt-6 bg-red-600 text-white p-4 rounded shadow">
+            <h3 className="text-lg font-semibold mb-2">Image Details</h3>
+            <p>
+              <strong>Keywords:</strong> {job.imageKeyword}
+            </p>
+            <h4 className="mt-2 font-semibold">Taglines:</h4>
+            <ul className="list-disc pl-6">
+              {job.taglines.map((tagline, index) => (
+                <li key={index}>{tagline}</li>
+              ))}
+            </ul>
+            <h4 className="mt-2 font-semibold">Body Copy:</h4>
+            <ul className="list-disc pl-6">
+              {job.bodyCopy.map((copy, index) => (
+                <li key={index}>{copy}</li>
+              ))}
+            </ul>
+          </div> */}
+          {/* <h3 className="mt-4 text-md font-semibold text-gray-800">
             Call to Action:
           </h3>
-          <p>{job.callToAction}</p>
+          <p>{job.callToAction}</p> */}
 
-          <h3 className="mt-4 text-md font-semibold text-gray-800">
+          {/* <h3 className="mt-4 text-md font-semibold text-gray-800">
             Voice Details:
           </h3>
           <p>
@@ -137,7 +262,7 @@ const CreateJobPost: React.FC = () => {
           </p>
           <p>
             <strong>Call To Action:</strong> {job.voiceCTA}
-          </p>
+          </p> */}
           <p>
             <strong>Location:</strong> {job.voiceLocation}
           </p>
@@ -160,25 +285,6 @@ const CreateJobPost: React.FC = () => {
           <p>
             <strong>Website:</strong> {job.contactDetails.website}
           </p>
-
-          <h3 className="mt-4 text-md font-semibold text-gray-800">
-            Image Details:
-          </h3>
-          <p>
-            <strong>Keywords:</strong> {job.imageKeyword}
-          </p>
-          <h4 className="mt-2 font-semibold text-gray-700">Taglines:</h4>
-          <ul className="list-disc pl-6">
-            {job.taglines.map((tagline, index) => (
-              <li key={index}>{tagline}</li>
-            ))}
-          </ul>
-          <h4 className="mt-2 font-semibold text-gray-700">Body Copy:</h4>
-          <ul className="list-disc pl-6">
-            {job.bodyCopy.map((copy, index) => (
-              <li key={index}>{copy}</li>
-            ))}
-          </ul>
         </div>
       )}
       {status === "failed" && error && (
@@ -187,8 +293,8 @@ const CreateJobPost: React.FC = () => {
           <p className="mt-2 text-sm text-red-800">{error}</p>
         </div>
       )}
-      <ChatStream />
       <GenerateVideo />
+      <ChatStream />
     </div>
   );
 };
