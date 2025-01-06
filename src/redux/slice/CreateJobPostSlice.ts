@@ -23,14 +23,19 @@ export const createJobPost = createAsyncThunk(
   }
 );
 
+interface JobField {
+  header?: string;
+  items: string[];
+}
+
 interface Job {
   headline: string;
   description: string;
   introduction: string;
   introductionOfJob: string;
-  tasks: string[];
-  qualifications: string[];
-  benefits: string[];
+  tasks: JobField | string[];
+  qualifications: JobField | string[];
+  benefits: JobField | string[];
   callToAction: string;
   personalAddress: string;
   voiceScript: string;
@@ -43,12 +48,95 @@ interface Job {
     phone: string;
     address: string;
     website: string;
+    contact_person: string;
   };
   imageKeyword: string;
   taglines: string[];
   bodyCopy: string[];
 }
 
+// const createJobPostSlice = createSlice({
+//   name: "createJobPost",
+//   initialState: {
+//     job: null as Job | null,
+//     status: "idle" as "idle" | "loading" | "succeeded" | "failed",
+//     error: null as string | null,
+//   },
+//   reducers: {
+//     resetState: (state) => {
+//       state.job = null;
+//       state.status = "idle";
+//       state.error = null;
+//     },
+//   },
+//   extraReducers: (builder) => {
+//     builder
+//       .addCase(createJobPost.pending, (state) => {
+//         state.status = "loading";
+//       })
+//       .addCase(createJobPost.fulfilled, (state, action) => {
+//         state.status = "succeeded";
+
+//         const jobPost = action.payload?.job_post || {};
+//         const voice = action.payload?.voice || {};
+//         const image = action.payload?.image || {};
+
+//         const parseField = (field: JobField | string[] | string): string[] => {
+//           if (Array.isArray(field)) {
+//             return field;
+//           } else if (typeof field === "object" && field?.items) {
+//             return field.items;
+//           } else if (typeof field === "string") {
+//             return field
+//               .split(/\n?▶/)
+//               .map((item: string) => item.trim())
+//               .filter(Boolean);
+//           }
+//           return [];
+//         };
+
+//         state.job = {
+//           headline: image.Headline || "No headline available",
+//           description: jobPost.Description || "No description available",
+//           introduction: jobPost.Introduction || "No introduction available",
+//           introductionOfJob:
+//             jobPost["Introduction of the job"] ||
+//             "No job introduction available",
+//           personalAddress:
+//             jobPost["Personal Address"] || "No personal address provided",
+
+//           tasks: parseField(jobPost.Tasks),
+//           qualifications: parseField(jobPost.Qualifications),
+//           benefits: parseField(jobPost.Benefits),
+
+//           callToAction:
+//             jobPost["Call to Action"] || "No call to action provided",
+//           voiceScript: voice.script || "No voice script provided",
+//           voiceTone: voice.tone || "No tone specified",
+//           voiceCTA: voice.cta || "No Call to Action specified",
+//           voiceLocation: voice.location || "No location specified",
+//           voiceBenefits: voice.benefits || "No benefits specified",
+//           contactDetails: voice.contact_details || {
+//             email: "No email provided",
+//             phone: "No phone provided",
+//             address: "No address provided",
+//             website: "No website provided",
+//           },
+//           imageKeyword: image.image_keyword || "No image keyword provided",
+//           taglines: image.taglines || [],
+//           bodyCopy: image.body_copy || [],
+//         };
+//       })
+
+//       .addCase(createJobPost.rejected, (state, action) => {
+//         state.status = "failed";
+//         state.error = action.payload as string;
+//       });
+//   },
+// });
+// export const { resetState } = createJobPostSlice.actions;
+
+// export default createJobPostSlice.reducer;
 const createJobPostSlice = createSlice({
   name: "createJobPost",
   initialState: {
@@ -75,29 +163,93 @@ const createJobPostSlice = createSlice({
         const voice = action.payload?.voice || {};
         const image = action.payload?.image || {};
 
-        // Normalized State
+        const parseField = (field: JobField | string[] | string): string[] => {
+          if (Array.isArray(field)) {
+            return field;
+          } else if (typeof field === "object" && field?.items) {
+            return field.items;
+          } else if (typeof field === "string") {
+            return field
+              .split(/\n?▶/)
+              .map((item: string) => item.trim())
+              .filter(Boolean);
+          }
+          return [];
+        };
+
+        const getMultilingualField = (
+          fieldMap: Record<string, string | undefined>,
+          defaultValue: string
+        ) => {
+          for (const key of Object.keys(fieldMap)) {
+            if (jobPost[key]) {
+              return jobPost[key];
+            }
+          }
+          return defaultValue;
+        };
+
         state.job = {
           headline: image.Headline || "No headline available",
           description: jobPost.Description || "No description available",
-          introduction: jobPost.Introduction || "No introduction available",
-          introductionOfJob:
-            jobPost["Introduction of the job"] ||
-            "No job introduction available",
-          personalAddress:
-            jobPost["Personal Address"] || "No personal address provided",
+          introduction: getMultilingualField(
+            {
+              Introduction: jobPost.Introduction,
+              Einführung: jobPost["Einführung"],
+              Einleitung: jobPost["Einleitung"],
+            },
+            "No introduction available"
+          ),
+          introductionOfJob: getMultilingualField(
+            {
+              "Introduction of the job": jobPost["Introduction of the job"],
+              Introduction_of_the_job: jobPost["Introduction_of_the_job"],
+              Introduction_of_the_Job: jobPost["Introduction_of_the_Job"],
+              "Job Introduction": jobPost["Job Introduction"],
+              Job_Introduction: jobPost["Job_Introduction"],
+              "Einführung des Jobs": jobPost["Einführung des Jobs"],
+            },
+            "No job introduction available"
+          ),
+          personalAddress: getMultilingualField(
+            {
+              "Personal Address": jobPost["Personal Address"],
+              Personal_Address: jobPost["Personal_Address"],
+              PersonalAddress: jobPost["PersonalAddress"],
+              "Persönliche Ansprache": jobPost["Persönliche Ansprache"],
+              "Persönliche Adresse": jobPost["Persönliche Adresse"],
+            },
+            "No personal address provided"
+          ),
 
-          tasks: (typeof jobPost.Tasks === "string"
-            ? jobPost.Tasks.split("\n▶").map((task: string) => task.trim())
-            : []
-          ).filter(Boolean),
-          qualifications: (typeof jobPost.Qualifications === "string"
-            ? jobPost.Qualifications.split("\n▶").map((q: string) => q.trim())
-            : []
-          ).filter(Boolean),
-          benefits: (typeof jobPost.Benefits === "string"
-            ? jobPost.Benefits.split("\n▶").map((b: string) => b.trim())
-            : []
-          ).filter(Boolean),
+          tasks: parseField(
+            getMultilingualField(
+              {
+                Tasks: jobPost.Tasks,
+                Aufgaben: jobPost["Aufgaben"],
+              },
+              "No tasks available"
+            )
+          ),
+          qualifications: parseField(
+            getMultilingualField(
+              {
+                Qualifications: jobPost.Qualifications,
+                Qualifikationen: jobPost["Qualifikationen"],
+              },
+              "No qualifications available"
+            )
+          ),
+          benefits: parseField(
+            getMultilingualField(
+              {
+                Benefits: jobPost.Benefits,
+                Vorteile: jobPost["Vorteile"],
+              },
+              "No benefits available"
+            )
+          ),
+
           callToAction:
             jobPost["Call to Action"] || "No call to action provided",
           voiceScript: voice.script || "No voice script provided",
@@ -110,6 +262,7 @@ const createJobPostSlice = createSlice({
             phone: "No phone provided",
             address: "No address provided",
             website: "No website provided",
+            contact_person: "No contact person provided",
           },
           imageKeyword: image.image_keyword || "No image keyword provided",
           taglines: image.taglines || [],
