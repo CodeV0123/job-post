@@ -5,6 +5,7 @@ import {
   fetchChatStream,
   resetChatState,
 } from "../redux/slice/CreateStreamSlice";
+import { updateJobFields } from "../redux/slice/CreateJobPostSlice";
 
 const ChatStream: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -19,11 +20,25 @@ const ChatStream: React.FC = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!job) {
-      setTimeout(() => setMessage(""), 3000);
       setMessage("Please create a job post first!");
+      setTimeout(() => setMessage(""), 3000);
       return;
     }
-    dispatch(fetchChatStream({ prompt, job_description: job }));
+
+    dispatch(fetchChatStream({ prompt, job_description: job }))
+      .unwrap()
+      .then((response) => {
+        console.log("Response from fetchChatStream:", response);
+        // Dispatch the updated fields to CreateJob
+        if (typeof response === "object") {
+          dispatch(updateJobFields(response));
+        } else {
+          console.error("Invalid response format:", response);
+        }
+      })
+      .catch((error) => {
+        console.error("Error fetching chat stream:", error);
+      });
   };
 
   const handleReset = () => {
