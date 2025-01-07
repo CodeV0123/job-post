@@ -6,6 +6,15 @@ import ChatStream from "./ChatStream";
 import GenerateVideo from "./GenerateVideo";
 import { FaPlay, FaPause } from "react-icons/fa";
 
+const parseField = (field: { items?: unknown[] } | unknown[]) => {
+  if (Array.isArray(field)) {
+    return field;
+  } else if (field && field.items) {
+    return field.items;
+  }
+  return [];
+};
+
 const CreateJobPost: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
   const { job, status, error } = useSelector(
@@ -101,30 +110,54 @@ const CreateJobPost: React.FC = () => {
           </h3>
           <p>{job.personalAddress}</p>
 
-          <h3 className="mt-4 text-md font-semibold text-gray-800">Tasks:</h3>
-          <ul className="list-disc pl-6">
-            {job.tasks.map((task, index) => (
-              <li key={index}>{task}</li>
-            ))}
-          </ul>
+          {/* Tasks */}
+          {job.tasks && (
+            <div className="mt-4">
+              <h3 className="text-md font-semibold text-gray-800">
+                {Array.isArray(job.tasks)
+                  ? "Tasks:"
+                  : job.tasks.header || "Tasks:"}
+              </h3>
+              <ul className="list-disc pl-6">
+                {parseField(job.tasks).map((task, index) => (
+                  <li key={index}>{task as string}</li>
+                ))}
+              </ul>
+            </div>
+          )}
 
-          <h3 className="mt-4 text-md font-semibold text-gray-800">
-            Qualifications:
-          </h3>
-          <ul className="list-disc pl-6">
-            {job.qualifications.map((qualification, index) => (
-              <li key={index}>{qualification}</li>
-            ))}
-          </ul>
+          {/* Qualifications */}
+          {job.qualifications && (
+            <div className="mt-4">
+              <h3 className="text-md font-semibold text-gray-800">
+                {Array.isArray(job.qualifications)
+                  ? "Qualifications:"
+                  : job.qualifications.header || "Qualifications:"}
+              </h3>
+              <ul className="list-disc pl-6">
+                {parseField(job.qualifications).map((qualification, index) => (
+                  <li key={index}>{qualification as string}</li>
+                ))}
+              </ul>
+            </div>
+          )}
 
-          <h3 className="mt-4 text-md font-semibold text-gray-800">
-            Benefits:
-          </h3>
-          <ul className="list-disc pl-6">
-            {job.benefits.map((benefit, index) => (
-              <li key={index}>{benefit}</li>
-            ))}
-          </ul>
+          {/* Benefits */}
+          {job.benefits && (
+            <div className="mt-4">
+              <h3 className="text-md font-semibold text-gray-800">
+                {Array.isArray(job.benefits)
+                  ? "Benefits:"
+                  : job.benefits.header || "Benefits:"}
+              </h3>
+              <ul className="list-disc pl-6">
+                {parseField(job.benefits).map((benefit, index) => (
+                  <li key={index}>{benefit as string}</li>
+                ))}
+              </ul>
+            </div>
+          )}
+
           {/* Generated Video Section */}
           {videoResponse && (
             <div className="relative mt-6">
@@ -196,73 +229,6 @@ const CreateJobPost: React.FC = () => {
               </div>
             </div>
           )}
-          {/* {videoResponse && (
-            <div className="relative mt-6 inset-0 bg-black bg-opacity-50">
-              <video
-                controls
-                className="w-full rounded shadow-lg"
-                src={videoResponse.video_path}
-              >
-                Your browser does not support the video tag.
-              </video> */}
-
-          {/* Bottom Red Section Overlay */}
-          {/* <div className="absolute bottom-0 left-0 w-full bg-red-600 text-white p-4 rounded-b">
-                <h3 className="text-lg font-semibold">Image Details</h3>
-
-                <h4 className="mt-2 font-semibold">Taglines:</h4>
-                <ul className="list-disc pl-6">
-                  {job.taglines.map((tagline, index) => (
-                    <li key={index}>{tagline}</li>
-                  ))}
-                </ul>
-
-                <h4 className="mt-2 font-semibold">Body Copy:</h4>
-                <ul className="list-disc pl-6">
-                  {job.bodyCopy.map((copy, index) => (
-                    <li key={index}>{copy}</li>
-                  ))}
-                </ul>
-              </div>
-            </div>
-          )} */}
-
-          {/* Image Details Section */}
-          {/* <div className="mt-6 bg-red-600 text-white p-4 rounded shadow">
-            <h3 className="text-lg font-semibold mb-2">Image Details</h3>
-            <p>
-              <strong>Keywords:</strong> {job.imageKeyword}
-            </p>
-            <h4 className="mt-2 font-semibold">Taglines:</h4>
-            <ul className="list-disc pl-6">
-              {job.taglines.map((tagline, index) => (
-                <li key={index}>{tagline}</li>
-              ))}
-            </ul>
-            <h4 className="mt-2 font-semibold">Body Copy:</h4>
-            <ul className="list-disc pl-6">
-              {job.bodyCopy.map((copy, index) => (
-                <li key={index}>{copy}</li>
-              ))}
-            </ul>
-          </div> */}
-          {/* <h3 className="mt-4 text-md font-semibold text-gray-800">
-            Call to Action:
-          </h3>
-          <p>{job.callToAction}</p> */}
-
-          {/* <h3 className="mt-4 text-md font-semibold text-gray-800">
-            Voice Details:
-          </h3>
-          <p>
-            <strong>Script:</strong> {job.voiceScript}
-          </p>
-          <p>
-            <strong>Tone:</strong> {job.voiceTone}
-          </p>
-          <p>
-            <strong>Call To Action:</strong> {job.voiceCTA}
-          </p> */}
           <p>
             <strong>Location:</strong> {job.voiceLocation}
           </p>
@@ -278,6 +244,9 @@ const CreateJobPost: React.FC = () => {
           </p>
           <p>
             <strong>Phone:</strong> {job.contactDetails.phone}
+          </p>
+          <p>
+            <strong>Contact Person:</strong> {job.contactDetails.contact_person}
           </p>
           <p>
             <strong>Address:</strong> {job.contactDetails.address}

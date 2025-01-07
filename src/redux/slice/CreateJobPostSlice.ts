@@ -23,14 +23,19 @@ export const createJobPost = createAsyncThunk(
   }
 );
 
+interface JobField {
+  header?: string;
+  items: string[];
+}
+
 interface Job {
   headline: string;
   description: string;
   introduction: string;
   introductionOfJob: string;
-  tasks: string[];
-  qualifications: string[];
-  benefits: string[];
+  tasks: JobField | string[];
+  qualifications: JobField | string[];
+  benefits: JobField | string[];
   callToAction: string;
   personalAddress: string;
   voiceScript: string;
@@ -43,6 +48,7 @@ interface Job {
     phone: string;
     address: string;
     website: string;
+    contact_person: string;
   };
   imageKeyword: string;
   taglines: string[];
@@ -62,6 +68,15 @@ const createJobPostSlice = createSlice({
       state.status = "idle";
       state.error = null;
     },
+    updateJobFields: (state, action) => {
+      console.log("Before update:", state.job);
+      if (action.payload && typeof action.payload === "object") {
+        state.job = { ...state.job, ...action.payload }; // Merge new fields into the existing job
+        console.log("Updated job state:", state.job);
+      } else {
+        console.error("Invalid payload for updateJobFields:", action.payload);
+      }
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -75,29 +90,93 @@ const createJobPostSlice = createSlice({
         const voice = action.payload?.voice || {};
         const image = action.payload?.image || {};
 
-        // Normalized State
+        const parseField = (field: JobField | string[] | string): string[] => {
+          if (Array.isArray(field)) {
+            return field;
+          } else if (typeof field === "object" && field?.items) {
+            return field.items;
+          } else if (typeof field === "string") {
+            return field
+              .split(/(?:\\n▶|\n▶|▶)/)
+              .map((item: string) => item.trim())
+              .filter(Boolean);
+          }
+          return [];
+        };
+
+        const getMultilingualField = (
+          fieldMap: Record<string, string | undefined>,
+          defaultValue: string
+        ) => {
+          for (const key of Object.keys(fieldMap)) {
+            if (jobPost[key]) {
+              return jobPost[key];
+            }
+          }
+          return defaultValue;
+        };
+
         state.job = {
           headline: image.Headline || "No headline available",
           description: jobPost.Description || "No description available",
-          introduction: jobPost.Introduction || "No introduction available",
-          introductionOfJob:
-            jobPost["Introduction of the job"] ||
-            "No job introduction available",
-          personalAddress:
-            jobPost["Personal Address"] || "No personal address provided",
+          introduction: getMultilingualField(
+            {
+              Introduction: jobPost.Introduction,
+              Einführung: jobPost["Einführung"],
+              Einleitung: jobPost["Einleitung"],
+            },
+            "No introduction available"
+          ),
+          introductionOfJob: getMultilingualField(
+            {
+              "Introduction of the job": jobPost["Introduction of the job"],
+              Introduction_of_the_job: jobPost["Introduction_of_the_job"],
+              Introduction_of_the_Job: jobPost["Introduction_of_the_Job"],
+              "Job Introduction": jobPost["Job Introduction"],
+              Job_Introduction: jobPost["Job_Introduction"],
+              "Einführung des Jobs": jobPost["Einführung des Jobs"],
+            },
+            "No job introduction available"
+          ),
+          personalAddress: getMultilingualField(
+            {
+              "Personal Address": jobPost["Personal Address"],
+              Personal_Address: jobPost["Personal_Address"],
+              PersonalAddress: jobPost["PersonalAddress"],
+              "Persönliche Ansprache": jobPost["Persönliche Ansprache"],
+              "Persönliche Adresse": jobPost["Persönliche Adresse"],
+            },
+            "No personal address provided"
+          ),
 
-          tasks: (typeof jobPost.Tasks === "string"
-            ? jobPost.Tasks.split("\n▶").map((task: string) => task.trim())
-            : []
-          ).filter(Boolean),
-          qualifications: (typeof jobPost.Qualifications === "string"
-            ? jobPost.Qualifications.split("\n▶").map((q: string) => q.trim())
-            : []
-          ).filter(Boolean),
-          benefits: (typeof jobPost.Benefits === "string"
-            ? jobPost.Benefits.split("\n▶").map((b: string) => b.trim())
-            : []
-          ).filter(Boolean),
+          tasks: parseField(
+            getMultilingualField(
+              {
+                Tasks: jobPost.Tasks,
+                Aufgaben: jobPost["Aufgaben"],
+              },
+              "No tasks available"
+            )
+          ),
+          qualifications: parseField(
+            getMultilingualField(
+              {
+                Qualifications: jobPost.Qualifications,
+                Qualifikationen: jobPost["Qualifikationen"],
+              },
+              "No qualifications available"
+            )
+          ),
+          benefits: parseField(
+            getMultilingualField(
+              {
+                Benefits: jobPost.Benefits,
+                Vorteile: jobPost["Vorteile"],
+              },
+              "No benefits available"
+            )
+          ),
+
           callToAction:
             jobPost["Call to Action"] || "No call to action provided",
           voiceScript: voice.script || "No voice script provided",
@@ -110,6 +189,7 @@ const createJobPostSlice = createSlice({
             phone: "No phone provided",
             address: "No address provided",
             website: "No website provided",
+            contact_person: "No contact person provided",
           },
           imageKeyword: image.image_keyword || "No image keyword provided",
           taglines: image.taglines || [],
@@ -123,6 +203,6 @@ const createJobPostSlice = createSlice({
       });
   },
 });
-export const { resetState } = createJobPostSlice.actions;
+export const { resetState, updateJobFields } = createJobPostSlice.actions;
 
 export default createJobPostSlice.reducer;
