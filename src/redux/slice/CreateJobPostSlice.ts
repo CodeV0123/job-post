@@ -97,7 +97,7 @@ const createJobPostSlice = createSlice({
             return field.items;
           } else if (typeof field === "string") {
             return field
-              .split(/\n?▶/)
+              .split(/(?:\\n▶|\n▶|▶)/)
               .map((item: string) => item.trim())
               .filter(Boolean);
           }
