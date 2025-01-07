@@ -22,7 +22,7 @@ const ChatStream: React.FC = () => {
     e.preventDefault();
     if (!job) {
       setMessage("Please create a job post first!");
-      setTimeout(() => setMessage(""), 3000);
+      setTimeout(() => setMessage(""), 5000);
       return;
     }
 
@@ -92,6 +92,12 @@ const ChatStream: React.FC = () => {
         <div className="mt-6 p-4 bg-gray-50 border border-gray-200 rounded overflow-x-auto">
           <h2 className="text-lg font-medium text-blue-700">Chat Response</h2>
           <p className="mt-2 text-sm text-green-800">{successMessage}</p>
+          {/* <pre className="mt-2 text-gray-700">
+            {" "}
+            {typeof chatResponse === "object"
+              ? JSON.stringify(chatResponse, null, 2)
+              : chatResponse}
+          </pre> */}
         </div>
       )}
 
