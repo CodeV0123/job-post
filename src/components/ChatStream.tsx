@@ -16,6 +16,7 @@ const ChatStream: React.FC = () => {
 
   const [prompt, setPrompt] = useState("");
   const [message, setMessage] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -32,6 +33,8 @@ const ChatStream: React.FC = () => {
         // Dispatch the updated fields to CreateJob
         if (typeof response === "object") {
           dispatch(updateJobFields(response));
+          setSuccessMessage("Job post updated successfully!");
+          setTimeout(() => setSuccessMessage(""), 3000);
         } else {
           console.error("Invalid response format:", response);
         }
@@ -88,12 +91,7 @@ const ChatStream: React.FC = () => {
       {status === "succeeded" && chatResponse && (
         <div className="mt-6 p-4 bg-gray-50 border border-gray-200 rounded overflow-x-auto">
           <h2 className="text-lg font-medium text-blue-700">Chat Response</h2>
-          <pre className="mt-2 text-gray-700">
-            {" "}
-            {typeof chatResponse === "object"
-              ? JSON.stringify(chatResponse, null, 2)
-              : chatResponse}
-          </pre>
+          <p className="mt-2 text-sm text-green-800">{successMessage}</p>
         </div>
       )}
 
