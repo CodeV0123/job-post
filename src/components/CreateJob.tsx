@@ -125,12 +125,6 @@ const CreateJobPost: React.FC = () => {
               </ul>
             </div>
           )}
-          {/* <h3 className="mt-4 text-md font-semibold text-gray-800">Tasks:</h3>
-          <ul className="list-disc pl-6">
-            {job.tasks.map((task, index) => (
-              <li key={index}>{task}</li>
-            ))}
-          </ul> */}
 
           {/* Qualifications */}
           {job.qualifications && (
@@ -147,14 +141,6 @@ const CreateJobPost: React.FC = () => {
               </ul>
             </div>
           )}
-          {/* <h3 className="mt-4 text-md font-semibold text-gray-800">
-            Qualifications:
-          </h3>
-          <ul className="list-disc pl-6">
-            {job.qualifications.map((qualification, index) => (
-              <li key={index}>{qualification}</li>
-            ))}
-          </ul> */}
 
           {/* Benefits */}
           {job.benefits && (
@@ -171,15 +157,6 @@ const CreateJobPost: React.FC = () => {
               </ul>
             </div>
           )}
-
-          {/* <h3 className="mt-4 text-md font-semibold text-gray-800">
-            Benefits:
-          </h3>
-          <ul className="list-disc pl-6">
-            {job.benefits.map((benefit, index) => (
-              <li key={index}>{benefit}</li>
-            ))}
-          </ul> */}
 
           {/* Generated Video Section */}
           {videoResponse && (
