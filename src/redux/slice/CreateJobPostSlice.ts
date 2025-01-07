@@ -150,6 +150,15 @@ const createJobPostSlice = createSlice({
       state.status = "idle";
       state.error = null;
     },
+    updateJobFields: (state, action) => {
+      console.log("Before update:", state.job);
+      if (action.payload && typeof action.payload === "object") {
+        state.job = { ...state.job, ...action.payload }; // Merge new fields into the existing job
+        console.log("Updated job state:", state.job);
+      } else {
+        console.error("Invalid payload for updateJobFields:", action.payload);
+      }
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -276,6 +285,6 @@ const createJobPostSlice = createSlice({
       });
   },
 });
-export const { resetState } = createJobPostSlice.actions;
+export const { resetState, updateJobFields } = createJobPostSlice.actions;
 
 export default createJobPostSlice.reducer;
