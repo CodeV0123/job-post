@@ -4,7 +4,7 @@ import { AppDispatch, RootState } from "../redux/store/store";
 import { createJobPost, resetState } from "../redux/slice/CreateJobPostSlice";
 import ChatStream from "./ChatStream";
 import GenerateVideo from "./GenerateVideo";
-import { FaPlay, FaPause } from "react-icons/fa";
+import { FaPlay } from "react-icons/fa";
 
 const parseField = (field: { items?: unknown[] } | unknown[]) => {
   if (Array.isArray(field)) {
@@ -16,6 +16,7 @@ const parseField = (field: { items?: unknown[] } | unknown[]) => {
 };
 
 const CreateJobPost: React.FC = () => {
+  const [isPlaying, setIsPlaying] = useState(false);
   const dispatch = useDispatch<AppDispatch>();
   const { job, status, error } = useSelector(
     (state: RootState) => state.createJobPost
@@ -27,6 +28,19 @@ const CreateJobPost: React.FC = () => {
 
   const [file, setFile] = useState<File | null>(null);
   const [message, setMessage] = useState<string | null>(null);
+
+  const handlePlayPause = () => {
+    const videoElement = document.getElementById(
+      "video-player"
+    ) as HTMLVideoElement;
+    if (videoElement.paused) {
+      videoElement.play();
+      setIsPlaying(true);
+    } else {
+      videoElement.pause();
+      setIsPlaying(false);
+    }
+  };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
@@ -162,41 +176,17 @@ const CreateJobPost: React.FC = () => {
           {videoResponse && (
             <div className="relative mt-6">
               {/* Dark Overlay */}
-              <div className="absolute inset-0 bg-black bg-opacity-50 z-10 flex items-center justify-center">
-                <button
-                  onClick={() => {
-                    const videoElement = document.getElementById(
-                      "video-player"
-                    ) as HTMLVideoElement;
-                    if (videoElement.paused) {
-                      videoElement.play();
-                      document
-                        .getElementById("play-icon")!
-                        .classList.add("hidden");
-                      document
-                        .getElementById("pause-icon")!
-                        .classList.remove("hidden");
-                    } else {
-                      videoElement.pause();
-                      document
-                        .getElementById("play-icon")!
-                        .classList.remove("hidden");
-                      document
-                        .getElementById("pause-icon")!
-                        .classList.add("hidden");
-                    }
-                  }}
-                  className="p-4 rounded-full bg-white bg-opacity-90 shadow-lg hover:bg-opacity-100 hover:scale-110 transition-all duration-300"
-                >
-                  {/* Play Icon */}
-                  <FaPlay id="play-icon" className="h-8 w-8 text-gray-800" />
-
-                  {/* Pause Icon */}
-                  <FaPause
-                    id="pause-icon"
-                    className="hidden h-8 w-8 text-gray-800"
-                  />
-                </button>
+              <div>
+                {!isPlaying && (
+                  <div className="absolute inset-0 bg-black bg-opacity-50 z-10 flex items-center justify-center">
+                    <button
+                      onClick={handlePlayPause}
+                      className="p-4 rounded-full bg-white bg-opacity-90 shadow-lg hover:bg-opacity-100 hover:scale-110 transition-all duration-300"
+                    >
+                      <FaPlay className="h-8 w-8 text-gray-800" />
+                    </button>
+                  </div>
+                )}
               </div>
 
               {/* Video Element */}
@@ -204,6 +194,8 @@ const CreateJobPost: React.FC = () => {
                 id="video-player"
                 className="w-full rounded shadow-lg"
                 src={videoResponse.video_path}
+                onPause={() => setIsPlaying(false)}
+                onPlay={() => setIsPlaying(true)}
                 controls
               >
                 Your browser does not support the video tag.
