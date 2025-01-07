@@ -241,12 +241,12 @@ const CreateJobPost: React.FC = () => {
               </div>
             </div>
           )}
-          <p>
+          {/* <p>
             <strong>Location:</strong> {job.voiceLocation}
           </p>
           <p>
             <strong>Benefits:</strong> {job.voiceBenefits}
-          </p>
+          </p> */}
 
           <h3 className="mt-4 text-md font-semibold text-gray-800">
             Contact Details:
