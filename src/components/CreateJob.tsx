@@ -28,6 +28,7 @@ const CreateJobPost: React.FC = () => {
 
   const [file, setFile] = useState<File | null>(null);
   const [message, setMessage] = useState<string | null>(null);
+  const [isExpanded, setIsExpanded] = useState(false);
 
   const handlePlayPause = () => {
     const videoElement = document.getElementById(
@@ -111,67 +112,86 @@ const CreateJobPost: React.FC = () => {
 
       {status === "succeeded" && job && (
         <div className="mt-6 p-4 bg-gray-50 border border-gray-200 rounded">
+          {/* Always show the headline */}
           <h2 className="text-lg font-medium text-blue-700">{job.headline}</h2>
-          <p className="mt-2 text-gray-700">{job.introduction}</p>
+          {/* Conditionally render the rest of the content */}
+          {isExpanded ? (
+            <>
+              <p className="mt-2 text-gray-700">{job.introduction}</p>
 
-          <h3 className="mt-4 text-md font-semibold text-gray-800">
-            Introduction of the Job:
-          </h3>
-          <p>{job.introductionOfJob}</p>
-
-          <h3 className="mt-4 text-md font-semibold text-gray-800">
-            Personal Address:
-          </h3>
-          <p>{job.personalAddress}</p>
-
-          {/* Tasks */}
-          {job.tasks && (
-            <div className="mt-4">
-              <h3 className="text-md font-semibold text-gray-800">
-                {Array.isArray(job.tasks)
-                  ? "Tasks:"
-                  : job.tasks.header || "Tasks:"}
+              <h3 className="mt-4 text-md font-semibold text-gray-800">
+                Introduction of the Job:
               </h3>
-              <ul className="list-disc pl-6">
-                {parseField(job.tasks).map((task, index) => (
-                  <li key={index}>{task as string}</li>
-                ))}
-              </ul>
-            </div>
+              <p>{job.introductionOfJob}</p>
+
+              <h3 className="mt-4 text-md font-semibold text-gray-800">
+                Personal Address:
+              </h3>
+              <p>{job.personalAddress}</p>
+
+              {/* Tasks */}
+              {job.tasks && (
+                <div className="mt-4">
+                  <h3 className="text-md font-semibold text-gray-800">
+                    {Array.isArray(job.tasks)
+                      ? "Tasks:"
+                      : job.tasks.header || "Tasks:"}
+                  </h3>
+                  <ul className="list-disc pl-6">
+                    {parseField(job.tasks).map((task, index) => (
+                      <li key={index}>{task as string}</li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+
+              {/* Qualifications */}
+              {job.qualifications && (
+                <div className="mt-4">
+                  <h3 className="text-md font-semibold text-gray-800">
+                    {Array.isArray(job.qualifications)
+                      ? "Qualifications:"
+                      : job.qualifications.header || "Qualifications:"}
+                  </h3>
+                  <ul className="list-disc pl-6">
+                    {parseField(job.qualifications).map(
+                      (qualification, index) => (
+                        <li key={index}>{qualification as string}</li>
+                      )
+                    )}
+                  </ul>
+                </div>
+              )}
+
+              {/* Benefits */}
+              {job.benefits && (
+                <div className="mt-4">
+                  <h3 className="text-md font-semibold text-gray-800">
+                    {Array.isArray(job.benefits)
+                      ? "Benefits:"
+                      : job.benefits.header || "Benefits:"}
+                  </h3>
+                  <ul className="list-disc pl-6">
+                    {parseField(job.benefits).map((benefit, index) => (
+                      <li key={index}>{benefit as string}</li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+            </>
+          ) : (
+            <></>
           )}
 
-          {/* Qualifications */}
-          {job.qualifications && (
-            <div className="mt-4">
-              <h3 className="text-md font-semibold text-gray-800">
-                {Array.isArray(job.qualifications)
-                  ? "Qualifications:"
-                  : job.qualifications.header || "Qualifications:"}
-              </h3>
-              <ul className="list-disc pl-6">
-                {parseField(job.qualifications).map((qualification, index) => (
-                  <li key={index}>{qualification as string}</li>
-                ))}
-              </ul>
-            </div>
-          )}
-
-          {/* Benefits */}
-          {job.benefits && (
-            <div className="mt-4">
-              <h3 className="text-md font-semibold text-gray-800">
-                {Array.isArray(job.benefits)
-                  ? "Benefits:"
-                  : job.benefits.header || "Benefits:"}
-              </h3>
-              <ul className="list-disc pl-6">
-                {parseField(job.benefits).map((benefit, index) => (
-                  <li key={index}>{benefit as string}</li>
-                ))}
-              </ul>
-            </div>
-          )}
-
+          {/* Toggle Button */}
+          <div className="mt-4">
+            <button
+              onClick={() => setIsExpanded((prev) => !prev)}
+              className="px-4 py-2 bg-blue-600 text-white font-medium rounded hover:bg-blue-700"
+            >
+              {isExpanded ? "Show Less" : "Show More"}
+            </button>
+          </div>
           {/* Generated Video Section */}
           {videoResponse && (
             <div className="relative mt-6">
