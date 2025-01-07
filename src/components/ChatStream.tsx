@@ -73,7 +73,12 @@ const ChatStream: React.FC = () => {
       {status === "succeeded" && chatResponse && (
         <div className="mt-6 p-4 bg-gray-50 border border-gray-200 rounded overflow-x-auto">
           <h2 className="text-lg font-medium text-blue-700">Chat Response</h2>
-          <pre className="mt-2 text-gray-700">{chatResponse}</pre>
+          <pre className="mt-2 text-gray-700">
+            {" "}
+            {typeof chatResponse === "object"
+              ? JSON.stringify(chatResponse, null, 2)
+              : chatResponse}
+          </pre>
         </div>
       )}
 
