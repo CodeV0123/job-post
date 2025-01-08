@@ -4,7 +4,7 @@ import { AppDispatch, RootState } from "../redux/store/store";
 import { createJobPost, resetState } from "../redux/slice/CreateJobPostSlice";
 import ChatStream from "./ChatStream";
 import GenerateVideo from "./GenerateVideo";
-import { FaPlay } from "react-icons/fa";
+import { FaPlay, FaPen } from "react-icons/fa";
 
 const parseField = (field: { items?: unknown[] } | unknown[]) => {
   if (Array.isArray(field)) {
@@ -16,7 +16,6 @@ const parseField = (field: { items?: unknown[] } | unknown[]) => {
 };
 
 const CreateJobPost: React.FC = () => {
-  const [isPlaying, setIsPlaying] = useState(false);
   const dispatch = useDispatch<AppDispatch>();
   const { job, status, error } = useSelector(
     (state: RootState) => state.createJobPost
@@ -29,6 +28,8 @@ const CreateJobPost: React.FC = () => {
   const [file, setFile] = useState<File | null>(null);
   const [message, setMessage] = useState<string | null>(null);
   const [isExpanded, setIsExpanded] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
 
   const handlePlayPause = () => {
     const videoElement = document.getElementById(
@@ -67,6 +68,14 @@ const CreateJobPost: React.FC = () => {
   const handleReset = () => {
     dispatch(resetState());
     setFile(null);
+  };
+
+  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files.length > 0) {
+      const file = e.target.files[0];
+      console.log(file);
+      // dispatch(uploadVideo(formData));
+    }
   };
 
   return (
@@ -194,7 +203,26 @@ const CreateJobPost: React.FC = () => {
           </div>
           {/* Generated Video Section */}
           {videoResponse && (
-            <div className="relative mt-6">
+            <div
+              className="relative mt-6"
+              onMouseEnter={() => setIsHovered(true)}
+              onMouseLeave={() => setIsHovered(false)}
+            >
+              {/* Pen Icon for Upload */}
+              {isHovered && (
+                <div className="absolute top-4 right-4 z-20 p-2 bg-green-600 rounded-full shadow-lg transition-all duration-300 hover:bg-green-700">
+                  <label htmlFor="file-upload" className="cursor-pointer">
+                    <FaPen className="text-white h-6 w-6" />
+                  </label>
+                  <input
+                    type="file"
+                    id="file-upload"
+                    accept=".png,.jpg,.jpeg,.mp4,.avi,.mov"
+                    onChange={handleFileUpload}
+                    className="hidden"
+                  />
+                </div>
+              )}
               {/* Dark Overlay */}
               <div>
                 {!isPlaying && (
