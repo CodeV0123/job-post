@@ -29,6 +29,7 @@ interface JobField {
 }
 
 interface Job {
+  jobTitle: string;
   headline: string;
   description: string;
   introduction: string;
@@ -119,6 +120,7 @@ const createJobPostSlice = createSlice({
         state.job = {
           headline: image.Headline || "No headline available",
           description: jobPost.Description || "No description available",
+          jobTitle: jobPost["Job Title"] || "No job title available",
           introduction: getMultilingualField(
             {
               Introduction: jobPost.Introduction,
