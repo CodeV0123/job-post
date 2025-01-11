@@ -250,20 +250,31 @@ const CreateJobPost: React.FC = () => {
               </video>
 
               {/* Bottom Red Section Overlay */}
-              <div className="absolute bottom-0 left-0 w-full bg-red-600 text-white p-4 rounded-b">
-                <h3 className="text-lg font-semibold">Image Details</h3>
+              <div className="absolute bottom-10 left-0 w-full  text-white p-4 rounded-b-lg mb-10">
+                <h1 className="font-bold ">
+                  <span className="text-2xl">Gesucht:</span> {job.jobTitle}
+                </h1>
+                <p className="font-bold text-lg">({job.voiceLocation})</p>
 
-                <h4 className="mt-2 font-semibold">Taglines:</h4>
-                <ul className="list-disc pl-6">
+                <ul className="list-none space-y-2 mt-4">
                   {job.taglines.slice(0, 4).map((tagline, index) => (
-                    <li key={index}>{tagline}</li>
-                  ))}
-                </ul>
-
-                <h4 className="mt-2 font-semibold">Body Copy:</h4>
-                <ul className="list-disc pl-6">
-                  {job.bodyCopy.slice(0, 4).map((copy, index) => (
-                    <li key={index}>{copy}</li>
+                    <li key={index} className="flex items-center font-medium">
+                      <svg
+                        className="w-4 h-4 text-white mr-2"
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth="2"
+                          d="M5 13l4 4L19 7"
+                        />
+                      </svg>
+                      {tagline}
+                    </li>
                   ))}
                 </ul>
               </div>
