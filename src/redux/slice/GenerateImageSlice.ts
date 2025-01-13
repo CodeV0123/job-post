@@ -50,12 +50,15 @@ const generateImageSlice = createSlice({
         state.status = "loading";
       })
       .addCase(generateImage.fulfilled, (state, action) => {
+        const base64Object = action.payload.image_base64 || {};
+        // Convert object to an array of base64 strings
+        state.images = Object.values(base64Object);
+        console.log("API Response", action.payload);
         state.status = "succeeded";
-        state.images = action.payload.image_base64;
       })
       .addCase(generateImage.rejected, (state, action) => {
-        state.status = "failed";
         state.error = action.payload as string;
+        state.status = "failed";
       });
   },
 });
