@@ -3,6 +3,7 @@ import createJobPostReducer from "../slice/CreateJobPostSlice";
 import chatStreamReducer from "../slice/CreateStreamSlice";
 import generateVideoReducer from "../slice/GenerateVideoSlice";
 import translateReducer from "../slice/TranslateToEnglishSlice";
+import generateImageReducer from "../slice/GenerateImageSlice";
 
 export const store = configureStore({
   reducer: {
@@ -10,6 +11,7 @@ export const store = configureStore({
     chatStream: chatStreamReducer,
     generateVideo: generateVideoReducer,
     translate: translateReducer,
+    generateImage: generateImageReducer,
   },
 });
 
