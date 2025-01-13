@@ -6,10 +6,13 @@ import {
   resetVideoState,
 } from "../redux/slice/GenerateVideoSlice";
 
-// Utility function to generate a random product ID
+interface GenerateVideoProps {
+  generatedImages: string[];
+}
+
 const generateRandomId = () => Math.floor(Math.random() * 100).toString();
 
-const GenerateVideo: React.FC = () => {
+const GenerateVideo: React.FC<GenerateVideoProps> = ({ generatedImages }) => {
   const dispatch = useDispatch<AppDispatch>();
   const { videoResponse, status, error } = useSelector(
     (state: RootState) => state.generateVideo
@@ -17,6 +20,7 @@ const GenerateVideo: React.FC = () => {
   const { job } = useSelector((state: RootState) => state.createJobPost);
 
   const [templatePath, setTemplatePath] = useState<File | null>(null);
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [message, setMessage] = useState<string | null>(null);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -25,19 +29,32 @@ const GenerateVideo: React.FC = () => {
     }
   };
 
+  const handleImageChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setSelectedImage(e.target.value);
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
     if (!templatePath || !job) {
-      setTimeout(() => setMessage(null), 3000);
       setMessage("File and job details are required");
+      setTimeout(() => setMessage(null), 3000);
       return;
     }
+
+    if (!selectedImage) {
+      alert("Please select an image first");
+      return;
+    }
+
+    // Convert base64 string to a File object
+    const blob = base64ToBlob(selectedImage, "image/png");
+    const imageFile = new File([blob], "selected_image.png");
 
     const payload = {
       template_path: templatePath,
       product_id: generateRandomId(),
-      image_keyword: job.imageKeyword,
+      image_file: imageFile,
       script: job.voiceScript,
     };
 
@@ -47,6 +64,7 @@ const GenerateVideo: React.FC = () => {
   const handleReset = () => {
     dispatch(resetVideoState());
     setTemplatePath(null);
+    setSelectedImage(null);
   };
 
   return (
@@ -71,9 +89,39 @@ const GenerateVideo: React.FC = () => {
           />
         </div>
         <div>
-          <p className="text-gray-700">
-            <strong>Image Keyword:</strong> {job?.imageKeyword || "N/A"}
-          </p>
+          <label
+            htmlFor="imageSelect"
+            className="block text-gray-700 font-medium mb-2"
+          >
+            Select Generated Image
+          </label>
+          <select
+            id="imageSelect"
+            onChange={handleImageChange}
+            value={selectedImage || ""}
+            className="block w-full border-gray-300 rounded shadow-sm focus:border-blue-500 focus:ring-blue-500"
+          >
+            <option value="" disabled>
+              -- Select an Image --
+            </option>
+            {generatedImages.map((image, index) => (
+              <option key={index} value={image}>
+                Image {index + 1}
+              </option>
+            ))}
+          </select>
+          {selectedImage && (
+            <div className="mt-4">
+              <p className="text-gray-700">Preview:</p>
+              <img
+                src={`data:image/png;base64,${selectedImage}`}
+                alt="Selected"
+                className="w-48 h-48 object-contain border border-gray-200 rounded-md"
+              />
+            </div>
+          )}
+        </div>
+        <div>
           <p className="text-gray-700">
             <strong>Script:</strong> {job?.voiceScript || "N/A"}
           </p>
@@ -102,13 +150,6 @@ const GenerateVideo: React.FC = () => {
           <h2 className="text-lg font-medium text-blue-700">
             Video Generated Successfully
           </h2>
-          {/* <video
-            controls
-            className="mt-4 w-full"
-            src={videoResponse.video_path}
-          >
-            Your browser does not support the video tag.
-          </video> */}
         </div>
       )}
 
@@ -121,5 +162,31 @@ const GenerateVideo: React.FC = () => {
     </div>
   );
 };
+
+// Utility function to convert base64 string to Blob
+function base64ToBlob(base64: string, mimeType: string): Blob {
+  // Ensure the base64 string is properly formatted (in case it includes the data URL prefix)
+  const base64String = base64.startsWith("data:")
+    ? base64.split(",")[1]
+    : base64;
+
+  // Log base64 string to verify format
+  console.log("Base64 String for conversion:", base64String);
+
+  try {
+    const byteChars = atob(base64String); // Decode base64 to bytes
+    const byteArrays = [];
+    for (let offset = 0; offset < byteChars.length; offset += 512) {
+      const slice = byteChars.slice(offset, offset + 512);
+      const byteNumbers = Array.from(slice).map((char) => char.charCodeAt(0));
+      const byteArray = new Uint8Array(byteNumbers);
+      byteArrays.push(byteArray);
+    }
+    return new Blob(byteArrays, { type: mimeType });
+  } catch (error) {
+    console.error("Error decoding base64 string:", error);
+    throw new Error("Invalid base64 string");
+  }
+}
 
 export default GenerateVideo;
