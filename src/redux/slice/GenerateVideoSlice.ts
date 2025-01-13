@@ -8,14 +8,14 @@ export const generateVideo = createAsyncThunk(
   async (payload: {
     template_path: File;
     product_id: string;
-    image_keyword: string;
+    image_file: File;
     script: string;
   }) => {
     try {
       const formData = new FormData();
       formData.append("template_path", payload.template_path);
       formData.append("product_id", payload.product_id);
-      formData.append("image_keyword", payload.image_keyword);
+      formData.append("image_file", payload.image_file);
       formData.append("script", payload.script);
 
       const response = await axios.post(API_URL, formData, {
@@ -63,6 +63,7 @@ const generateVideoSlice = createSlice({
       .addCase(generateVideo.fulfilled, (state, action) => {
         state.status = "succeeded";
         state.videoResponse = action.payload;
+        console.log("API Response", action.payload);
       })
       .addCase(generateVideo.rejected, (state, action) => {
         state.status = "failed";
