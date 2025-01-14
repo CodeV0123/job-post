@@ -150,8 +150,8 @@ const CreateJobPost: React.FC = () => {
         Create Job Post
       </h1>
       {/* Language Toggle */}
-      <div className="flex items-center mt-4 ">
-        <span className="text-gray-700 mr-4">
+      <div className="flex items-center justify-start">
+        <span className="text-gray-700 mr-4 mb-2">
           {isEnglish ? "English" : "German"}
         </span>
         <div className="relative">
@@ -237,23 +237,23 @@ const CreateJobPost: React.FC = () => {
               <p className="mt-2 text-gray-700">{localJob.introduction}</p>
 
               <h3 className="mt-4 text-md font-semibold text-gray-800">
-                Introduction of the Job:
+                {isEnglish
+                  ? "Introduction to the Position"
+                  : "Einleitung zur Stelle"}
               </h3>
               <p>{localJob.introductionOfJob}</p>
 
               <h3 className="mt-4 text-md font-semibold text-gray-800">
-                Personal Address:
+                {isEnglish ? "Personal Address" : "Persönliche Ansprache"}
               </h3>
               <p>{localJob.personalAddress}</p>
 
               {/* Tasks */}
               {localJob.tasks && (
                 <div className="mt-4">
-                  {/* <h3 className="text-md font-semibold text-gray-800">
-                    {Array.isArray(localJob.tasks)
-                      ? "Tasks:"
-                      : localJob.tasks.header || "Tasks:"}
-                  </h3> */}
+                  <h3 className="text-md font-semibold text-gray-800">
+                    {isEnglish ? "Tasks:" : "Aufgaben:"}
+                  </h3>
                   <ul className="list-disc pl-6">
                     {parseField(localJob.tasks).map((task, index) => (
                       <li key={index}>{task as string}</li>
@@ -265,11 +265,9 @@ const CreateJobPost: React.FC = () => {
               {/* Qualifications */}
               {localJob.qualifications && (
                 <div className="mt-4">
-                  {/* <h3 className="text-md font-semibold text-gray-800">
-                    {Array.isArray(job.qualifications)
-                      ? "Qualifications:"
-                      : job.qualifications.header || "Qualifications:"}
-                  </h3> */}
+                  <h3 className="text-md font-semibold text-gray-800">
+                    {isEnglish ? "Qualifications:" : "Qualifikationen:"}
+                  </h3>
                   <ul className="list-disc pl-6">
                     {parseField(localJob.qualifications).map(
                       (qualification, index) => (
@@ -283,11 +281,9 @@ const CreateJobPost: React.FC = () => {
               {/* Benefits */}
               {localJob.benefits && (
                 <div className="mt-4">
-                  {/* <h3 className="text-md font-semibold text-gray-800">
-                    {Array.isArray(job.benefits)
-                      ? "Benefits:"
-                      : job.benefits.header || "Benefits:"}
-                  </h3> */}
+                  <h3 className="text-md font-semibold text-gray-800">
+                    {isEnglish ? "Benefits:" : "Vorteile:"}
+                  </h3>
                   <ul className="list-disc pl-6">
                     {parseField(localJob.benefits).map((benefit, index) => (
                       <li key={index}>{benefit as string}</li>
@@ -302,12 +298,12 @@ const CreateJobPost: React.FC = () => {
 
           {/* Toggle Button */}
           <div className="mt-4">
-            <button
+            <p
               onClick={() => setIsExpanded((prev) => !prev)}
-              className="px-4 py-2 bg-blue-600 text-white font-medium rounded hover:bg-blue-700"
+              className="px-4 text-right text-black font-medium cursor-pointer "
             >
               {isExpanded ? "Show Less" : "Show More"}
-            </button>
+            </p>
           </div>
           {/* Generated Video Section */}
           {videoResponse && (
@@ -358,17 +354,23 @@ const CreateJobPost: React.FC = () => {
               </video>
 
               {/* Bottom Red Section Overlay */}
-              <div className="absolute bottom-10 left-0 w-full  text-white p-4 rounded-b-lg mb-10">
-                <h1 className="font-bold ">
-                  <span className="text-2xl">Gesucht:</span> {localJob.jobTitle}
-                </h1>
-                <p className="font-bold text-lg">({localJob.voiceLocation})</p>
+              <div className="absolute bottom-10 left-0 w-full  text-white p-4 rounded-b-lg  ">
+                <div className="font-bold flex items-center gap-2">
+                  <h1 className="text-2xl">
+                    {isEnglish ? "Job Title" : "Berufsbezeichnung"}:
+                  </h1>
+                  <h2 className="text-2xl">{localJob.jobTitle}</h2>
+                </div>
+                <p className="font-bold text-2xl">({localJob.voiceLocation})</p>
 
                 <ul className="list-none space-y-2 mt-4">
                   {localJob.taglines.slice(0, 4).map((tagline, index) => (
-                    <li key={index} className="flex items-center font-medium">
+                    <li
+                      key={index}
+                      className="flex items-center font-medium text-2xl"
+                    >
                       <svg
-                        className="w-4 h-4 text-white mr-2"
+                        className="w-10 h-10 text-white mr-2"
                         xmlns="http://www.w3.org/2000/svg"
                         fill="none"
                         viewBox="0 0 24 24"
@@ -388,32 +390,24 @@ const CreateJobPost: React.FC = () => {
               </div>
             </div>
           )}
-          {/* <p>
-            <strong>Location:</strong> {job.voiceLocation}
-          </p>
-          <p>
-            <strong>Benefits:</strong> {job.voiceBenefits}
-          </p> */}
-
-          <h3 className="mt-4 text-md font-semibold text-gray-800">
-            Contact Details:
-          </h3>
-          <p>
-            <strong>Email:</strong> {localJob.contactDetails.email}
-          </p>
-          <p>
-            <strong>Phone:</strong> {localJob.contactDetails.phone}
-          </p>
-          <p>
-            <strong>Contact Person:</strong>{" "}
-            {localJob.contactDetails.contact_person}
-          </p>
-          <p>
-            <strong>Address:</strong> {localJob.contactDetails.address}
-          </p>
-          <p>
-            <strong>Website:</strong> {localJob.contactDetails.website}
-          </p>
+          <div className="mt-4 px-4 flex items-center justify-between">
+            <div className="flex-grow mt-2 mr-4">
+              <input
+                type="text"
+                value={localJob.jobTitle}
+                className="w-full p-2 border-2 border-transparent rounded-lg text-gray-800 focus:outline-none focus:border-dashed focus:border-gray-300 hover:border-dashed hover:border-gray-300 transition-colors"
+                title="Job Title"
+              />
+            </div>
+            <div className="mt-4">
+              <button
+                className="px-4 py-2 text-black bg-gray-200 rounded-lg hover:bg-gray-300 transition-colors"
+                onClick={() => alert("Redirect to application website")} // Placeholder for redirect logic
+              >
+                {isEnglish ? "Apply Now" : "Jetzt bewerben"}
+              </button>
+            </div>
+          </div>
         </div>
       )}
       {jobStatus === "failed" && error && (
