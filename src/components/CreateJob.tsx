@@ -1,10 +1,32 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../redux/store/store";
 import { createJobPost, resetState } from "../redux/slice/CreateJobPostSlice";
 import ChatStream from "./ChatStream";
 import GenerateVideo from "./GenerateVideo";
+import GenerateImage from "./GenerateImage";
 import { FaPlay, FaPen } from "react-icons/fa";
+import { translateToEnglish } from "../redux/slice/TranslateToEnglishSlice";
+
+interface Job {
+  headline: string;
+  introduction: string;
+  introductionOfJob: string;
+  personalAddress: string;
+  tasks?: { items?: string[] } | string[];
+  qualifications?: { items?: string[] } | string[];
+  benefits?: { items?: string[] } | string[];
+  jobTitle: string;
+  voiceLocation: string;
+  taglines: string[];
+  contactDetails: {
+    email: string;
+    phone: string;
+    contact_person: string;
+    address: string;
+    website: string;
+  }; // Add this line to allow additional properties
+}
 
 const parseField = (field: { items?: unknown[] } | unknown[]) => {
   if (Array.isArray(field)) {
@@ -17,12 +39,18 @@ const parseField = (field: { items?: unknown[] } | unknown[]) => {
 
 const CreateJobPost: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
-  const { job, status, error } = useSelector(
-    (state: RootState) => state.createJobPost
-  );
+  const {
+    job,
+    status: jobStatus,
+    error,
+  } = useSelector((state: RootState) => state.createJobPost);
 
   const { videoResponse } = useSelector(
     (state: RootState) => state.generateVideo
+  );
+
+  const { status: translationStatus } = useSelector(
+    (state: RootState) => state.translateToEnglish
   );
 
   const [file, setFile] = useState<File | null>(null);
@@ -30,6 +58,44 @@ const CreateJobPost: React.FC = () => {
   const [isExpanded, setIsExpanded] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
+  const [generatedImages, setGeneratedImages] = useState<string[]>([]);
+  const [isEnglish, setIsEnglish] = useState(false);
+  const [localJob, setLocalJob] = useState<Job | null>(null);
+
+  useEffect(() => {
+    if (job) {
+      setLocalJob(job); // Store the original job when it becomes available
+    }
+  }, [job]);
+
+  const handleTranslateToEnglish = async () => {
+    if (job) {
+      // Ensure job is not null before dispatching
+      const response = await dispatch(translateToEnglish(job)).unwrap();
+      console.log("Response from translateToEnglish:", response);
+
+      // Update localJob with translated data
+      if (response.translated_json) {
+        setLocalJob(response.translated_json);
+      } else {
+        console.error("Translated JSON is missing from the response.");
+      }
+    } else {
+      console.error("Job data is not available for translation.");
+    }
+  };
+  const handleToggleLanguage = () => {
+    if (isEnglish) {
+      setLocalJob(job); // Revert to the original Redux job
+    } else {
+      handleTranslateToEnglish(); // Translate to English
+    }
+    setIsEnglish((prev) => !prev); // Toggle the language flag
+  };
+
+  const handleImageGeneration = (images: string[]) => {
+    setGeneratedImages(images);
+  };
 
   const handlePlayPause = () => {
     const videoElement = document.getElementById(
@@ -83,6 +149,45 @@ const CreateJobPost: React.FC = () => {
       <h1 className="text-2xl font-semibold text-gray-700 mb-6">
         Create Job Post
       </h1>
+      {/* Language Toggle */}
+      <div className="flex items-center mt-4 ">
+        <span className="text-gray-700 mr-4">
+          {isEnglish ? "English" : "German"}
+        </span>
+        <div className="relative">
+          <label
+            className={`inline-flex items-center cursor-pointer ${
+              translationStatus === "loading"
+                ? "pointer-events-none opacity-50"
+                : ""
+            }`}
+          >
+            <span className="sr-only">Toggle Language</span>
+            <input
+              type="checkbox"
+              className="hidden"
+              onChange={handleToggleLanguage}
+              checked={isEnglish}
+              disabled={translationStatus === "loading"}
+            />
+            <div
+              className={`w-10 h-6 rounded-full transition-colors duration-300 ${
+                isEnglish ? "bg-blue-600" : "bg-gray-300"
+              }`}
+            ></div>
+            <div
+              className={`absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full shadow-md transform transition-transform duration-300 ${
+                isEnglish ? "translate-x-4" : "translate-x-0"
+              }`}
+            ></div>
+          </label>
+        </div>
+        {translationStatus === "loading" && (
+          <span className="ml-4 text-gray-500 text-sm">
+            Translation loading...
+          </span>
+        )}
+      </div>
       <form onSubmit={handleSubmit} className="space-y-6">
         <div>
           <label
@@ -103,10 +208,10 @@ const CreateJobPost: React.FC = () => {
         <div className="flex space-x-4">
           <button
             type="submit"
-            disabled={status === "loading"}
+            disabled={jobStatus === "loading"}
             className="px-6 py-2 bg-blue-600 text-white font-medium rounded hover:bg-blue-700 disabled:bg-blue-300"
           >
-            {status === "loading" ? "Uploading..." : "Submit"}
+            {jobStatus === "loading" ? "Uploading..." : "Submit"}
           </button>
           <button
             type="button"
@@ -119,35 +224,38 @@ const CreateJobPost: React.FC = () => {
         <p className="mt-2 text-sm text-red-800">{message}</p>
       </form>
 
-      {status === "succeeded" && job && (
+      {/* Render based on jobStatus */}
+      {jobStatus === "succeeded" && localJob && (
         <div className="mt-6 p-4 bg-gray-50 border border-gray-200 rounded">
           {/* Always show the headline */}
-          <h2 className="text-lg font-medium text-blue-700">{job.headline}</h2>
+          <h2 className="text-lg font-medium text-blue-700">
+            {localJob.headline}
+          </h2>
           {/* Conditionally render the rest of the content */}
           {isExpanded ? (
             <>
-              <p className="mt-2 text-gray-700">{job.introduction}</p>
+              <p className="mt-2 text-gray-700">{localJob.introduction}</p>
 
               <h3 className="mt-4 text-md font-semibold text-gray-800">
                 Introduction of the Job:
               </h3>
-              <p>{job.introductionOfJob}</p>
+              <p>{localJob.introductionOfJob}</p>
 
               <h3 className="mt-4 text-md font-semibold text-gray-800">
                 Personal Address:
               </h3>
-              <p>{job.personalAddress}</p>
+              <p>{localJob.personalAddress}</p>
 
               {/* Tasks */}
-              {job.tasks && (
+              {localJob.tasks && (
                 <div className="mt-4">
-                  <h3 className="text-md font-semibold text-gray-800">
-                    {Array.isArray(job.tasks)
+                  {/* <h3 className="text-md font-semibold text-gray-800">
+                    {Array.isArray(localJob.tasks)
                       ? "Tasks:"
-                      : job.tasks.header || "Tasks:"}
-                  </h3>
+                      : localJob.tasks.header || "Tasks:"}
+                  </h3> */}
                   <ul className="list-disc pl-6">
-                    {parseField(job.tasks).map((task, index) => (
+                    {parseField(localJob.tasks).map((task, index) => (
                       <li key={index}>{task as string}</li>
                     ))}
                   </ul>
@@ -155,15 +263,15 @@ const CreateJobPost: React.FC = () => {
               )}
 
               {/* Qualifications */}
-              {job.qualifications && (
+              {localJob.qualifications && (
                 <div className="mt-4">
-                  <h3 className="text-md font-semibold text-gray-800">
+                  {/* <h3 className="text-md font-semibold text-gray-800">
                     {Array.isArray(job.qualifications)
                       ? "Qualifications:"
                       : job.qualifications.header || "Qualifications:"}
-                  </h3>
+                  </h3> */}
                   <ul className="list-disc pl-6">
-                    {parseField(job.qualifications).map(
+                    {parseField(localJob.qualifications).map(
                       (qualification, index) => (
                         <li key={index}>{qualification as string}</li>
                       )
@@ -173,15 +281,15 @@ const CreateJobPost: React.FC = () => {
               )}
 
               {/* Benefits */}
-              {job.benefits && (
+              {localJob.benefits && (
                 <div className="mt-4">
-                  <h3 className="text-md font-semibold text-gray-800">
+                  {/* <h3 className="text-md font-semibold text-gray-800">
                     {Array.isArray(job.benefits)
                       ? "Benefits:"
                       : job.benefits.header || "Benefits:"}
-                  </h3>
+                  </h3> */}
                   <ul className="list-disc pl-6">
-                    {parseField(job.benefits).map((benefit, index) => (
+                    {parseField(localJob.benefits).map((benefit, index) => (
                       <li key={index}>{benefit as string}</li>
                     ))}
                   </ul>
@@ -252,12 +360,12 @@ const CreateJobPost: React.FC = () => {
               {/* Bottom Red Section Overlay */}
               <div className="absolute bottom-10 left-0 w-full  text-white p-4 rounded-b-lg mb-10">
                 <h1 className="font-bold ">
-                  <span className="text-2xl">Gesucht:</span> {job.jobTitle}
+                  <span className="text-2xl">Gesucht:</span> {localJob.jobTitle}
                 </h1>
-                <p className="font-bold text-lg">({job.voiceLocation})</p>
+                <p className="font-bold text-lg">({localJob.voiceLocation})</p>
 
                 <ul className="list-none space-y-2 mt-4">
-                  {job.taglines.slice(0, 4).map((tagline, index) => (
+                  {localJob.taglines.slice(0, 4).map((tagline, index) => (
                     <li key={index} className="flex items-center font-medium">
                       <svg
                         className="w-4 h-4 text-white mr-2"
@@ -291,29 +399,31 @@ const CreateJobPost: React.FC = () => {
             Contact Details:
           </h3>
           <p>
-            <strong>Email:</strong> {job.contactDetails.email}
+            <strong>Email:</strong> {localJob.contactDetails.email}
           </p>
           <p>
-            <strong>Phone:</strong> {job.contactDetails.phone}
+            <strong>Phone:</strong> {localJob.contactDetails.phone}
           </p>
           <p>
-            <strong>Contact Person:</strong> {job.contactDetails.contact_person}
+            <strong>Contact Person:</strong>{" "}
+            {localJob.contactDetails.contact_person}
           </p>
           <p>
-            <strong>Address:</strong> {job.contactDetails.address}
+            <strong>Address:</strong> {localJob.contactDetails.address}
           </p>
           <p>
-            <strong>Website:</strong> {job.contactDetails.website}
+            <strong>Website:</strong> {localJob.contactDetails.website}
           </p>
         </div>
       )}
-      {status === "failed" && error && (
+      {jobStatus === "failed" && error && (
         <div className="mt-6 p-4 bg-red-50 border border-red-200 rounded">
           <h2 className="text-lg font-medium text-red-700">Error</h2>
           <p className="mt-2 text-sm text-red-800">{error}</p>
         </div>
       )}
-      <GenerateVideo />
+      <GenerateImage onImagesGenerated={handleImageGeneration} />
+      <GenerateVideo generatedImages={generatedImages} />
       <ChatStream />
     </div>
   );
