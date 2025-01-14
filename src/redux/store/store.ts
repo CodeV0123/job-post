@@ -2,12 +2,16 @@ import { configureStore } from "@reduxjs/toolkit";
 import createJobPostReducer from "../slice/CreateJobPostSlice";
 import chatStreamReducer from "../slice/CreateStreamSlice";
 import generateVideoReducer from "../slice/GenerateVideoSlice";
+import translateToEnglishReducer from "../slice/TranslateToEnglishSlice";
+import generateImageReducer from "../slice/GenerateImageSlice";
 
 export const store = configureStore({
   reducer: {
     createJobPost: createJobPostReducer,
     chatStream: chatStreamReducer,
     generateVideo: generateVideoReducer,
+    translateToEnglish: translateToEnglishReducer,
+    generateImage: generateImageReducer,
   },
 });
 
