@@ -67,7 +67,6 @@ const CreateJobPost: React.FC = () => {
 
   useEffect(() => {
     if (job) {
-      console.log("Job data available:", job);
       setLocalJob(job); // Store the original job when it becomes available
     }
   }, [job]);
@@ -76,8 +75,6 @@ const CreateJobPost: React.FC = () => {
     if (job) {
       // Ensure job is not null before dispatching
       const response = await dispatch(translateToEnglish(job)).unwrap();
-      console.log("Response from translateToEnglish:", response);
-
       // Update localJob with translated data
       if (response.translated_json) {
         setLocalJob(response.translated_json);
@@ -127,7 +124,11 @@ const CreateJobPost: React.FC = () => {
       setTimeout(() => {
         setMessage(null);
       }, 3000);
-      setMessage("Please select file to upload");
+      setMessage(
+        isEnglish
+          ? "Please select file to upload"
+          : "Bitte wählen Sie die Datei zum Hochladen aus"
+      );
       return;
     }
     const formData = new FormData();
