@@ -8,28 +8,7 @@ import GenerateImage from "./GenerateImage";
 import { FaPlay, FaPen } from "react-icons/fa";
 import { translateToEnglish } from "../redux/slice/TranslateToEnglishSlice";
 import { toggleLanguage } from "../redux/slice/LanguageSlice";
-
-interface Job {
-  headline: string;
-  introduction: string;
-  introductionOfJob: string;
-  personalAddress: string;
-  tasks?: { items?: string[] } | string[];
-  qualifications?: { items?: string[] } | string[];
-  benefits?: { items?: string[] } | string[];
-  jobTitle: string;
-  voiceLocation: string;
-  taglines: string[];
-  contactDetails: {
-    email: string;
-    phone: string;
-    contact_person: string;
-    address: string;
-    website: string;
-  };
-  closingDate: string;
-  website: string;
-} // Add this line to allow additional properties
+import { Job } from "../types/job";
 
 const parseField = (field: { items?: unknown[] } | unknown[]) => {
   if (Array.isArray(field)) {
@@ -485,7 +464,7 @@ const CreateJobPost: React.FC = () => {
         </div>
       )}
       <GenerateImage onImagesGenerated={handleImageGeneration} />
-      <GenerateVideo generatedImages={generatedImages} />
+      <GenerateVideo generatedImages={generatedImages} localJob={localJob} />
       <ChatStream />
     </div>
   );
