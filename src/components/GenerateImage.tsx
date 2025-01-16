@@ -66,7 +66,7 @@ const GenerateImage: React.FC<GenerateImageProps> = ({ onImagesGenerated }) => {
   return (
     <div className="max-w-3xl mx-auto mt-10 p-6 bg-white shadow-md rounded-md">
       <h1 className="text-2xl font-semibold text-gray-700 mb-6">
-        {isEnglish ? "Generate Image" : "Bild generieren"}
+        {isEnglish ? "Generate Image" : "Bild Generieren"}
       </h1>
       <form onSubmit={handleSubmit} className="space-y-6">
         <div>
