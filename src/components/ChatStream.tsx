@@ -60,8 +60,85 @@ const ChatStream: React.FC = () => {
   };
 
   return (
-    <div className="max-w-3xl mx-auto mt-10 p-6 bg-white shadow-md rounded-md">
-      <h1 className="text-2xl font-semibold text-gray-700 mb-6">
+    // <div className="max-w-3xl mx-auto mt-10 p-6 bg-white shadow-md rounded-md">
+    //   <h1 className="text-2xl font-semibold text-gray-700 mb-6">
+    //     {isEnglish ? "Chat Stream" : "Chat-Stream"}
+    //   </h1>
+    //   <form onSubmit={handleSubmit} className="space-y-6">
+    //     <div>
+    //       <label
+    //         htmlFor="prompt"
+    //         className="block text-gray-700 font-medium mb-2"
+    //       >
+    //         {isEnglish ? "Prompt:" : "Prompt:"}{" "}
+    //         <span className="text-gray-600 italic text-xs">
+    //           {isEnglish
+    //             ? "(Please prompt for additional details that you would like to amend!)"
+    //             : "(Bitte geben Sie weitere Details an, die Sie ändern möchten!)"}
+    //         </span>
+    //       </label>
+    //       <input
+    //         type="text"
+    //         id="prompt"
+    //         value={prompt}
+    //         onChange={(e) => setPrompt(e.target.value)}
+    //         placeholder={
+    //           isEnglish ? "Enter your request" : "Geben Sie Ihre Anfrage ein"
+    //         }
+    //         className="w-full p-2 border rounded"
+    //       />
+    //     </div>
+    //     <div className="flex space-x-4">
+    //       <button
+    //         type="submit"
+    //         disabled={status === "loading"}
+    //         className="px-6 py-2 bg-blue-600 text-white font-medium rounded hover:bg-blue-700 disabled:bg-blue-300"
+    //       >
+    //         {status === "loading"
+    //           ? isEnglish
+    //             ? "Processing..."
+    //             : "Verarbeitung..."
+    //           : isEnglish
+    //           ? "Submit"
+    //           : "Einreichen"}
+    //       </button>
+    //       <button
+    //         type="button"
+    //         onClick={handleReset}
+    //         className="px-6 py-2 bg-gray-600 text-white font-medium rounded hover:bg-gray-700"
+    //       >
+    //         {isEnglish ? "Reset" : "Zurücksetzen"}
+    //       </button>
+    //     </div>
+    //     <p className="text-sm text-red-800">{message}</p>
+    //   </form>
+
+    //   {status === "succeeded" && chatResponse && (
+    //     <div className="mt-6 p-4 bg-gray-50 border border-gray-200 rounded overflow-x-auto">
+    //       <h2 className="text-lg font-medium text-blue-700">
+    //         {isEnglish ? "Chat Response" : "Chat-Antwort"}
+    //       </h2>
+    //       <p className="mt-2 text-sm text-green-800">{successMessage}</p>
+    //       {/* <pre className="mt-2 text-gray-700">
+    //         {" "}
+    //         {typeof chatResponse === "object"
+    //           ? JSON.stringify(chatResponse, null, 2)
+    //           : chatResponse}
+    //       </pre> */}
+    //     </div>
+    //   )}
+
+    //   {status === "failed" && error && (
+    //     <div className="mt-6 p-4 bg-red-50 border border-red-200 rounded">
+    //       <h2 className="text-lg font-medium text-red-700">
+    //         {isEnglish ? "Error" : "Fehler"}
+    //       </h2>
+    //       <p className="mt-2 text-sm text-red-800">{error}</p>
+    //     </div>
+    //   )}
+    // </div>
+    <div className="max-w-3xl mx-auto mt-10 p-6 bg-white shadow-md rounded-md sm:p-8 lg:max-w-5xl">
+      <h1 className="text-2xl font-semibold text-gray-700 mb-6 text-center sm:text-3xl">
         {isEnglish ? "Chat Stream" : "Chat-Stream"}
       </h1>
       <form onSubmit={handleSubmit} className="space-y-6">
@@ -71,7 +148,7 @@ const ChatStream: React.FC = () => {
             className="block text-gray-700 font-medium mb-2"
           >
             {isEnglish ? "Prompt:" : "Prompt:"}{" "}
-            <span className="text-gray-600 italic text-xs">
+            <span className="text-gray-600 italic text-xs block sm:inline">
               {isEnglish
                 ? "(Please prompt for additional details that you would like to amend!)"
                 : "(Bitte geben Sie weitere Details an, die Sie ändern möchten!)"}
@@ -85,14 +162,14 @@ const ChatStream: React.FC = () => {
             placeholder={
               isEnglish ? "Enter your request" : "Geben Sie Ihre Anfrage ein"
             }
-            className="w-full p-2 border rounded"
+            className="w-full p-2 border rounded text-sm sm:text-base focus:ring focus:ring-blue-300 focus:outline-none"
           />
         </div>
-        <div className="flex space-x-4">
+        <div className="flex flex-col sm:flex-row sm:space-x-4 space-y-4 sm:space-y-0">
           <button
             type="submit"
             disabled={status === "loading"}
-            className="px-6 py-2 bg-blue-600 text-white font-medium rounded hover:bg-blue-700 disabled:bg-blue-300"
+            className="w-full sm:w-auto px-6 py-2 bg-blue-600 text-white font-medium rounded hover:bg-blue-700 disabled:bg-blue-300"
           >
             {status === "loading"
               ? isEnglish
@@ -105,7 +182,7 @@ const ChatStream: React.FC = () => {
           <button
             type="button"
             onClick={handleReset}
-            className="px-6 py-2 bg-gray-600 text-white font-medium rounded hover:bg-gray-700"
+            className="w-full sm:w-auto px-6 py-2 bg-gray-600 text-white font-medium rounded hover:bg-gray-700"
           >
             {isEnglish ? "Reset" : "Zurücksetzen"}
           </button>
@@ -119,12 +196,11 @@ const ChatStream: React.FC = () => {
             {isEnglish ? "Chat Response" : "Chat-Antwort"}
           </h2>
           <p className="mt-2 text-sm text-green-800">{successMessage}</p>
-          {/* <pre className="mt-2 text-gray-700">
-            {" "}
+          <pre className="mt-2 text-sm text-gray-700 whitespace-pre-wrap">
             {typeof chatResponse === "object"
               ? JSON.stringify(chatResponse, null, 2)
               : chatResponse}
-          </pre> */}
+          </pre>
         </div>
       )}
 
