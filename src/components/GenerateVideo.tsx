@@ -184,6 +184,9 @@ const GenerateVideo: React.FC<GenerateVideoProps> = ({ generatedImages }) => {
     // </div>
     <div className="max-w-3xl mx-auto mt-10 p-6 bg-white shadow-md rounded-md">
       <h1 className="text-2xl font-semibold text-gray-700 mb-6 text-center">
+        <span className="italic text-gray-400 text-base">
+          {isEnglish ? "[Third Step]:" : "[Dritter Schritt]:"}{" "}
+        </span>
         {isEnglish ? "Generate Video" : "Video Generieren"}
       </h1>
       <form onSubmit={handleSubmit} className="space-y-6">
