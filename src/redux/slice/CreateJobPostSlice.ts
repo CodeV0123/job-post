@@ -130,6 +130,7 @@ const createJobPostSlice = createSlice({
               Jobbezeichnung: jobPost["Jobbezeichnung"],
               Jobtitel: jobPost["Jobtitel"],
               "Job Titel": jobPost["Job Titel"],
+              Job_Title: jobPost["Job_Title"],
             },
             "No job title available"
           ),
@@ -159,6 +160,8 @@ const createJobPostSlice = createSlice({
               introductionOfJob: jobPost["introductionOfJob"],
               "Job-Einführung": jobPost["Job-Einführung"],
               "Job Einleitung": jobPost["Job Einleitung"],
+              Stellenbeschreibung: jobPost["Stellenbeschreibung"],
+              Job_Einführung: jobPost["Job_Einführung"],
             },
             "No job introduction available"
           ),

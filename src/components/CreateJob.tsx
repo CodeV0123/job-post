@@ -8,28 +8,7 @@ import GenerateImage from "./GenerateImage";
 import { FaPlay, FaPen } from "react-icons/fa";
 import { translateToEnglish } from "../redux/slice/TranslateToEnglishSlice";
 import { toggleLanguage } from "../redux/slice/LanguageSlice";
-
-interface Job {
-  headline: string;
-  introduction: string;
-  introductionOfJob: string;
-  personalAddress: string;
-  tasks?: { items?: string[] } | string[];
-  qualifications?: { items?: string[] } | string[];
-  benefits?: { items?: string[] } | string[];
-  jobTitle: string;
-  voiceLocation: string;
-  taglines: string[];
-  contactDetails: {
-    email: string;
-    phone: string;
-    contact_person: string;
-    address: string;
-    website: string;
-  };
-  closingDate: string;
-  website: string;
-} // Add this line to allow additional properties
+import { Job } from "../types/job";
 
 const parseField = (field: { items?: unknown[] } | unknown[]) => {
   if (Array.isArray(field)) {
@@ -153,7 +132,10 @@ const CreateJobPost: React.FC = () => {
   return (
     <div className="max-w-3xl mx-auto mt-10 p-6 bg-white shadow-md rounded-md">
       <h1 className="text-2xl text-center font-semibold text-gray-700 mb-2">
-        {isEnglish ? "Create Job Post" : "Stellenanzeige erstellen"}
+        <span className="italic text-gray-400 text-base">
+          {isEnglish ? "[First Step]:" : "[Erster Schritt]:"}{" "}
+        </span>
+        {isEnglish ? "Create Job Post" : "Stellenanzeige Erstellen"}
       </h1>
       {/* Language Toggle */}
       <p className="text-gray-400 italic py-1 text-xs">
@@ -260,10 +242,10 @@ const CreateJobPost: React.FC = () => {
               </h3>
               <p>{localJob.introductionOfJob}</p>
 
-              <h3 className="mt-4 text-md font-semibold text-gray-800">
+              {/* <h3 className="mt-4 text-md font-semibold text-gray-800">
                 {isEnglish ? "Personal Address" : "Persönliche Ansprache"}
               </h3>
-              <p>{localJob.personalAddress}</p>
+              <p>{localJob.personalAddress}</p> */}
 
               {/* Tasks */}
               {localJob.tasks && (
@@ -428,13 +410,7 @@ const CreateJobPost: React.FC = () => {
                 readOnly
               />
               <p className="w-full italic p-2 border-2 border-transparent rounded-lg text-gray-400 focus:outline-none focus:border-dashed focus:border-gray-300 hover:border-dashed hover:border-gray-300 transition-colors">
-                {new Date(localJob.closingDate).toLocaleDateString("en-US", {
-                  year: "numeric",
-                  month: "long",
-                  day: "2-digit",
-                })}
-                {"  "}
-                {localJob.voiceLocation}
+                {localJob.personalAddress}
               </p>
             </div>
             <div className="mt-4">
@@ -488,7 +464,7 @@ const CreateJobPost: React.FC = () => {
         </div>
       )}
       <GenerateImage onImagesGenerated={handleImageGeneration} />
-      <GenerateVideo generatedImages={generatedImages} />
+      <GenerateVideo generatedImages={generatedImages} localJob={localJob} />
       <ChatStream />
     </div>
   );

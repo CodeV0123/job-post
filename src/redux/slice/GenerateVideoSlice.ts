@@ -10,6 +10,7 @@ export const generateVideo = createAsyncThunk(
     product_id: string;
     image_file: File;
     script: string;
+    // language: string;
   }) => {
     try {
       const formData = new FormData();
@@ -17,6 +18,7 @@ export const generateVideo = createAsyncThunk(
       formData.append("product_id", payload.product_id);
       formData.append("image_file", payload.image_file);
       formData.append("script", payload.script);
+      // formData.append("language", payload.language);
 
       const response = await axios.post(API_URL, formData, {
         headers: {
