@@ -18,10 +18,16 @@ const ChatStream: React.FC = () => {
   const [message, setMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
 
+  const isEnglish = useSelector((state: RootState) => state.language.isEnglish);
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!job) {
-      setMessage("Please create a job post first!");
+      setMessage(
+        isEnglish
+          ? "Please create a job post first!"
+          : "Bitte erstellen Sie zuerst einen Job-Post!"
+      );
       setTimeout(() => setMessage(""), 5000);
       return;
     }
@@ -33,7 +39,11 @@ const ChatStream: React.FC = () => {
         // Dispatch the updated fields to CreateJob
         if (typeof response === "object") {
           dispatch(updateJobFields(response));
-          setSuccessMessage("Job post updated successfully!");
+          setSuccessMessage(
+            isEnglish
+              ? "Job post updated successfully!"
+              : "Job-Post erfolgreich aktualisiert!"
+          );
           setTimeout(() => setSuccessMessage(""), 3000);
         } else {
           console.error("Invalid response format:", response);
@@ -51,16 +61,20 @@ const ChatStream: React.FC = () => {
 
   return (
     <div className="max-w-3xl mx-auto mt-10 p-6 bg-white shadow-md rounded-md">
-      <h1 className="text-2xl font-semibold text-gray-700 mb-6">Chat Stream</h1>
+      <h1 className="text-2xl font-semibold text-gray-700 mb-6">
+        {isEnglish ? "Chat Stream" : "Chat-Stream"}
+      </h1>
       <form onSubmit={handleSubmit} className="space-y-6">
         <div>
           <label
             htmlFor="prompt"
             className="block text-gray-700 font-medium mb-2"
           >
-            Prompt:{" "}
+            {isEnglish ? "Prompt:" : "Prompt:"}{" "}
             <span className="text-gray-600 italic text-xs">
-              (Please prompt for additional details!)
+              {isEnglish
+                ? "(Please prompt for additional details that you would like to amend!)"
+                : "(Bitte geben Sie weitere Details an, die Sie ändern möchten!)"}
             </span>
           </label>
           <input
@@ -68,7 +82,9 @@ const ChatStream: React.FC = () => {
             id="prompt"
             value={prompt}
             onChange={(e) => setPrompt(e.target.value)}
-            placeholder="Enter your change request"
+            placeholder={
+              isEnglish ? "Enter your request" : "Geben Sie Ihre Anfrage ein"
+            }
             className="w-full p-2 border rounded"
           />
         </div>
@@ -78,14 +94,20 @@ const ChatStream: React.FC = () => {
             disabled={status === "loading"}
             className="px-6 py-2 bg-blue-600 text-white font-medium rounded hover:bg-blue-700 disabled:bg-blue-300"
           >
-            {status === "loading" ? "Processing..." : "Submit"}
+            {status === "loading"
+              ? isEnglish
+                ? "Processing..."
+                : "Verarbeitung..."
+              : isEnglish
+              ? "Submit"
+              : "Einreichen"}
           </button>
           <button
             type="button"
             onClick={handleReset}
             className="px-6 py-2 bg-gray-600 text-white font-medium rounded hover:bg-gray-700"
           >
-            Reset
+            {isEnglish ? "Reset" : "Zurücksetzen"}
           </button>
         </div>
         <p className="text-sm text-red-800">{message}</p>
@@ -93,7 +115,9 @@ const ChatStream: React.FC = () => {
 
       {status === "succeeded" && chatResponse && (
         <div className="mt-6 p-4 bg-gray-50 border border-gray-200 rounded overflow-x-auto">
-          <h2 className="text-lg font-medium text-blue-700">Chat Response</h2>
+          <h2 className="text-lg font-medium text-blue-700">
+            {isEnglish ? "Chat Response" : "Chat-Antwort"}
+          </h2>
           <p className="mt-2 text-sm text-green-800">{successMessage}</p>
           {/* <pre className="mt-2 text-gray-700">
             {" "}
@@ -106,7 +130,9 @@ const ChatStream: React.FC = () => {
 
       {status === "failed" && error && (
         <div className="mt-6 p-4 bg-red-50 border border-red-200 rounded">
-          <h2 className="text-lg font-medium text-red-700">Error</h2>
+          <h2 className="text-lg font-medium text-red-700">
+            {isEnglish ? "Error" : "Fehler"}
+          </h2>
           <p className="mt-2 text-sm text-red-800">{error}</p>
         </div>
       )}
