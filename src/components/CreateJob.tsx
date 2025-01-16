@@ -7,6 +7,7 @@ import GenerateVideo from "./GenerateVideo";
 import GenerateImage from "./GenerateImage";
 import { FaPlay, FaPen } from "react-icons/fa";
 import { translateToEnglish } from "../redux/slice/TranslateToEnglishSlice";
+import { toggleLanguage } from "../redux/slice/LanguageSlice";
 
 interface Job {
   headline: string;
@@ -93,6 +94,7 @@ const CreateJobPost: React.FC = () => {
     } else {
       handleTranslateToEnglish(); // Translate to English
     }
+    dispatch(toggleLanguage()); // Toggle the language flag
     setIsEnglish((prev) => !prev); // Toggle the language flag
   };
 
