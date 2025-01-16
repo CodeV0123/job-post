@@ -314,9 +314,15 @@ const CreateJobPost: React.FC = () => {
           <div className="mt-4">
             <p
               onClick={() => setIsExpanded((prev) => !prev)}
-              className="px-4 text-right text-black font-medium cursor-pointer "
+              className="px-4 text-right text-black font-medium cursor-pointer"
             >
-              {isExpanded ? "Show Less" : "Show More"}
+              {isExpanded
+                ? isEnglish
+                  ? "Show Less"
+                  : "Weniger anzeigen"
+                : isEnglish
+                ? "Show More"
+                : "Mehr anzeigen"}
             </p>
           </div>
           {/* Generated Video Section */}
