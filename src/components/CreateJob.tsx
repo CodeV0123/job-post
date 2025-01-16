@@ -263,10 +263,10 @@ const CreateJobPost: React.FC = () => {
               </h3>
               <p>{localJob.introductionOfJob}</p>
 
-              <h3 className="mt-4 text-md font-semibold text-gray-800">
+              {/* <h3 className="mt-4 text-md font-semibold text-gray-800">
                 {isEnglish ? "Personal Address" : "Persönliche Ansprache"}
               </h3>
-              <p>{localJob.personalAddress}</p>
+              <p>{localJob.personalAddress}</p> */}
 
               {/* Tasks */}
               {localJob.tasks && (
@@ -431,13 +431,7 @@ const CreateJobPost: React.FC = () => {
                 readOnly
               />
               <p className="w-full italic p-2 border-2 border-transparent rounded-lg text-gray-400 focus:outline-none focus:border-dashed focus:border-gray-300 hover:border-dashed hover:border-gray-300 transition-colors">
-                {new Date(localJob.closingDate).toLocaleDateString("en-US", {
-                  year: "numeric",
-                  month: "long",
-                  day: "2-digit",
-                })}
-                {"  "}
-                {localJob.voiceLocation}
+                {localJob.personalAddress}
               </p>
             </div>
             <div className="mt-4">
