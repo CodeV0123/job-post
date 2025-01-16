@@ -58,7 +58,10 @@ const ChatStream: React.FC = () => {
             htmlFor="prompt"
             className="block text-gray-700 font-medium mb-2"
           >
-            Prompt:
+            Prompt:{" "}
+            <span className="text-gray-600 italic text-xs">
+              (Please prompt for additional details!)
+            </span>
           </label>
           <input
             type="text"
