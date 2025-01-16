@@ -13,7 +13,7 @@ const GenerateImage: React.FC<GenerateImageProps> = ({ onImagesGenerated }) => {
     (state: RootState) => state.generateImage
   );
   const { job } = useSelector((state: RootState) => state.createJobPost);
-
+  const isEnglish = useSelector((state: RootState) => state.language.isEnglish);
   const [templatePath, setTemplatePath] = useState<File | null>(null);
   const [message, setMessage] = useState<string | null>(null);
 
@@ -66,7 +66,7 @@ const GenerateImage: React.FC<GenerateImageProps> = ({ onImagesGenerated }) => {
   return (
     <div className="max-w-3xl mx-auto mt-10 p-6 bg-white shadow-md rounded-md">
       <h1 className="text-2xl font-semibold text-gray-700 mb-6">
-        Generate Images
+        {isEnglish ? "Generate Image" : "Bild generieren"}
       </h1>
       <form onSubmit={handleSubmit} className="space-y-6">
         <div>
@@ -74,7 +74,7 @@ const GenerateImage: React.FC<GenerateImageProps> = ({ onImagesGenerated }) => {
             htmlFor="templateFile"
             className="block text-gray-700 font-medium mb-2"
           >
-            Upload Template File
+            {isEnglish ? "Upload Template File" : "Vorlage-Datei hochladen"}
           </label>
           <input
             type="file"
@@ -89,7 +89,13 @@ const GenerateImage: React.FC<GenerateImageProps> = ({ onImagesGenerated }) => {
           disabled={status === "loading"}
           className="w-full px-6 py-2 bg-blue-600 text-white font-medium rounded hover:bg-blue-700 disabled:bg-blue-300"
         >
-          {status === "loading" ? "Generating..." : "Generate"}
+          {status === "loading"
+            ? isEnglish
+              ? "Generating..."
+              : "Generieren..."
+            : isEnglish
+            ? "Generate"
+            : "Erzeugen"}
         </button>
         {message && (
           <p className="mt-2 text-sm text-red-800 text-center">{message}</p>
@@ -99,7 +105,7 @@ const GenerateImage: React.FC<GenerateImageProps> = ({ onImagesGenerated }) => {
       {status === "succeeded" && images.length > 0 && (
         <div className="mt-6">
           <h2 className="text-xl font-medium text-gray-800 mb-4">
-            Generated Images
+            {isEnglish ? "Generated Images" : "Erzeugte Bilder"}
           </h2>
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
             {images.map((base64String, index) => (
@@ -116,7 +122,7 @@ const GenerateImage: React.FC<GenerateImageProps> = ({ onImagesGenerated }) => {
                   onClick={() => downloadImage(base64String, index)}
                   className="mt-3 px-4 py-2 bg-green-600 text-white font-medium rounded hover:bg-green-700"
                 >
-                  Download
+                  {isEnglish ? "Download" : "Herunterladen"}
                 </button>
               </div>
             ))}
