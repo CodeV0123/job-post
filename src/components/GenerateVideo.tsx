@@ -5,14 +5,19 @@ import {
   generateVideo,
   resetVideoState,
 } from "../redux/slice/GenerateVideoSlice";
+import { Job } from "../types/job";
 
 interface GenerateVideoProps {
   generatedImages: string[];
+  localJob: Job | null;
 }
 
 const generateRandomId = () => Math.floor(Math.random() * 100).toString();
 
-const GenerateVideo: React.FC<GenerateVideoProps> = ({ generatedImages }) => {
+const GenerateVideo: React.FC<GenerateVideoProps> = ({
+  generatedImages,
+  localJob,
+}) => {
   const dispatch = useDispatch<AppDispatch>();
   const { videoResponse, status, error } = useSelector(
     (state: RootState) => state.generateVideo
@@ -20,6 +25,7 @@ const GenerateVideo: React.FC<GenerateVideoProps> = ({ generatedImages }) => {
   const { job } = useSelector((state: RootState) => state.createJobPost);
 
   const isEnglish = useSelector((state: RootState) => state.language.isEnglish);
+  // const localJob = useSelector((state: RootState) => state.localJob);
 
   const [templatePath, setTemplatePath] = useState<File | null>(null);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
@@ -57,11 +63,13 @@ const GenerateVideo: React.FC<GenerateVideoProps> = ({ generatedImages }) => {
     const blob = base64ToBlob(selectedImage, "image/png");
     const imageFile = new File([blob], "selected_image.png");
 
+    // const currentVoiceScript = localJob?.voiceScript || job.voiceScript;
+
     const payload = {
       template_path: templatePath,
       product_id: generateRandomId(),
       image_file: imageFile,
-      script: job.voiceScript,
+      script: localJob?.voiceScript || job.voiceScript,
     };
 
     dispatch(generateVideo(payload));
@@ -139,7 +147,7 @@ const GenerateVideo: React.FC<GenerateVideoProps> = ({ generatedImages }) => {
         <div>
           <p className="text-gray-700">
             <strong>{isEnglish ? "Script:" : "Skript:"}</strong>{" "}
-            {job?.voiceScript || "N/A"}
+            {localJob?.voiceScript || "N/A"}
           </p>
         </div>
         <div className="flex flex-col sm:flex-row sm:space-x-4 space-y-4 sm:space-y-0">
