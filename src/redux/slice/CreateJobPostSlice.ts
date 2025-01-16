@@ -54,6 +54,8 @@ interface Job {
   imageKeyword: string;
   taglines: string[];
   bodyCopy: string[];
+  website: string;
+  closingDate: string;
 }
 
 const createJobPostSlice = createSlice({
@@ -124,6 +126,10 @@ const createJobPostSlice = createSlice({
             {
               "Job Title": jobPost["Job Title"],
               Berufsbezeichnung: jobPost["Berufsbezeichnung"],
+              Stellenbezeichnung: jobPost["Stellenbezeichnung"],
+              Jobbezeichnung: jobPost["Jobbezeichnung"],
+              Jobtitel: jobPost["Jobtitel"],
+              "Job Titel": jobPost["Job Titel"],
             },
             "No job title available"
           ),
@@ -144,8 +150,15 @@ const createJobPostSlice = createSlice({
               Job_Introduction: jobPost["Job_Introduction"],
               "Einführung des Jobs": jobPost["Einführung des Jobs"],
               "Einleitung zur Stelle": jobPost["Einleitung zur Stelle"],
+              "Einführung des Berufs": jobPost["Einführung des Berufs"],
               "Introduction to the Position":
                 jobPost["Introduction to the Position"],
+              Stelleneinführung: jobPost["Stelleneinführung"],
+              Jobeinführung: jobPost["Jobeinführung"],
+              "Job Einführung": jobPost["Job Einführung"],
+              introductionOfJob: jobPost["introductionOfJob"],
+              "Job-Einführung": jobPost["Job-Einführung"],
+              "Job Einleitung": jobPost["Job Einleitung"],
             },
             "No job introduction available"
           ),
@@ -156,6 +169,8 @@ const createJobPostSlice = createSlice({
               PersonalAddress: jobPost["PersonalAddress"],
               "Persönliche Ansprache": jobPost["Persönliche Ansprache"],
               "Persönliche Adresse": jobPost["Persönliche Adresse"],
+              Persönliche_Adresse: jobPost["Persönliche_Adresse"],
+              personalAddress: jobPost["personalAddress"],
             },
             "No personal address provided"
           ),
@@ -183,6 +198,7 @@ const createJobPostSlice = createSlice({
               {
                 Benefits: jobPost.Benefits,
                 Vorteile: jobPost["Vorteile"],
+                Leistungen: jobPost["Leistungen"],
               },
               "No benefits available"
             )
@@ -205,7 +221,10 @@ const createJobPostSlice = createSlice({
           imageKeyword: image.image_keyword || "No image keyword provided",
           taglines: image.taglines || [],
           bodyCopy: image.body_copy || [],
+          website: image.website || "No website provided",
+          closingDate: image.Closing_Date || "No closing date provided",
         };
+        console.log("Job post:", state.job);
       })
 
       .addCase(createJobPost.rejected, (state, action) => {

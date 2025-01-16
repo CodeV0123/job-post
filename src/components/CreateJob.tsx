@@ -7,6 +7,7 @@ import GenerateVideo from "./GenerateVideo";
 import GenerateImage from "./GenerateImage";
 import { FaPlay, FaPen } from "react-icons/fa";
 import { translateToEnglish } from "../redux/slice/TranslateToEnglishSlice";
+import { toggleLanguage } from "../redux/slice/LanguageSlice";
 
 interface Job {
   headline: string;
@@ -25,8 +26,10 @@ interface Job {
     contact_person: string;
     address: string;
     website: string;
-  }; // Add this line to allow additional properties
-}
+  };
+  closingDate: string;
+  website: string;
+} // Add this line to allow additional properties
 
 const parseField = (field: { items?: unknown[] } | unknown[]) => {
   if (Array.isArray(field)) {
@@ -72,8 +75,6 @@ const CreateJobPost: React.FC = () => {
     if (job) {
       // Ensure job is not null before dispatching
       const response = await dispatch(translateToEnglish(job)).unwrap();
-      console.log("Response from translateToEnglish:", response);
-
       // Update localJob with translated data
       if (response.translated_json) {
         setLocalJob(response.translated_json);
@@ -90,6 +91,7 @@ const CreateJobPost: React.FC = () => {
     } else {
       handleTranslateToEnglish(); // Translate to English
     }
+    dispatch(toggleLanguage()); // Toggle the language flag
     setIsEnglish((prev) => !prev); // Toggle the language flag
   };
 
@@ -122,7 +124,11 @@ const CreateJobPost: React.FC = () => {
       setTimeout(() => {
         setMessage(null);
       }, 3000);
-      setMessage("Please select file to upload");
+      setMessage(
+        isEnglish
+          ? "Please select file to upload"
+          : "Bitte wählen Sie die Datei zum Hochladen aus"
+      );
       return;
     }
     const formData = new FormData();
@@ -146,12 +152,15 @@ const CreateJobPost: React.FC = () => {
 
   return (
     <div className="max-w-3xl mx-auto mt-10 p-6 bg-white shadow-md rounded-md">
-      <h1 className="text-2xl font-semibold text-gray-700 mb-6">
-        Create Job Post
+      <h1 className="text-2xl text-center font-semibold text-gray-700 mb-2">
+        {isEnglish ? "Create Job Post" : "Stellenanzeige erstellen"}
       </h1>
       {/* Language Toggle */}
-      <div className="flex items-center justify-start">
-        <span className="text-gray-700 mr-4 mb-2">
+      <p className="text-gray-400 italic py-1 text-xs">
+        {isEnglish ? "(Toggle Language)" : "(Sprache umschalten)"}
+      </p>
+      <div className="flex space-x-4">
+        <span className="text-gray-700 mr-4 mb-4">
           {isEnglish ? "English" : "German"}
         </span>
         <div className="relative">
@@ -184,7 +193,7 @@ const CreateJobPost: React.FC = () => {
         </div>
         {translationStatus === "loading" && (
           <span className="ml-4 text-gray-500 text-sm">
-            Translation loading...
+            {isEnglish ? "Translation loading..." : "Übersetzung lädt..."}
           </span>
         )}
       </div>
@@ -194,7 +203,9 @@ const CreateJobPost: React.FC = () => {
             htmlFor="file"
             className="block text-gray-700 font-medium mb-2"
           >
-            Upload Job Post Document
+            {isEnglish
+              ? "Upload Job Post Document"
+              : "Stellenanzeige hochladen"}
           </label>
           <input
             type="file"
@@ -211,14 +222,20 @@ const CreateJobPost: React.FC = () => {
             disabled={jobStatus === "loading"}
             className="px-6 py-2 bg-blue-600 text-white font-medium rounded hover:bg-blue-700 disabled:bg-blue-300"
           >
-            {jobStatus === "loading" ? "Uploading..." : "Submit"}
+            {jobStatus === "loading"
+              ? isEnglish
+                ? "Uploading..."
+                : "Hochladen..."
+              : isEnglish
+              ? "Submit"
+              : "Einreichen"}
           </button>
           <button
             type="button"
             onClick={handleReset}
             className="px-6 py-2 bg-gray-600 text-white font-medium rounded hover:bg-gray-700"
           >
-            Reset
+            {isEnglish ? "Reset" : "Zurücksetzen"}
           </button>
         </div>
         <p className="mt-2 text-sm text-red-800">{message}</p>
@@ -300,9 +317,15 @@ const CreateJobPost: React.FC = () => {
           <div className="mt-4">
             <p
               onClick={() => setIsExpanded((prev) => !prev)}
-              className="px-4 text-right text-black font-medium cursor-pointer "
+              className="px-4 text-right text-black font-medium cursor-pointer"
             >
-              {isExpanded ? "Show Less" : "Show More"}
+              {isExpanded
+                ? isEnglish
+                  ? "Show Less"
+                  : "Weniger anzeigen"
+                : isEnglish
+                ? "Show More"
+                : "Mehr anzeigen"}
             </p>
           </div>
           {/* Generated Video Section */}
@@ -350,24 +373,26 @@ const CreateJobPost: React.FC = () => {
                 onPlay={() => setIsPlaying(true)}
                 controls
               >
-                Your browser does not support the video tag.
+                {isEnglish
+                  ? " Your browser does not support the video tag."
+                  : "Ihr Browser unterstützt das Video-Tag nicht."}
               </video>
 
               {/* Bottom Red Section Overlay */}
-              <div className="absolute bottom-10 left-0 w-full  text-white p-4 rounded-b-lg  ">
+              <div className="absolute bottom-10 left-0 w-full  text-white p-4 rounded-b-lg">
                 <div className="font-bold flex items-center gap-2">
-                  <h1 className="text-2xl">
-                    {isEnglish ? "Job Title" : "Berufsbezeichnung"}:
+                  <h1 className="text-xl">
+                    {isEnglish ? "Job title" : "Berufsbezeichnung"}:
                   </h1>
-                  <h2 className="text-2xl">{localJob.jobTitle}</h2>
+                  <h2 className="text-xl">{localJob.jobTitle}</h2>
                 </div>
-                <p className="font-bold text-2xl">({localJob.voiceLocation})</p>
+                <p className="font-bold text-lg">({localJob.voiceLocation})</p>
 
-                <ul className="list-none space-y-2 mt-4">
-                  {localJob.taglines.slice(0, 4).map((tagline, index) => (
+                <ul className="list-none space-y-2 mt-2">
+                  {localJob.taglines.map((tagline, index) => (
                     <li
                       key={index}
-                      className="flex items-center font-medium text-2xl"
+                      className="flex items-center font-medium text-lg"
                     >
                       <svg
                         className="w-10 h-10 text-white mr-2"
@@ -391,23 +416,69 @@ const CreateJobPost: React.FC = () => {
             </div>
           )}
           <div className="mt-4 px-4 flex items-center justify-between">
-            <div className="flex-grow mt-2 mr-4">
+            <div className="flex-grow mr-4">
+              <p className="w-full italic p-2 border-2 border-transparent rounded-lg text-gray-800 focus:outline-none focus:border-dashed focus:border-gray-300 hover:border-dashed hover:border-gray-300 transition-colors">
+                {localJob.website}
+              </p>
               <input
                 type="text"
                 value={localJob.jobTitle}
                 className="w-full p-2 border-2 border-transparent rounded-lg text-gray-800 focus:outline-none focus:border-dashed focus:border-gray-300 hover:border-dashed hover:border-gray-300 transition-colors"
                 title="Job Title"
+                readOnly
               />
+              <p className="w-full italic p-2 border-2 border-transparent rounded-lg text-gray-400 focus:outline-none focus:border-dashed focus:border-gray-300 hover:border-dashed hover:border-gray-300 transition-colors">
+                {new Date(localJob.closingDate).toLocaleDateString("en-US", {
+                  year: "numeric",
+                  month: "long",
+                  day: "2-digit",
+                })}
+                {"  "}
+                {localJob.voiceLocation}
+              </p>
             </div>
             <div className="mt-4">
               <button
-                className="px-4 py-2 text-black bg-gray-200 rounded-lg hover:bg-gray-300 transition-colors"
-                onClick={() => alert("Redirect to application website")} // Placeholder for redirect logic
+                className="px-4 py-2 mb-5 text-black bg-gray-200 rounded-lg hover:bg-gray-300 transition-colors"
+                onClick={() => {
+                  if (localJob.website) {
+                    const validUrl =
+                      localJob.website.startsWith("http://") ||
+                      localJob.website.startsWith("https://")
+                        ? localJob.website
+                        : `https://${localJob.website}`;
+
+                    window.open(validUrl, "_blank");
+                  } else {
+                    alert("Website URL is not available");
+                  }
+                }}
               >
                 {isEnglish ? "Apply Now" : "Jetzt bewerben"}
               </button>
             </div>
           </div>
+          <h3 className="mt-4 text-md font-semibold text-gray-800">
+            {isEnglish ? "Contact Details:" : "Kontaktdetails:"}
+          </h3>
+          <p>
+            <strong>{isEnglish ? "Email:" : "E-Mail:"}</strong>{" "}
+            {localJob.contactDetails.email}
+          </p>
+          <p>
+            <strong>{isEnglish ? "Phone:" : "Telefon"}</strong>{" "}
+            {localJob.contactDetails.phone}
+          </p>
+          <p>
+            <strong>{isEnglish ? "Contact Person:" : "Ansprechpartner"}</strong>{" "}
+            {localJob.contactDetails.contact_person}
+          </p>
+          {/* <p>
+            <strong>Address:</strong> {localJob.personalAddress}
+          </p>
+          <p>
+            <strong>Website:</strong> {localJob.website}
+          </p> */}
         </div>
       )}
       {jobStatus === "failed" && error && (
