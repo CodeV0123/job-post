@@ -4,6 +4,7 @@ import chatStreamReducer from "../slice/CreateStreamSlice";
 import generateVideoReducer from "../slice/GenerateVideoSlice";
 import translateToEnglishReducer from "../slice/TranslateToEnglishSlice";
 import generateImageReducer from "../slice/GenerateImageSlice";
+import languageReducer from "../slice/LanguageSlice";
 
 export const store = configureStore({
   reducer: {
@@ -12,6 +13,7 @@ export const store = configureStore({
     generateVideo: generateVideoReducer,
     translateToEnglish: translateToEnglishReducer,
     generateImage: generateImageReducer,
+    language: languageReducer,
   },
 });
 
