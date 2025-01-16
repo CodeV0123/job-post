@@ -153,7 +153,7 @@ const CreateJobPost: React.FC = () => {
   return (
     <div className="max-w-3xl mx-auto mt-10 p-6 bg-white shadow-md rounded-md">
       <h1 className="text-2xl text-center font-semibold text-gray-700 mb-2">
-        {isEnglish ? "Create Job Post" : "Stellenanzeige erstellen"}
+        {isEnglish ? "Create Job Post" : "Stellenanzeige Erstellen"}
       </h1>
       {/* Language Toggle */}
       <p className="text-gray-400 italic py-1 text-xs">
