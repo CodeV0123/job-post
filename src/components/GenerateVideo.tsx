@@ -19,6 +19,8 @@ const GenerateVideo: React.FC<GenerateVideoProps> = ({ generatedImages }) => {
   );
   const { job } = useSelector((state: RootState) => state.createJobPost);
 
+  const isEnglish = useSelector((state: RootState) => state.language.isEnglish);
+
   const [templatePath, setTemplatePath] = useState<File | null>(null);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [message, setMessage] = useState<string | null>(null);
@@ -70,7 +72,7 @@ const GenerateVideo: React.FC<GenerateVideoProps> = ({ generatedImages }) => {
   return (
     <div className="max-w-3xl mx-auto mt-10 p-6 bg-white shadow-md rounded-md">
       <h1 className="text-2xl font-semibold text-gray-700 mb-6">
-        Generate Video
+        {isEnglish ? "Generate Video" : "Video Generieren"}
       </h1>
       <form onSubmit={handleSubmit} className="space-y-6">
         <div>
@@ -78,7 +80,9 @@ const GenerateVideo: React.FC<GenerateVideoProps> = ({ generatedImages }) => {
             htmlFor="templatePath"
             className="block text-gray-700 font-medium mb-2"
           >
-            Template Path (Upload File)
+            {isEnglish
+              ? "Template Path (Upload File)"
+              : "Vorlagepfad (Datei hochladen)"}
           </label>
           <input
             type="file"
@@ -93,7 +97,9 @@ const GenerateVideo: React.FC<GenerateVideoProps> = ({ generatedImages }) => {
             htmlFor="imageSelect"
             className="block text-gray-700 font-medium mb-2"
           >
-            Select Generated Image
+            {isEnglish
+              ? "Select Generated Image"
+              : "Generiertes Bild auswählen"}
           </label>
           <select
             id="imageSelect"
@@ -102,17 +108,19 @@ const GenerateVideo: React.FC<GenerateVideoProps> = ({ generatedImages }) => {
             className="block w-full border-gray-300 rounded shadow-sm focus:border-blue-500 focus:ring-blue-500"
           >
             <option value="" disabled>
-              -- Select an Image --
+              {isEnglish ? " -- Select an Image --" : " -- Bild auswählen --"}
             </option>
             {generatedImages.map((image, index) => (
               <option key={index} value={image}>
-                Image {index + 1}
+                {isEnglish ? "Image" : "Bild"} {index + 1}
               </option>
             ))}
           </select>
           {selectedImage && (
             <div className="mt-4">
-              <p className="text-gray-700">Preview:</p>
+              <p className="text-gray-700">
+                {isEnglish ? "Preview:" : "Vorschau:"}
+              </p>
               <img
                 src={`data:image/png;base64,${selectedImage}`}
                 alt="Selected"
@@ -123,7 +131,8 @@ const GenerateVideo: React.FC<GenerateVideoProps> = ({ generatedImages }) => {
         </div>
         <div>
           <p className="text-gray-700">
-            <strong>Script:</strong> {job?.voiceScript || "N/A"}
+            <strong>{isEnglish ? "Script:" : "Skript:"}</strong>{" "}
+            {job?.voiceScript || "N/A"}
           </p>
         </div>
         <div className="flex space-x-4">
@@ -132,14 +141,21 @@ const GenerateVideo: React.FC<GenerateVideoProps> = ({ generatedImages }) => {
             disabled={status === "loading"}
             className="px-6 py-2 bg-blue-600 text-white font-medium rounded hover:bg-blue-700 disabled:bg-blue-300"
           >
-            {status === "loading" ? "Generating..." : "Submit"}
+            {status === "loading"
+              ? isEnglish
+                ? "Generating..."
+                : "Generieren..."
+              : isEnglish
+              ? "Generate"
+              : "Erzeugen"}
+            {/* {status === "loading" ? "Generating..." : "Submit"} */}
           </button>
           <button
             type="button"
             onClick={handleReset}
             className="px-6 py-2 bg-gray-600 text-white font-medium rounded hover:bg-gray-700"
           >
-            Reset
+            {isEnglish ? "Reset" : "Zurücksetzen"}
           </button>
         </div>
         <p className="mt-2 text-sm text-red-800">{message}</p>
@@ -148,7 +164,9 @@ const GenerateVideo: React.FC<GenerateVideoProps> = ({ generatedImages }) => {
       {status === "succeeded" && videoResponse && (
         <div className="mt-6 p-4 bg-gray-50 border border-gray-200 rounded">
           <h2 className="text-lg font-medium text-blue-700">
-            Video Generated Successfully
+            {isEnglish
+              ? "Video Generated Successfully"
+              : "Video erfolgreich generiert"}
           </h2>
         </div>
       )}
