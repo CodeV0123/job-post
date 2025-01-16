@@ -198,6 +198,7 @@ const createJobPostSlice = createSlice({
               {
                 Benefits: jobPost.Benefits,
                 Vorteile: jobPost["Vorteile"],
+                Leistungen: jobPost["Leistungen"],
               },
               "No benefits available"
             )
