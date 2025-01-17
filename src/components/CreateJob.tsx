@@ -449,7 +449,7 @@ const CreateJobPost: React.FC = () => {
               {localJob.contactDetails.phone}
             </p>
           )}
-          {localJob.contactDetails.address && (
+          {localJob.contactDetails.contact_person && (
             <p>
               <strong>
                 {isEnglish ? "Contact Person:" : "Ansprechpartner"}
