@@ -32,7 +32,7 @@ const ChatStream: React.FC = () => {
       return;
     }
 
-    dispatch(fetchChatStream({ prompt, job_description: job }))
+    dispatch(fetchChatStream({ prompt, job_description: job, isEnglish }))
       .unwrap()
       .then((response) => {
         console.log("Response from fetchChatStream:", response);
