@@ -119,7 +119,7 @@ const GenerateImage: React.FC<GenerateImageProps> = ({ onImagesGenerated }) => {
           <h2 className="text-xl font-medium text-gray-800 mb-4 text-center sm:text-2xl">
             {isEnglish ? "Generated Images" : "Erzeugte Bilder"}
           </h2>
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 gap-4">
             {images.map((base64String, index) => (
               <div
                 key={index}
@@ -128,7 +128,7 @@ const GenerateImage: React.FC<GenerateImageProps> = ({ onImagesGenerated }) => {
                 <img
                   src={`data:image/png;base64,${base64String}`}
                   alt={`Generated ${index + 1}`}
-                  className="w-32 h-32 object-cover rounded-md sm:w-40 sm:h-40"
+                  className="w-32 h-32 object-cover rounded-md sm:w-40 sm:h-30"
                 />
                 <button
                   onClick={() => downloadImage(base64String, index)}
