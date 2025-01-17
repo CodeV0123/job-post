@@ -8,14 +8,22 @@ export const fetchChatStream = createAsyncThunk(
   async ({
     prompt,
     job_description,
+    isEnglish,
   }: {
     prompt: string;
     job_description: object;
+    isEnglish: boolean;
   }) => {
+    // Append language instruction to the prompt
+    const enhancedPrompt = `${prompt} ${
+      isEnglish
+        ? ". Return the JSON response in English."
+        : ". Geben Sie die JSON-Antwort auf Deutsch zurück."
+    }`;
     try {
       const response = await axios.get(API_URL, {
         params: {
-          prompt,
+          prompt: enhancedPrompt,
           job_description: JSON.stringify(job_description), // Provide an empty object as a placeholder
         },
       });
