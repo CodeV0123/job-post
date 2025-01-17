@@ -1,7 +1,10 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../redux/store/store";
-import { generateImage } from "../redux/slice/GenerateImageSlice";
+import {
+  generateImage,
+  setTemplateFile,
+} from "../redux/slice/GenerateImageSlice";
 
 interface GenerateImageProps {
   onImagesGenerated: (images: string[]) => void;
@@ -9,12 +12,12 @@ interface GenerateImageProps {
 
 const GenerateImage: React.FC<GenerateImageProps> = ({ onImagesGenerated }) => {
   const dispatch = useDispatch<AppDispatch>();
-  const { images, status, error } = useSelector(
+  const { images, status, error, templateFile } = useSelector(
     (state: RootState) => state.generateImage
   );
   const { job } = useSelector((state: RootState) => state.createJobPost);
   const isEnglish = useSelector((state: RootState) => state.language.isEnglish);
-  const [templatePath, setTemplatePath] = useState<File | null>(null);
+  // const [templatePath, setTemplatePath] = useState<File | null>(null);
   const [message, setMessage] = useState<string | null>(null);
 
   // Function to convert base64 to Blob
@@ -31,17 +34,23 @@ const GenerateImage: React.FC<GenerateImageProps> = ({ onImagesGenerated }) => {
     return new Blob(byteArrays, { type: contentType });
   };
 
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files?.[0]) {
+      dispatch(setTemplateFile(e.target.files[0]));
+    }
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!templatePath || !job?.imageKeyword) {
+    if (!templateFile || !job?.imageKeyword) {
       setMessage("Template file and job image keyword are required");
       setTimeout(() => setMessage(null), 3000);
       return;
     }
 
     const payload = {
-      templatePath,
+      templatePath: templateFile,
       imageKeyword: job.imageKeyword,
     };
 
@@ -83,7 +92,7 @@ const GenerateImage: React.FC<GenerateImageProps> = ({ onImagesGenerated }) => {
             type="file"
             id="templateFile"
             accept=".jpg,.png,.jpeg,.svg,.webp"
-            onChange={(e) => setTemplatePath(e.target.files?.[0] || null)}
+            onChange={handleFileChange}
             className="block w-full text-sm text-gray-600 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
           />
         </div>

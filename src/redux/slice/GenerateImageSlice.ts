@@ -1,4 +1,4 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import axios from "axios";
 
 const API_URL = "https://image-job.assemblr.ai/generate-image/";
@@ -30,18 +30,31 @@ export const generateImage = createAsyncThunk(
     }
   }
 );
+interface GenerateImageState {
+  images: string[];
+  templateFile: File | null; // Add this
+  status: "idle" | "loading" | "succeeded" | "failed";
+  error: string | null;
+}
+
+const initialState: GenerateImageState = {
+  images: [],
+  templateFile: null, // Add this
+  status: "idle",
+  error: null,
+};
+
 const generateImageSlice = createSlice({
   name: "generateImage",
-  initialState: {
-    images: [] as string[],
-    status: "idle" as "idle" | "loading" | "succeeded" | "failed",
-    error: null as string | null,
-  },
+  initialState,
   reducers: {
     resetState: (state) => {
       state.images = [];
       state.status = "idle";
       state.error = null;
+    },
+    setTemplateFile: (state, action: PayloadAction<File>) => {
+      state.templateFile = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -63,6 +76,6 @@ const generateImageSlice = createSlice({
   },
 });
 
-export const { resetState } = generateImageSlice.actions;
+export const { resetState, setTemplateFile } = generateImageSlice.actions;
 
 export default generateImageSlice.reducer;
