@@ -24,18 +24,14 @@ const GenerateVideo: React.FC<GenerateVideoProps> = ({
   );
   const { job } = useSelector((state: RootState) => state.createJobPost);
 
-  const isEnglish = useSelector((state: RootState) => state.language.isEnglish);
-  // const localJob = useSelector((state: RootState) => state.localJob);
+  const { templateFile } = useSelector(
+    (state: RootState) => state.generateImage
+  );
 
-  const [templatePath, setTemplatePath] = useState<File | null>(null);
+  const isEnglish = useSelector((state: RootState) => state.language.isEnglish);
+
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [message, setMessage] = useState<string | null>(null);
-
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files) {
-      setTemplatePath(e.target.files[0]);
-    }
-  };
 
   const handleImageChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectedImage(e.target.value);
@@ -44,10 +40,10 @@ const GenerateVideo: React.FC<GenerateVideoProps> = ({
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!templatePath || !job) {
+    if (!templateFile || !job) {
       setMessage(
         isEnglish
-          ? "File and job details are required"
+          ? "Template file and job details are required"
           : "Datei- und Auftragsdetails sind erforderlich"
       );
       setTimeout(() => setMessage(null), 3000);
@@ -63,10 +59,8 @@ const GenerateVideo: React.FC<GenerateVideoProps> = ({
     const blob = base64ToBlob(selectedImage, "image/png");
     const imageFile = new File([blob], "selected_image.png");
 
-    // const currentVoiceScript = localJob?.voiceScript || job.voiceScript;
-
     const payload = {
-      template_path: templatePath,
+      template_path: templateFile,
       product_id: generateRandomId(),
       image_file: imageFile,
       script: localJob?.voiceScript || job.voiceScript,
@@ -77,7 +71,6 @@ const GenerateVideo: React.FC<GenerateVideoProps> = ({
 
   const handleReset = () => {
     dispatch(resetVideoState());
-    setTemplatePath(null);
     setSelectedImage(null);
   };
 
@@ -90,23 +83,14 @@ const GenerateVideo: React.FC<GenerateVideoProps> = ({
         {isEnglish ? "Generate Video" : "Video Generieren"}
       </h1>
       <form onSubmit={handleSubmit} className="space-y-6">
-        <div>
-          <label
-            htmlFor="templatePath"
-            className="block text-gray-700 font-medium mb-2"
-          >
-            {isEnglish
-              ? "Template Path (Upload File)"
-              : "Vorlagepfad (Datei hochladen)"}
-          </label>
-          <input
-            type="file"
-            id="templatePath"
-            onChange={handleFileChange}
-            className="block w-full text-sm text-gray-600 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
-            accept=".mp4,.avi,.mov,.png,.jpg,.jpeg"
-          />
-        </div>
+        {templateFile && (
+          <div className="mt-4">
+            <p className="text-gray-700 font-medium">
+              {isEnglish ? "Selected Template:" : "Ausgewählte Vorlage:"}
+              <span className="ml-2 font-normal">{templateFile.name}</span>
+            </p>
+          </div>
+        )}
         <div>
           <label
             htmlFor="imageSelect"
