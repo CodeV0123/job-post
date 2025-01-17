@@ -199,11 +199,11 @@ const ChatStream: React.FC = () => {
             {isEnglish ? "Chat Response" : "Chat-Antwort"}
           </h2>
           <p className="mt-2 text-sm text-green-800">{successMessage}</p>
-          <pre className="mt-2 text-sm text-gray-700 whitespace-pre-wrap">
+          {/* <pre className="mt-2 text-sm text-gray-700 whitespace-pre-wrap">
             {typeof chatResponse === "object"
               ? JSON.stringify(chatResponse, null, 2)
               : chatResponse}
-          </pre>
+          </pre> */}
         </div>
       )}
 
