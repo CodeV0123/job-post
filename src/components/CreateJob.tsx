@@ -437,24 +437,26 @@ const CreateJobPost: React.FC = () => {
           <h3 className="mt-4 text-md font-semibold text-gray-800">
             {isEnglish ? "Contact Details:" : "Kontaktdetails:"}
           </h3>
-          <p>
-            <strong>{isEnglish ? "Email:" : "E-Mail:"}</strong>{" "}
-            {localJob.contactDetails.email}
-          </p>
-          <p>
-            <strong>{isEnglish ? "Phone:" : "Telefon"}</strong>{" "}
-            {localJob.contactDetails.phone}
-          </p>
-          <p>
-            <strong>{isEnglish ? "Contact Person:" : "Ansprechpartner"}</strong>{" "}
-            {localJob.contactDetails.contact_person}
-          </p>
-          {/* <p>
-            <strong>Address:</strong> {localJob.personalAddress}
-          </p>
-          <p>
-            <strong>Website:</strong> {localJob.website}
-          </p> */}
+          {localJob.contactDetails.email && (
+            <p>
+              <strong>{isEnglish ? "Email:" : "E-Mail:"}</strong>{" "}
+              {localJob.contactDetails.email}
+            </p>
+          )}
+          {localJob.contactDetails.phone && (
+            <p>
+              <strong>{isEnglish ? "Phone:" : "Telefon"}</strong>{" "}
+              {localJob.contactDetails.phone}
+            </p>
+          )}
+          {localJob.contactDetails.address && (
+            <p>
+              <strong>
+                {isEnglish ? "Contact Person:" : "Ansprechpartner"}
+              </strong>{" "}
+              {localJob.contactDetails.contact_person}
+            </p>
+          )}
         </div>
       )}
       {jobStatus === "failed" && error && (
