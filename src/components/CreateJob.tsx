@@ -228,19 +228,20 @@ const CreateJobPost: React.FC = () => {
         <div className="mt-6 p-4 bg-gray-50 border border-gray-200 rounded">
           {/* Always show the headline */}
           <h2 className="text-lg font-medium text-blue-700">
-            {localJob.headline}
+            {/* {localJob.headline} */}
+            {localJob.introductionOfJob}
           </h2>
           {/* Conditionally render the rest of the content */}
           {isExpanded ? (
             <>
               <p className="mt-2 text-gray-700">{localJob.introduction}</p>
 
-              <h3 className="mt-4 text-md font-semibold text-gray-800">
+              {/* <h3 className="mt-4 text-md font-semibold text-gray-800">
                 {isEnglish
                   ? "Introduction to the Position"
                   : "Einleitung zur Stelle"}
               </h3>
-              <p>{localJob.introductionOfJob}</p>
+              <p>{localJob.introductionOfJob}</p> */}
 
               {/* <h3 className="mt-4 text-md font-semibold text-gray-800">
                 {isEnglish ? "Personal Address" : "Persönliche Ansprache"}
