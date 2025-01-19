@@ -74,10 +74,10 @@ const GenerateImage: React.FC<GenerateImageProps> = ({ onImagesGenerated }) => {
 
   return (
     <div className="max-w-3xl mx-auto mt-10 p-6 bg-white shadow-md rounded-md sm:p-8 lg:max-w-5xl">
+      <span className="italic text-gray-400 text-base">
+        {isEnglish ? "[Second Step]:" : "[Zweiter Schritt]:"}{" "}
+      </span>
       <h1 className="text-2xl font-semibold text-gray-700 mb-6 text-center sm:text-3xl">
-        <span className="italic text-gray-400 text-base">
-          {isEnglish ? "[Second Step]:" : "[Zweiter Schritt]:"}{" "}
-        </span>
         {isEnglish ? "Generate Image" : "Bild Generieren"}
       </h1>
       <form onSubmit={handleSubmit} className="space-y-6">
