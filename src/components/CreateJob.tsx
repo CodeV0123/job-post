@@ -131,10 +131,10 @@ const CreateJobPost: React.FC = () => {
 
   return (
     <div className="max-w-3xl mx-auto mt-10 p-6 bg-white shadow-md rounded-md">
+      <span className="italic text- text-gray-400 text-base">
+        {isEnglish ? "[First Step]:" : "[Erster Schritt]:"}{" "}
+      </span>
       <h1 className="text-2xl text-center font-semibold text-gray-700 mb-2">
-        <span className="italic text-gray-400 text-base">
-          {isEnglish ? "[First Step]:" : "[Erster Schritt]:"}{" "}
-        </span>
         {isEnglish ? "Create Job Post" : "Stellenanzeige Erstellen"}
       </h1>
       {/* Language Toggle */}
@@ -228,19 +228,20 @@ const CreateJobPost: React.FC = () => {
         <div className="mt-6 p-4 bg-gray-50 border border-gray-200 rounded">
           {/* Always show the headline */}
           <h2 className="text-lg font-medium text-blue-700">
-            {localJob.headline}
+            {/* {localJob.headline} */}
+            {localJob.introductionOfJob}
           </h2>
           {/* Conditionally render the rest of the content */}
           {isExpanded ? (
             <>
               <p className="mt-2 text-gray-700">{localJob.introduction}</p>
 
-              <h3 className="mt-4 text-md font-semibold text-gray-800">
+              {/* <h3 className="mt-4 text-md font-semibold text-gray-800">
                 {isEnglish
                   ? "Introduction to the Position"
                   : "Einleitung zur Stelle"}
               </h3>
-              <p>{localJob.introductionOfJob}</p>
+              <p>{localJob.introductionOfJob}</p> */}
 
               {/* <h3 className="mt-4 text-md font-semibold text-gray-800">
                 {isEnglish ? "Personal Address" : "Persönliche Ansprache"}
@@ -437,24 +438,26 @@ const CreateJobPost: React.FC = () => {
           <h3 className="mt-4 text-md font-semibold text-gray-800">
             {isEnglish ? "Contact Details:" : "Kontaktdetails:"}
           </h3>
-          <p>
-            <strong>{isEnglish ? "Email:" : "E-Mail:"}</strong>{" "}
-            {localJob.contactDetails.email}
-          </p>
-          <p>
-            <strong>{isEnglish ? "Phone:" : "Telefon"}</strong>{" "}
-            {localJob.contactDetails.phone}
-          </p>
-          <p>
-            <strong>{isEnglish ? "Contact Person:" : "Ansprechpartner"}</strong>{" "}
-            {localJob.contactDetails.contact_person}
-          </p>
-          {/* <p>
-            <strong>Address:</strong> {localJob.personalAddress}
-          </p>
-          <p>
-            <strong>Website:</strong> {localJob.website}
-          </p> */}
+          {localJob.contactDetails.email && (
+            <p>
+              <strong>{isEnglish ? "Email:" : "E-Mail:"}</strong>{" "}
+              {localJob.contactDetails.email}
+            </p>
+          )}
+          {localJob.contactDetails.phone && (
+            <p>
+              <strong>{isEnglish ? "Phone:" : "Telefon"}</strong>{" "}
+              {localJob.contactDetails.phone}
+            </p>
+          )}
+          {localJob.contactDetails.contact_person && (
+            <p>
+              <strong>
+                {isEnglish ? "Contact Person:" : "Ansprechpartner"}
+              </strong>{" "}
+              {localJob.contactDetails.contact_person}
+            </p>
+          )}
         </div>
       )}
       {jobStatus === "failed" && error && (
