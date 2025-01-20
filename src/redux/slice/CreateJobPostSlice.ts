@@ -28,7 +28,43 @@ interface JobField {
   items: string[];
 }
 
-interface Job {
+// First, let's define the nested interfaces
+interface VoiceDetails {
+  script: string;
+  tone: string;
+  cta: string;
+  location: string;
+  benefits: string;
+  contact_details: {
+    email: string;
+    phone: string;
+    address: string;
+    website: string;
+    contact_person: string;
+  };
+}
+
+interface JobPostDetails {
+  Description?: string;
+  "Job Title"?: string;
+  Berufsbezeichnung?: string;
+  Stellenbezeichnung?: string;
+  Jobbezeichnung?: string;
+  Jobtitel?: string;
+  "Job Titel"?: string;
+  Job_Title?: string;
+  Introduction?: string;
+  Einführung?: string;
+  Einleitung?: string;
+  Tasks?: JobField | string[];
+  Qualifications?: JobField | string[];
+  Benefits?: JobField | string[];
+  "Call to Action"?: string;
+  // Add other job post specific fields as needed
+}
+
+export interface Job {
+  // Original fields
   jobTitle: string;
   headline: string;
   description: string;
@@ -56,6 +92,10 @@ interface Job {
   bodyCopy: string[];
   website: string;
   closingDate: string;
+
+  // Add these new properties for the nested objects
+  voice?: VoiceDetails;
+  job_post?: JobPostDetails;
 }
 
 const createJobPostSlice = createSlice({
@@ -162,6 +202,7 @@ const createJobPostSlice = createSlice({
               "Job Einleitung": jobPost["Job Einleitung"],
               Stellenbeschreibung: jobPost["Stellenbeschreibung"],
               Job_Einführung: jobPost["Job_Einführung"],
+              JobEinführung: jobPost["JobEinführung"],
             },
             "No job introduction available"
           ),
@@ -174,6 +215,7 @@ const createJobPostSlice = createSlice({
               "Persönliche Adresse": jobPost["Persönliche Adresse"],
               Persönliche_Adresse: jobPost["Persönliche_Adresse"],
               personalAddress: jobPost["personalAddress"],
+              PersönlicheAdresse: jobPost["PersönlicheAdresse"],
             },
             "No personal address provided"
           ),

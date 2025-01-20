@@ -32,13 +32,95 @@ const ChatStream: React.FC = () => {
       return;
     }
 
-    dispatch(fetchChatStream({ prompt, job_description: job, isEnglish }))
+    // Check if the prompt is related to script/voiceover
+    const isScriptRelated =
+      prompt.toLowerCase().includes("script") ||
+      prompt.toLowerCase().includes("voice over");
+
+    // Create the job description object based on prompt type
+    const jobDescription = isScriptRelated
+      ? {
+          // Voice-related data
+          voice: {
+            script: job.voiceScript || "",
+            tone: job.voiceTone || "",
+            cta: job.voiceCTA || "",
+            location: job.voiceLocation || "",
+            benefits: job.voiceBenefits || "",
+            contact_details: {
+              email: job.contactDetails?.email || "",
+              phone: job.contactDetails?.phone || "",
+              address: job.contactDetails?.address || "",
+              website: job.contactDetails?.website || "",
+              contact_person: job.contactDetails?.contact_person || "",
+            },
+          },
+        }
+      : {
+          // Job post-related data
+          job_post: {
+            Description: job.description || "",
+            Headline: job.headline || "",
+            "Job Title": job.jobTitle || "",
+            Introduction: job.introduction || "",
+            "Introduction of the Position": job.introductionOfJob || "",
+            Tasks: job.tasks || [],
+            Benefits: job.benefits || [],
+            Qualifications: job.qualifications || [],
+            "Call to Action": job.callToAction || "",
+            "Personal Address": job.personalAddress || "",
+          },
+        };
+
+    // Log the data we're about to send
+    console.log("Sending job description:", jobDescription);
+
+    dispatch(
+      fetchChatStream({
+        prompt,
+        job_description: jobDescription,
+        isEnglish,
+      })
+    )
       .unwrap()
       .then((response) => {
         console.log("Response from fetchChatStream:", response);
-        // Dispatch the updated fields to CreateJob
-        if (typeof response === "object") {
-          dispatch(updateJobFields(response));
+
+        if (response && typeof response === "object") {
+          if (response.voice) {
+            // Update voice-related fields
+            const updatedVoiceFields = {
+              voiceScript: response.voice.script || job.voiceScript,
+              voiceTone: response.voice.tone || job.voiceTone,
+              voiceCTA: response.voice.cta || job.voiceCTA,
+              voiceLocation: response.voice.location || job.voiceLocation,
+              voiceBenefits: response.voice.benefits || job.voiceBenefits,
+              contactDetails:
+                response.voice.contact_details || job.contactDetails,
+            };
+            dispatch(updateJobFields(updatedVoiceFields));
+          } else if (response.job_post) {
+            // Update job post-related fields
+            const updatedJobFields = {
+              description: response.job_post.Description || job.description,
+              headline: response.job_post.Headline || job.headline,
+              jobTitle: response.job_post["Job Title"] || job.jobTitle,
+              introduction: response.job_post.Introduction || job.introduction,
+              introductionOfJob:
+                response.job_post["Introduction of the Position"] ||
+                job.introductionOfJob,
+              tasks: response.job_post.Tasks || job.tasks,
+              benefits: response.job_post.Benefits || job.benefits,
+              qualifications:
+                response.job_post.Qualifications || job.qualifications,
+              callToAction:
+                response.job_post["Call to Action"] || job.callToAction,
+              personalAddress:
+                response.job_post["Personal Address"] || job.personalAddress,
+            };
+            dispatch(updateJobFields(updatedJobFields));
+          }
+
           setSuccessMessage(
             isEnglish
               ? "Job post updated successfully!"
@@ -51,6 +133,12 @@ const ChatStream: React.FC = () => {
       })
       .catch((error) => {
         console.error("Error fetching chat stream:", error);
+        setMessage(
+          isEnglish
+            ? "Error updating job post"
+            : "Fehler beim Aktualisieren des Job-Posts"
+        );
+        setTimeout(() => setMessage(""), 5000);
       });
   };
 
@@ -61,10 +149,10 @@ const ChatStream: React.FC = () => {
 
   return (
     <div className="max-w-3xl mx-auto mt-10 p-6 bg-white shadow-md rounded-md sm:p-8 lg:max-w-5xl">
+      <span className="italic text-gray-400 text-base">
+        {isEnglish ? "[Final Step]:" : "[Letzter Schritt]:"}{" "}
+      </span>
       <h1 className="text-2xl font-semibold text-gray-700 mb-6 text-center sm:text-3xl">
-        <span className="italic text-gray-400 text-base">
-          {isEnglish ? "[Final Step]:" : "[Letzter Schritt]:"}{" "}
-        </span>
         {isEnglish ? "Chat Stream" : "Chat-Stream"}
       </h1>
       <form onSubmit={handleSubmit} className="space-y-6">
