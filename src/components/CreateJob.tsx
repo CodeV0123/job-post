@@ -44,11 +44,11 @@ const CreateJobPost: React.FC = () => {
   const [isEnglish, setIsEnglish] = useState(false);
   const [localJob, setLocalJob] = useState<Job | null>(null);
 
-  useEffect(() => {
-    setIsEnglish(false);
-    // If you're using Redux for language state, also reset Redux state
-    dispatch(toggleLanguage());
-  }, [dispatch]); // Include dispatch in the dependency array
+  // useEffect(() => {
+  //   setIsEnglish(false);
+  //   // If you're using Redux for language state, also reset Redux state
+  //   dispatch(toggleLanguage());
+  // }, [dispatch]); // Include dispatch in the dependency array
 
   useEffect(() => {
     if (job) {
