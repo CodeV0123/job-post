@@ -98,13 +98,23 @@ export interface Job {
   job_post?: JobPostDetails;
 }
 
+interface JobState {
+  job: Job | null;
+  translatedJob: Job | null;
+  status: "idle" | "loading" | "succeeded" | "failed";
+  error: string | null;
+}
+
+const initialState: JobState = {
+  job: null,
+  translatedJob: null,
+  status: "idle",
+  error: null,
+};
+
 const createJobPostSlice = createSlice({
   name: "createJobPost",
-  initialState: {
-    job: null as Job | null,
-    status: "idle" as "idle" | "loading" | "succeeded" | "failed",
-    error: null as string | null,
-  },
+  initialState,
   reducers: {
     resetState: (state) => {
       state.job = null;
@@ -112,12 +122,19 @@ const createJobPostSlice = createSlice({
       state.error = null;
     },
     updateJobFields: (state, action) => {
-      console.log("Before update:", state.job);
-      if (action.payload && typeof action.payload === "object") {
-        state.job = { ...state.job, ...action.payload }; // Merge new fields into the existing job
+      // Check if action.payload is directly the payload object
+      if (typeof action.payload === "object" && action.payload !== null) {
+        state.job = state.job
+          ? { ...state.job, ...action.payload }
+          : { ...action.payload };
         console.log("Updated job state:", state.job);
       } else {
         console.error("Invalid payload for updateJobFields:", action.payload);
+      }
+    },
+    syncTranslatedJob: (state) => {
+      if (state.job) {
+        state.translatedJob = { ...state.job };
       }
     },
   },
@@ -159,7 +176,7 @@ const createJobPostSlice = createSlice({
           return defaultValue;
         };
 
-        state.job = {
+        const newJob = {
           headline: image.Headline || "No headline available",
           description: jobPost.Description || "No description available",
           jobTitle: getMultilingualField(
@@ -269,6 +286,8 @@ const createJobPostSlice = createSlice({
           website: image.website || "No website provided",
           closingDate: image.Closing_Date || "No closing date provided",
         };
+        state.job = newJob;
+        state.translatedJob = { ...newJob };
         console.log("Job post:", state.job);
       })
 
@@ -278,6 +297,7 @@ const createJobPostSlice = createSlice({
       });
   },
 });
-export const { resetState, updateJobFields } = createJobPostSlice.actions;
+export const { resetState, updateJobFields, syncTranslatedJob } =
+  createJobPostSlice.actions;
 
 export default createJobPostSlice.reducer;
