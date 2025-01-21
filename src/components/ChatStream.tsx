@@ -6,6 +6,7 @@ import {
   resetChatState,
 } from "../redux/slice/CreateStreamSlice";
 import { updateJobFields } from "../redux/slice/CreateJobPostSlice";
+import { updateTranslatedData } from "../redux/slice/TranslateToEnglishSlice";
 
 const ChatStream: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -13,6 +14,9 @@ const ChatStream: React.FC = () => {
     (state: RootState) => state.chatStream
   );
   const { job } = useSelector((state: RootState) => state.createJobPost);
+  const { translatedData, status: translationStatus } = useSelector(
+    (state: RootState) => state.translateToEnglish
+  );
 
   const [prompt, setPrompt] = useState("");
   const [message, setMessage] = useState("");
@@ -20,105 +24,58 @@ const ChatStream: React.FC = () => {
 
   const isEnglish = useSelector((state: RootState) => state.language.isEnglish);
 
+  const getCurrentJobData = () => {
+    if (isEnglish) {
+      return translatedData || null;
+    }
+    return job;
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!job) {
+
+    // Use job data based on language state
+    const currentJob = getCurrentJobData();
+
+    if (!currentJob) {
       setMessage(
         isEnglish
-          ? "Please create a job post first!"
-          : "Bitte erstellen Sie zuerst einen Job-Post!"
+          ? "Please create a job post or wait for translation!"
+          : "Bitte erstellen Sie einen Job-Post oder warten Sie auf die Übersetzung!"
       );
       setTimeout(() => setMessage(""), 5000);
       return;
     }
 
-    // Check if the prompt is related to script/voiceover
-    const isScriptRelated =
-      prompt.toLowerCase().includes("script") ||
-      prompt.toLowerCase().includes("voice over");
-
-    // Create the job description object based on prompt type
-    const jobDescription = isScriptRelated
-      ? {
-          // Voice-related data
-          voice: {
-            script: job.voiceScript || "",
-            tone: job.voiceTone || "",
-            cta: job.voiceCTA || "",
-            location: job.voiceLocation || "",
-            benefits: job.voiceBenefits || "",
-            contact_details: {
-              email: job.contactDetails?.email || "",
-              phone: job.contactDetails?.phone || "",
-              address: job.contactDetails?.address || "",
-              website: job.contactDetails?.website || "",
-              contact_person: job.contactDetails?.contact_person || "",
-            },
-          },
-        }
-      : {
-          // Job post-related data
-          job_post: {
-            Description: job.description || "",
-            Headline: job.headline || "",
-            "Job Title": job.jobTitle || "",
-            Introduction: job.introduction || "",
-            "Introduction of the Position": job.introductionOfJob || "",
-            Tasks: job.tasks || [],
-            Benefits: job.benefits || [],
-            Qualifications: job.qualifications || [],
-            "Call to Action": job.callToAction || "",
-            "Personal Address": job.personalAddress || "",
-          },
-        };
-
-    // Log the data we're about to send
-    console.log("Sending job description:", jobDescription);
-
     dispatch(
       fetchChatStream({
         prompt,
-        job_description: jobDescription,
+        job_description: currentJob,
         isEnglish,
       })
     )
       .unwrap()
       .then((response) => {
-        console.log("Response from fetchChatStream:", response);
+        if (typeof response === "object") {
+          // dispatch(
+          //   updateJobFields({
+          //     payload: response,
+          //     isTranslated: isEnglish,
+          //   })
+          // );
+          if (isEnglish) {
+            // First update the translated data in TranslateToEnglishSlice
+            dispatch(
+              updateTranslatedData({
+                ...translatedData,
+                ...response,
+              })
+            );
 
-        if (response && typeof response === "object") {
-          if (response.voice) {
-            // Update voice-related fields
-            const updatedVoiceFields = {
-              voiceScript: response.voice.script || job.voiceScript,
-              voiceTone: response.voice.tone || job.voiceTone,
-              voiceCTA: response.voice.cta || job.voiceCTA,
-              voiceLocation: response.voice.location || job.voiceLocation,
-              voiceBenefits: response.voice.benefits || job.voiceBenefits,
-              contactDetails:
-                response.voice.contact_details || job.contactDetails,
-            };
-            dispatch(updateJobFields(updatedVoiceFields));
-          } else if (response.job_post) {
-            // Update job post-related fields
-            const updatedJobFields = {
-              description: response.job_post.Description || job.description,
-              headline: response.job_post.Headline || job.headline,
-              jobTitle: response.job_post["Job Title"] || job.jobTitle,
-              introduction: response.job_post.Introduction || job.introduction,
-              introductionOfJob:
-                response.job_post["Introduction of the Position"] ||
-                job.introductionOfJob,
-              tasks: response.job_post.Tasks || job.tasks,
-              benefits: response.job_post.Benefits || job.benefits,
-              qualifications:
-                response.job_post.Qualifications || job.qualifications,
-              callToAction:
-                response.job_post["Call to Action"] || job.callToAction,
-              personalAddress:
-                response.job_post["Personal Address"] || job.personalAddress,
-            };
-            dispatch(updateJobFields(updatedJobFields));
+            // Also update the job state to keep it in sync
+            dispatch(updateJobFields(response));
+          } else {
+            dispatch(updateJobFields(response));
           }
 
           setSuccessMessage(
@@ -127,25 +84,37 @@ const ChatStream: React.FC = () => {
               : "Job-Post erfolgreich aktualisiert!"
           );
           setTimeout(() => setSuccessMessage(""), 3000);
-        } else {
-          console.error("Invalid response format:", response);
+          setPrompt("");
         }
       })
       .catch((error) => {
         console.error("Error fetching chat stream:", error);
         setMessage(
           isEnglish
-            ? "Error updating job post"
-            : "Fehler beim Aktualisieren des Job-Posts"
+            ? "Failed to update job post. Please try again."
+            : "Aktualisierung des Job-Posts fehlgeschlagen. Bitte versuchen Sie es erneut."
         );
-        setTimeout(() => setMessage(""), 5000);
       });
   };
-
   const handleReset = () => {
     dispatch(resetChatState());
     setPrompt("");
+    setMessage("");
+    setSuccessMessage("");
   };
+
+  /*
+  ! Uncomment the following useEffect to debug the current state and also import useEffect from react.
+  */
+  // useEffect(() => {
+  //   console.log("Current state:", {
+  //     isEnglish,
+  //     translatedData,
+  //     job,
+  //     translationStatus,
+  //     currentJob: getCurrentJobData(),
+  //   });
+  // }, [isEnglish, translatedData, job, translationStatus]);
 
   return (
     <div className="max-w-3xl mx-auto mt-10 p-6 bg-white shadow-md rounded-md sm:p-8 lg:max-w-5xl">
@@ -155,6 +124,13 @@ const ChatStream: React.FC = () => {
       <h1 className="text-2xl font-semibold text-gray-700 mb-6 text-center sm:text-3xl">
         {isEnglish ? "Chat Stream" : "Chat-Stream"}
       </h1>
+
+      {translationStatus === "loading" && (
+        <div className="mb-4 text-blue-600">
+          {isEnglish ? "Translation in progress..." : "Übersetzung läuft..."}
+        </div>
+      )}
+
       <form onSubmit={handleSubmit} className="space-y-6">
         <div>
           <label
@@ -182,10 +158,10 @@ const ChatStream: React.FC = () => {
         <div className="flex flex-col sm:flex-row sm:space-x-4 space-y-4 sm:space-y-0">
           <button
             type="submit"
-            disabled={status === "loading"}
+            disabled={status === "loading" || translationStatus === "loading"}
             className="w-full sm:w-auto px-6 py-2 bg-blue-600 text-white font-medium rounded hover:bg-blue-700 disabled:bg-blue-300"
           >
-            {status === "loading"
+            {status === "loading" || translationStatus === "loading"
               ? isEnglish
                 ? "Processing..."
                 : "Verarbeitung..."
@@ -210,11 +186,6 @@ const ChatStream: React.FC = () => {
             {isEnglish ? "Chat Response" : "Chat-Antwort"}
           </h2>
           <p className="mt-2 text-sm text-green-800">{successMessage}</p>
-          {/* <pre className="mt-2 text-sm text-gray-700 whitespace-pre-wrap">
-            {typeof chatResponse === "object"
-              ? JSON.stringify(chatResponse, null, 2)
-              : chatResponse}
-          </pre> */}
         </div>
       )}
 
