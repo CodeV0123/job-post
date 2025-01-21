@@ -33,7 +33,11 @@ const initialState: TranslateState = {
 const translateToEnglishSlice = createSlice({
   name: "translate",
   initialState,
-  reducers: {},
+  reducers: {
+    updateTranslatedData: (state, action) => {
+      state.translatedData = action.payload;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(translateToEnglish.pending, (state) => {
@@ -42,7 +46,9 @@ const translateToEnglishSlice = createSlice({
       })
       .addCase(translateToEnglish.fulfilled, (state, action) => {
         state.status = "succeeded";
-        state.translatedData = action.payload.translated_data;
+        // Update to use translated_json instead of translated_data
+        state.translatedData = action.payload.translated_json;
+        console.log("Translation stored:", state.translatedData);
       })
       .addCase(translateToEnglish.rejected, (state, action) => {
         state.status = "failed";
@@ -50,5 +56,5 @@ const translateToEnglishSlice = createSlice({
       });
   },
 });
-
+export const { updateTranslatedData } = translateToEnglishSlice.actions;
 export default translateToEnglishSlice.reducer;
