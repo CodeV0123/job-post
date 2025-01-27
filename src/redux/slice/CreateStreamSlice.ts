@@ -137,7 +137,7 @@ export const fetchChatStream = createAsyncThunk(
       params: {
         prompt,
         job_description: JSON.stringify(job_description),
-        language: isEnglish ? "en" : "de",
+        isEnglish: isEnglish ? "true" : "false",
       },
     });
     return response.data as JobPost;

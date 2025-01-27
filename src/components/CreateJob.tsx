@@ -7,7 +7,6 @@ import GenerateVideo from "./GenerateVideo";
 import GenerateImage from "./GenerateImage";
 import { FaPlay, FaPen } from "react-icons/fa";
 import { translateToEnglish } from "../redux/slice/TranslateToEnglishSlice";
-import { toggleLanguage } from "../redux/slice/LanguageSlice";
 import { Job } from "../types/job";
 
 const parseField = (field: { items?: unknown[] } | unknown[]) => {
@@ -44,23 +43,16 @@ const CreateJobPost: React.FC = () => {
   const [isEnglish, setIsEnglish] = useState(false);
   const [localJob, setLocalJob] = useState<Job | null>(null);
 
-  // useEffect(() => {
-  //   setIsEnglish(false);
-  //   // If you're using Redux for language state, also reset Redux state
-  //   dispatch(toggleLanguage());
-  // }, [dispatch]); // Include dispatch in the dependency array
-
   useEffect(() => {
     if (job) {
-      setLocalJob(job); // Store the original job when it becomes available
+      setLocalJob(job);
+      console.log("Job data is available:", job);
     }
   }, [job]);
 
   const handleTranslateToEnglish = async () => {
     if (job) {
-      // Ensure job is not null before dispatching
       const response = await dispatch(translateToEnglish(job)).unwrap();
-      // Update localJob with translated data
       if (response.translated_json) {
         setLocalJob(response.translated_json);
       } else {
@@ -76,7 +68,6 @@ const CreateJobPost: React.FC = () => {
     } else {
       handleTranslateToEnglish(); // Translate to English
     }
-    dispatch(toggleLanguage()); // Toggle the language flag
     setIsEnglish((prev) => !prev); // Toggle the language flag
   };
 
@@ -467,9 +458,16 @@ const CreateJobPost: React.FC = () => {
           <p className="mt-2 text-sm text-red-800">{error}</p>
         </div>
       )}
-      <GenerateImage onImagesGenerated={handleImageGeneration} />
-      <GenerateVideo generatedImages={generatedImages} localJob={localJob} />
-      <ChatStream />
+      <GenerateImage
+        onImagesGenerated={handleImageGeneration}
+        isEnglish={isEnglish}
+      />
+      <GenerateVideo
+        generatedImages={generatedImages}
+        localJob={localJob}
+        isEnglish={isEnglish}
+      />
+      <ChatStream isEnglish={isEnglish} />
     </div>
   );
 };
