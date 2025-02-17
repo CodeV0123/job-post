@@ -1,9 +1,11 @@
 import React from "react";
-import CreateJob from "./components/CreateJob";
+import CreateJobPost from "./components/CreateJobPost/CreateJobPost";
+// import CreateJob from "./components/CreateJob";
 function App() {
   return (
     <React.Fragment>
-      <CreateJob />
+      {/* <CreateJob /> */}
+      <CreateJobPost />
     </React.Fragment>
   );
 }
