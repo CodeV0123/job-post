@@ -1,13 +1,14 @@
 import React from "react";
-import CreateJobPost from "./components/CreateJobPost/CreateJob";
-import NavBar from "./components/NavBar";
-// import CreateJob from "./components/CreateJob";
+import { Route, Routes } from "react-router-dom";
+// import CreateJobPost from "./components/CreateJobPost/CreateJob";
+import CreateJob from "./components/CreateJobPost/CreateJob";
 function App() {
   return (
     <React.Fragment>
-      {/* <CreateJob /> */}
-      <NavBar />
-      <CreateJobPost />
+      <Routes>
+        <Route path="/" element={<CreateJob />} />
+      </Routes>
+      {/* <CreateJobPost /> */}
     </React.Fragment>
   );
 }
