@@ -60,17 +60,17 @@ const CreateJob = () => {
         }}
       >
         <div>
-          <h1 className="text-[#5d5c61] uppercase bg-[#fff] font-normal tracking-[0.95px] text-center border rounded-full text-xl w-[112px] flex justify-center items-center mx-auto">
+          <h1 className="text-[#5d5c61] uppercase bg-[#fff] font-bold tracking-[0.95px] text-center border rounded-full text-xl w-[112px] flex justify-center items-center mx-auto">
             step 1
           </h1>
-          <h2 className="bg-[#fff] text-[#5d5c61] text-3xl font-bold mt-5 border rounded-[15px] w-[586px] flex justify-center items-center mx-auto">
+          <h2 className="bg-[#fff] text-[#5d5c61] text-3xl font-normal mt-5 border rounded-[15px] w-[586px] h-[67px] flex justify-center items-center mx-auto">
             Create Job Post
           </h2>
-          <div className="flex justify-center mt-5 border rounded-[15px] w-[800px] h-[250px] bg-[#fff] p-[15px]">
+          <div className="flex justify-center items-center mt-10 border rounded-[15px] w-[800px] h-[250px] bg-[#fff] p-[15px]">
             <form onSubmit={handleSubmit} className="mt-5">
               <label
                 htmlFor="file"
-                className="uppercase text-[#5d5c61] text-center"
+                className="uppercase font-bold text-[#5d5c61] text-center"
               >
                 Upload job post document
               </label>
@@ -105,9 +105,13 @@ const CreateJob = () => {
         {status === "succeeded" && (
           <button
             onClick={() => navigate("/generate-image")} // Navigate to GenerateImage
-            className="absolute right-10 transform -translate-y-1/5 bg-[#fff] text-[#5d5c61] p-3 rounded-full"
+            className="absolute right-10 transform -translate-y-1/5 bg-[#fff] p-2 rounded-full"
           >
-            <ChevronRightIcon className="w-8 h-8 font-extrabold" />
+            <ChevronRightIcon
+              className="w-8 h-8"
+              strokeWidth={3}
+              stroke="#5d5c61"
+            />
           </button>
         )}
       </div>
