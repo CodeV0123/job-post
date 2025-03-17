@@ -5,9 +5,11 @@ import generateVideoReducer from "../slice/GenerateVideoSlice";
 import translateToEnglishReducer from "../slice/TranslateToEnglishSlice";
 import generateImageReducer from "../slice/GenerateImageSlice";
 import languageReducer from "../slice/LanguageSlice";
+import createJobReducer from "../slice/CreateJobPostSlice";
 
 export const store = configureStore({
   reducer: {
+    createJob: createJobReducer,
     createJobPost: createJobPostReducer,
     chatStream: chatStreamReducer,
     generateVideo: generateVideoReducer,
