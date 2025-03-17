@@ -12,19 +12,19 @@ const ToggleLanguage = () => {
         TOGGLE <br /> LANGUAGE
       </span>
       <div
-        className={`relative w-20 h-8 flex items-center rounded-full cursor-pointer transition-all duration-300 ${
+        className={`relative w-24 h-8 flex items-center rounded-full cursor-pointer transition-all duration-300 ${
           language === "english" ? "bg-pink-300" : "bg-gray-400"
         }`}
         onClick={() => dispatch(toggleLanguage())}
       >
         <div
           className={`absolute left-1 top-1 h-6 w-6 bg-white rounded-full shadow-md transition-all duration-300 ${
-            language === "english" ? "translate-x-12" : "translate-x-0"
+            language === "english" ? "translate-x-16" : "translate-x-0"
           }`}
         ></div>
         <span
-          className={`absolute left-2 right-2 text-xs font-medium text-white transition-all duration-300 ${
-            language === "english" ? "translate-x-0" : "translate-x-4"
+          className={`absolute left-3 right-3 text-xs font-medium text-white transition-all duration-300 ${
+            language === "english" ? "translate-x-0" : "translate-x-6"
           }`}
         >
           {language === "german" ? "German" : "English"}
