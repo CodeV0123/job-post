@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
-const API_URL = "https://image-job.assemblr.ai/create-job-post/";
+const API_URL = "https://image-job.assemblr.ai/create-job-post";
 
 /*
 ! Async thunk to send POST request
@@ -9,22 +9,21 @@ const API_URL = "https://image-job.assemblr.ai/create-job-post/";
 
 export const createJobPost = createAsyncThunk(
   "createJob/createJobPost",
-  async (file: Blob, { rejectWithValue }) => {
+  async (formData: FormData) => {
+    // Accept FormData
     try {
-      const formData = new FormData();
-      formData.append("file", file);
-
       const response = await axios.post(API_URL, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
       });
+      console.log(response.data);
       return response.data;
     } catch (error) {
       if (axios.isAxiosError(error)) {
-        return rejectWithValue(error.response?.data || "Something went wrong");
+        return error.response?.data || "Something went wrong";
       }
-      return rejectWithValue("Something went wrong");
+      return "Something went wrong";
     }
   }
 );
@@ -40,6 +39,11 @@ const createJobSlice = createSlice({
   name: "createJob",
   initialState,
   reducers: {
+    resetState: (state) => {
+      state.jobPost = null;
+      state.status = "idle";
+      state.error = null;
+    },
     toggleLanguage: (state) => {
       state.language = state.language === "german" ? "english" : "german";
     },
@@ -51,7 +55,9 @@ const createJobSlice = createSlice({
       })
       .addCase(createJobPost.fulfilled, (state, action) => {
         state.status = "succeeded";
-        state.jobPost = action.payload.job_post;
+        state.jobPost = action.payload?.job_post;
+        console.log(state.jobPost);
+        console.log(action.payload.job_post);
       })
       .addCase(createJobPost.rejected, (state, action) => {
         state.status = "failed";
@@ -60,5 +66,5 @@ const createJobSlice = createSlice({
   },
 });
 
-export const { toggleLanguage } = createJobSlice.actions;
+export const { resetState, toggleLanguage } = createJobSlice.actions;
 export default createJobSlice.reducer;
