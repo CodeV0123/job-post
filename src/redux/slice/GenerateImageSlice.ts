@@ -1,45 +1,63 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import axios from "axios";
+import { RootState } from "../store/store";
 
-const API_URL = "https://image-job.assemblr.ai/generate-image/";
+const API_URL = "https://image-job.assemblr.ai/generate-image";
+
+interface GenerateImagePayload {
+  templatePath: File;
+  imageSource: "stock_photo" | "ai_image";
+}
 
 export const generateImage = createAsyncThunk(
-  "generateImage,generate",
+  "generateImage/generate",
   async (
-    {
-      templatePath,
-      imageKeyword,
-    }: { templatePath: File; imageKeyword: string },
-    { rejectWithValue }
+    { templatePath, imageSource }: GenerateImagePayload,
+    { getState, rejectWithValue }
   ) => {
-    const formData = new FormData();
-    formData.append("template_path", templatePath);
-    formData.append("image_keyword", imageKeyword);
     try {
+      const state = getState() as RootState;
+
+      // Get image keyword from CreateJobSlice (Ensure it has a value)
+      const imageKeyword =
+        imageSource === "ai_image"
+          ? state.createJob.image_keyword
+          : state.createJob.image_keyword_stockimage;
+
+      console.log("Sending image_keyword:", imageKeyword); // Debugging Log
+
+      // Prepare form data
+      const formData = new FormData();
+      formData.append("template_path", templatePath);
+      formData.append("image_keyword", imageKeyword);
+      formData.append("image_source", imageSource);
+
+      // Send request
       const response = await axios.post(API_URL, formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
+        headers: { "Content-Type": "multipart/form-data" },
       });
+      console.log(response.data);
       return response.data;
     } catch (error) {
-      if (axios.isAxiosError(error)) {
-        return rejectWithValue(error.response?.data || "Something went wrong");
-      }
-      return rejectWithValue("Something went wrong");
+      return rejectWithValue(
+        axios.isAxiosError(error)
+          ? error.response?.data || "Something went wrong"
+          : "Something went wrong"
+      );
     }
   }
 );
+
 interface GenerateImageState {
   images: string[];
-  templateFile: File | null; // Add this
+  imageSource: "stock_photo" | "ai_image";
   status: "idle" | "loading" | "succeeded" | "failed";
   error: string | null;
 }
 
 const initialState: GenerateImageState = {
   images: [],
-  templateFile: null, // Add this
+  imageSource: "stock_photo",
   status: "idle",
   error: null,
 };
@@ -50,11 +68,15 @@ const generateImageSlice = createSlice({
   reducers: {
     resetState: (state) => {
       state.images = [];
+      state.imageSource = "stock_photo";
       state.status = "idle";
       state.error = null;
     },
-    setTemplateFile: (state, action: PayloadAction<File>) => {
-      state.templateFile = action.payload;
+    setImageSource: (
+      state,
+      action: PayloadAction<"stock_photo" | "ai_image">
+    ) => {
+      state.imageSource = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -76,6 +98,5 @@ const generateImageSlice = createSlice({
   },
 });
 
-export const { resetState, setTemplateFile } = generateImageSlice.actions;
-
+export const { resetState, setImageSource } = generateImageSlice.actions;
 export default generateImageSlice.reducer;
