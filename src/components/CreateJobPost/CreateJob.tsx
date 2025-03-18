@@ -80,7 +80,7 @@ const CreateJob = () => {
               <div className="flex justify-center items-center gap-2 mb-8">
                 <label
                   htmlFor="file"
-                  className="bg-gray-200 hover:bg-gray-300 text-[#5d5c61] py-2 px-4 rounded-full cursor-pointer"
+                  className="bg-gray-200 hover:bg-gray-300 text-[#5d5c61] py-2 px-4 rounded-full cursor-pointer text-sm"
                 >
                   Choose File
                 </label>
