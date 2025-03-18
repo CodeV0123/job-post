@@ -8,15 +8,19 @@ import {
 import NavBar from "./NavBar";
 import ToggleLanguage from "../ToggleLanguage/ToggleLanguage";
 import bgimage from "./assets/bgimage.png";
+import { ChevronRightIcon } from "@heroicons/react/24/solid";
+import { useNavigate } from "react-router-dom";
 
 const GenerateImage = () => {
   const dispatch = useDispatch<AppDispatch>();
+  const navigate = useNavigate();
   const { images, imageSource, status, error } = useSelector(
     (state: RootState) => state.generateImage
   );
 
   // Local State for File Upload (DO NOT store file in Redux)
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [message, setMessage] = useState<string | null>(null);
 
   // Handle File Selection
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -26,14 +30,17 @@ const GenerateImage = () => {
 
   //   Handle Dropdown Change
   const handleSourceChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    dispatch(setImageSource(event.target.value as "stock_photo" | "ai_image"));
+    dispatch(setImageSource(event.target.value as "ai_image" | "stock_photo"));
   };
 
   // Handle Submit
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
     if (!selectedFile) {
-      alert("Please upload a template file.");
+      setTimeout(() => {
+        setMessage(null);
+      }, 3000);
+      setMessage("Please upload a template file.");
       return;
     }
     dispatch(generateImage({ templatePath: selectedFile, imageSource }));
@@ -59,7 +66,7 @@ const GenerateImage = () => {
             Generate Image
           </h2>
 
-          <div className="flex justify-center items-center mt-10 border rounded-[15px] w-[800px] h-[260px] bg-[#fff] p-[20px] shadow-lg">
+          <div className="flex justify-center items-center mt-10 border rounded-[15px] w-[800px] h-[270px] bg-[#fff] p-[20px] shadow-lg">
             <form
               className="w-full flex flex-col items-center"
               onSubmit={handleSubmit}
@@ -74,14 +81,19 @@ const GenerateImage = () => {
                 onChange={handleFileChange}
               />
 
-              <select
-                value={imageSource}
-                onChange={handleSourceChange}
-                className="mt-4 p-2 border rounded-lg bg-gray-200 text-[#5d5c61]"
-              >
-                <option value="stock_photo">Stock Photo</option>
-                <option value="ai_image">AI Image</option>
-              </select>
+              <div className="relative w-[30%] mt-4">
+                {/* <label className="uppercase font-bold text-[#5d5c61] text-sm mb-2 w-full block text-center">
+                  Select Image Source
+                </label> */}
+                <select
+                  value={imageSource}
+                  onChange={handleSourceChange}
+                  className="block w-full px-4 py-2 border border-gray-300 bg-white rounded-lg shadow-sm focus:ring-2 focus:ring-[#5d5c61] focus:outline-none"
+                >
+                  <option value="stock_photo">Stock Photo</option>
+                  <option value="ai_image">AI Image</option>
+                </select>
+              </div>
 
               <button
                 type="submit"
@@ -93,9 +105,10 @@ const GenerateImage = () => {
               {status === "failed" && (
                 <p className="text-red-500 mt-4">{error}</p>
               )}
+              <p className="text-red-500 mt-4">{message}</p>
             </form>
           </div>
-
+          {/* Image display temp */}
           {status === "succeeded" && images.length > 0 && (
             <div className="mt-6 grid grid-cols-3 gap-4">
               {images.map((image, index) => (
@@ -109,6 +122,19 @@ const GenerateImage = () => {
             </div>
           )}
         </div>
+        {/* Forward Chevron Icon */}
+        {status === "succeeded" && (
+          <button
+            onClick={() => navigate("/generate-image")}
+            className="absolute right-10 transform -translate-y-1/5 bg-[#fff] p-2 rounded-full"
+          >
+            <ChevronRightIcon
+              className="w-8 h-8"
+              strokeWidth={3}
+              stroke="#5d5c61"
+            />
+          </button>
+        )}
         {/* Toggle Language Button - Positioned at Bottom Right */}
         <div className="absolute bottom-5 right-5">
           <ToggleLanguage colorScheme="green" textColor="text-white" />
