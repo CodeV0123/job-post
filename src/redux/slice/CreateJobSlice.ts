@@ -28,11 +28,22 @@ export const createJobPost = createAsyncThunk(
   }
 );
 
-const initialState = {
+interface CreateJobState {
+  jobPost: null;
+  language: string;
+  status: string;
+  error: unknown;
+  image_keyword: string; // Add this
+  image_keyword_stockimage: string; // Add this
+}
+
+const initialState: CreateJobState = {
   jobPost: null,
   language: "german", // default language
   status: "idle",
   error: null as unknown | null,
+  image_keyword: "", // Add this
+  image_keyword_stockimage: "", // Add this
 };
 
 const createJobSlice = createSlice({
@@ -56,6 +67,18 @@ const createJobSlice = createSlice({
       .addCase(createJobPost.fulfilled, (state, action) => {
         state.status = "succeeded";
         state.jobPost = action.payload?.job_post;
+
+        // Ensure image keywords are stored
+        state.image_keyword = action.payload?.image?.image_keyword || "";
+        state.image_keyword_stockimage =
+          action.payload?.image?.image_keyword_stockimage || "";
+
+        console.log("Extracted image_keyword:", state.image_keyword);
+        console.log(
+          "Extracted image_keyword_stock:",
+          state.image_keyword_stockimage
+        );
+
         console.log(state.jobPost);
         console.log(action.payload.job_post);
       })
