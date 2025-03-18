@@ -63,7 +63,7 @@ const CreateJob = () => {
           <h1 className="text-[#5d5c61] uppercase bg-[#fff] font-bold tracking-[0.95px] text-center border rounded-full text-xl w-[112px] flex justify-center items-center mx-auto">
             step 1
           </h1>
-          <h2 className="bg-[#fff] text-[#5d5c61] text-3xl font-bold mt-5 border rounded-[15px] w-[560px] h-[50px] flex justify-center items-center mx-auto">
+          <h2 className="bg-[#fff] text-[#5d5c61] text-3xl capitalize font-bold mt-5 border rounded-[15px] w-[560px] h-[50px] flex justify-center items-center mx-auto">
             Create Job Post
           </h2>
           <div className="flex justify-center items-center mt-10 border rounded-[15px] w-[800px] h-[240px] bg-[#fff] p-[15px]">
