@@ -1,19 +1,27 @@
 import { useDispatch, useSelector } from "react-redux";
 import { toggleLanguage } from "../../redux/slice/CreateJobSlice";
 
-const ToggleLanguage = () => {
+const ToggleLanguage = ({
+  colorScheme,
+  textColor,
+}: {
+  colorScheme: "green" | "pink";
+  textColor: "text-white" | "text-gray-700";
+}) => {
   const dispatch = useDispatch();
   const language = useSelector(
     (state: { createJob: { language: string } }) => state.createJob.language
   );
+
+  const activeColor = colorScheme === "green" ? "bg-[#324c3d]" : "bg-[#daa0b5]";
   return (
     <div className="flex flex-col items-center">
-      <span className="text-gray-700 font-semibold text-center text-sm mb-2">
+      <span className={`font-semibold text-center text-sm mb-2 ${textColor}`}>
         TOGGLE <br /> LANGUAGE
       </span>
       <div
         className={`relative w-24 h-8 flex items-center rounded-full cursor-pointer transition-all duration-300 ${
-          language === "english" ? "bg-pink-300" : "bg-gray-400"
+          language === "english" ? activeColor : "bg-gray-400"
         }`}
         onClick={() => dispatch(toggleLanguage())}
       >
