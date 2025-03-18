@@ -80,11 +80,11 @@ const CreateJob = () => {
               <div className="flex justify-center items-center gap-2 mb-8">
                 <label
                   htmlFor="file"
-                  className="bg-gray-200 hover:bg-gray-300 text-gray-700 py-2 px-4 rounded-full cursor-pointer"
+                  className="bg-gray-200 hover:bg-gray-300 text-[#5d5c61] py-2 px-4 rounded-full cursor-pointer"
                 >
                   Choose File
                 </label>
-                <span className="text-gray-500">{fileName}</span>
+                <span className="text-[#777777]">{fileName}</span>
                 <input
                   type="file"
                   id="file"
@@ -99,14 +99,14 @@ const CreateJob = () => {
                 <button
                   type="submit"
                   disabled={status === "loading"}
-                  className="px-6 py-2 bg-blue-600 text-white font-medium rounded-full hover:bg-blue-700 disabled:bg-blue-300"
+                  className="px-6 py-2 bg-[#8bbee0] text-white font-medium rounded-full hover:bg-blue-700 disabled:bg-blue-300"
                 >
                   {status === "loading" ? "Uploading..." : "Submit"}
                 </button>
                 <button
                   type="button"
                   onClick={handleReset}
-                  className="px-6 py-2 bg-gray-600 text-white font-medium rounded-full hover:bg-gray-700"
+                  className="px-6 py-2 bg-[#e9deef] text-[#73737f] font-medium rounded-full hover:bg-gray-100"
                 >
                   Reset
                 </button>
