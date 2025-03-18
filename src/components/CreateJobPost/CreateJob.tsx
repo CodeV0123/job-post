@@ -60,10 +60,10 @@ const CreateJob = () => {
           <h1 className="text-[#5d5c61] uppercase bg-[#fff] font-bold tracking-[0.95px] text-center border rounded-full text-xl w-[112px] h-[35px] flex justify-center items-center">
             STEP 1
           </h1>
-          <h2 className="bg-[#fff] text-[#5d5c61] text-3xl capitalize font-bold mt-5 border rounded-[15px] w-[560px] h-[50px] flex justify-center items-center">
+          <h2 className="bg-[#fff] text-[#5d5c61] text-3xl capitalize font-bold mt-5 border rounded-[15px] w-[560px] h-[50px] flex justify-center items-center mx-auto shadow-md">
             Create Job Post
           </h2>
-          <div className="flex justify-center items-center mt-10 border rounded-[15px] w-[800px] h-[240px] bg-[#fff] p-[15px]">
+          <div className="flex justify-center items-center mt-10 border rounded-[15px] w-[800px] h-[240px] bg-[#fff] p-[20px] shadow-md">
             <form
               onSubmit={handleSubmit}
               className="w-full flex flex-col items-center justify-center"
@@ -80,7 +80,7 @@ const CreateJob = () => {
               <div className="flex justify-center items-center gap-2 mb-8">
                 <label
                   htmlFor="file"
-                  className="bg-gray-200 hover:bg-gray-300 text-gray-700 py-2 px-4 rounded-md cursor-pointer"
+                  className="bg-gray-200 hover:bg-gray-300 text-gray-700 py-2 px-4 rounded-full cursor-pointer"
                 >
                   Choose File
                 </label>
@@ -99,14 +99,14 @@ const CreateJob = () => {
                 <button
                   type="submit"
                   disabled={status === "loading"}
-                  className="px-6 py-2 bg-blue-600 text-white font-medium rounded-md hover:bg-blue-700 disabled:bg-blue-300"
+                  className="px-6 py-2 bg-blue-600 text-white font-medium rounded-full hover:bg-blue-700 disabled:bg-blue-300"
                 >
                   {status === "loading" ? "Uploading..." : "Submit"}
                 </button>
                 <button
                   type="button"
                   onClick={handleReset}
-                  className="px-6 py-2 bg-gray-600 text-white font-medium rounded-md hover:bg-gray-700"
+                  className="px-6 py-2 bg-gray-600 text-white font-medium rounded-full hover:bg-gray-700"
                 >
                   Reset
                 </button>
