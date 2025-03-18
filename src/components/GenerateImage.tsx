@@ -56,6 +56,7 @@ const GenerateImage: React.FC<GenerateImageProps> = ({
     const payload = {
       templatePath: templateFile,
       imageKeyword: job.imageKeyword,
+      imageSource: "stock_photo" as "stock_photo" | "ai_image", // or "ai_image" depending on your requirement
     };
 
     dispatch(generateImage(payload));
