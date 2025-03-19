@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { RootState, AppDispatch } from "../../redux/store/store";
+import { RootState, AppDispatch, store } from "../../redux/store/store";
 import {
   generateImage,
   setImageSource,
@@ -30,7 +30,7 @@ const GenerateImage = () => {
 
   //   Handle Dropdown Change
   const handleSourceChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    dispatch(setImageSource(event.target.value as "ai_image" | "stock_photo"));
+    dispatch(setImageSource(event.target.value as "stock_photo" | "ai_image"));
   };
 
   // Handle Submit
@@ -41,6 +41,17 @@ const GenerateImage = () => {
         setMessage(null);
       }, 3000);
       setMessage("Please upload a template file.");
+      return;
+    }
+    const state = store.getState() as RootState;
+    const imageKeyword =
+      imageSource === "ai_image"
+        ? state.createJob.image_keyword
+        : state.createJob.image_keyword_stockimage;
+
+    if (!imageKeyword) {
+      setMessage("Error: Image Keyword is required.");
+      setTimeout(() => setMessage(null), 3000);
       return;
     }
     dispatch(generateImage({ templatePath: selectedFile, imageSource }));
@@ -125,7 +136,7 @@ const GenerateImage = () => {
         {/* Forward Chevron Icon */}
         {status === "succeeded" && (
           <button
-            onClick={() => navigate("/generate-image")}
+            onClick={() => navigate("/generate-video")}
             className="absolute right-10 transform -translate-y-1/5 bg-[#fff] p-2 rounded-full"
           >
             <ChevronRightIcon
