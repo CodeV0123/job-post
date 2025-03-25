@@ -16,6 +16,12 @@ interface CreatedJobProps {
       ["Qualifikationen"]?: string;
       ["Vorteile"]?: string;
       ["Handlungsaufforderung"]?: string;
+      ["kontakt"]: {
+        email?: string;
+        telefon?: string;
+        ansprechpartner?: string;
+        bewerbungsfrist?: string;
+      };
     };
     english?: {
       ["Job Title"]?: string;
@@ -24,6 +30,12 @@ interface CreatedJobProps {
       ["Qualifications"]?: string;
       ["Benefits"]?: string;
       ["Call to Action"]?: string;
+      ["contact"]: {
+        email?: string;
+        phone?: string;
+        contact_person?: string;
+        closing_date?: string;
+      };
     };
   };
   language: string;
@@ -162,14 +174,15 @@ const CreatedJob: React.FC<CreatedJobProps> = ({ jobPost, language }) => {
               </div>
 
               {/* Application */}
-              <div>
-                <h3 className="font-semibold text-[#000] mb-3">Application:</h3>
+              <div className="flex flex-growjustify-around">
+                <h3 className="font-normal text-[#000] mb-3">Apply now- </h3>
                 <p className="text-[#666666]">
                   {language === "german"
                     ? jobPost.german?.["Handlungsaufforderung"]
                     : jobPost.english?.["Call to Action"]}
                 </p>
               </div>
+              <GeneratedVideo />
             </div>
           </div>
           <h2 className=" text-[#5d5c61] uppercase bg-[#fff] font-bold tracking-[0.95px] text-center border rounded-full text-lg w-[130px] h-[35px] flex justify-center items-center">
