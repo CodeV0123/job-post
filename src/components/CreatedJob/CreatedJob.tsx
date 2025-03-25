@@ -5,6 +5,7 @@ import bgimage from "./assets/bgimage.png";
 import navlogo from "./assets/navlogo.png";
 import ToggleLanguage from "../ToggleLanguage/ToggleLanguage";
 import { useNavigate } from "react-router-dom";
+import GeneratedVideo from "../GenerateVideo/GeneratedVideo";
 
 interface CreatedJobProps {
   jobPost: {
@@ -90,9 +91,9 @@ const CreatedJob: React.FC<CreatedJobProps> = ({ jobPost, language }) => {
         className="flex-1 flex items-center justify-center"
       >
         <div className="flex flex-col items-center space-y-8 mt-11">
-          <h1 className="text-[#5d5c61] uppercase bg-[#fff] font-bold tracking-[0.95px] text-center border rounded-full text-lg w-[112px] h-[35px] flex justify-center items-center">
+          <h3 className="text-[#5d5c61] uppercase bg-[#fff] font-bold tracking-[0.95px] text-center border rounded-full text-lg w-[112px] h-[35px] flex justify-center items-center">
             STEP 1
-          </h1>
+          </h3>
           <div className="bg-white rounded-lg shadow-lg p-8 max-w-xl w-full mx-4 relative overflow-hidden">
             {/* Language Toggle Button */}
             {/* <div className="absolute top-4 right-4">
@@ -171,6 +172,10 @@ const CreatedJob: React.FC<CreatedJobProps> = ({ jobPost, language }) => {
               </div>
             </div>
           </div>
+          <h2 className=" text-[#5d5c61] uppercase bg-[#fff] font-bold tracking-[0.95px] text-center border rounded-full text-lg w-[130px] h-[35px] flex justify-center items-center">
+            final step
+          </h2>
+          <GeneratedVideo />
         </div>
       </div>
     </div>
