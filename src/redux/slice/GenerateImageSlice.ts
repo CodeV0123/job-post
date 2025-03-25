@@ -53,6 +53,7 @@ interface GenerateImageState {
   imageSource: "stock_photo" | "ai_image";
   status: "idle" | "loading" | "succeeded" | "failed";
   error: string | null;
+  templateFile: File | null;
 }
 
 const initialState: GenerateImageState = {
@@ -60,6 +61,7 @@ const initialState: GenerateImageState = {
   imageSource: "stock_photo",
   status: "idle",
   error: null,
+  templateFile: null,
 };
 
 const generateImageSlice = createSlice({
@@ -71,12 +73,16 @@ const generateImageSlice = createSlice({
       state.imageSource = "stock_photo";
       state.status = "idle";
       state.error = null;
+      state.templateFile = null;
     },
     setImageSource: (
       state,
       action: PayloadAction<"stock_photo" | "ai_image">
     ) => {
       state.imageSource = action.payload;
+    },
+    setTemplateFile: (state, action: PayloadAction<File>) => {
+      state.templateFile = action.payload;
     },
   },
   extraReducers: (builder) => {
