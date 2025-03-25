@@ -174,9 +174,10 @@ const CreatedJob: React.FC<CreatedJobProps> = ({ jobPost, language }) => {
               </div>
 
               {/* Application */}
-              <div className="flex flex-growjustify-around">
-                <h3 className="font-normal text-[#000] mb-3">Apply now- </h3>
-                <p className="text-[#666666]">
+              <div className="flex flex-grow">
+                <h3 className="font-normal text-[#000] mb-3">Apply now </h3>
+                <p className="text-[#666666] px-1">
+                  -{" "}
                   {language === "german"
                     ? jobPost.german?.["Handlungsaufforderung"]
                     : jobPost.english?.["Call to Action"]}
@@ -185,8 +186,11 @@ const CreatedJob: React.FC<CreatedJobProps> = ({ jobPost, language }) => {
               <GeneratedVideo />
             </div>
           </div>
-          <h2 className=" text-[#5d5c61] uppercase bg-[#fff] font-bold tracking-[0.95px] text-center border rounded-full text-lg w-[130px] h-[35px] flex justify-center items-center">
-            final step
+          <h2 className=" text-[#5d5c61] uppercase bg-[#fff] font-bold tracking-[0.95px] text-center border rounded-full text-lg w-[112px] h-[35px] flex justify-center items-center">
+            step 2
+          </h2>
+          <h2 className=" text-[#5d5c61] uppercase bg-[#fff] font-bold tracking-[0.95px] text-center border rounded-full text-lg w-[112px] h-[35px] flex justify-center items-center">
+            step 3
           </h2>
           <GeneratedVideo />
         </div>
