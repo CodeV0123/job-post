@@ -81,7 +81,7 @@ const generateImageSlice = createSlice({
     ) => {
       state.imageSource = action.payload;
     },
-    setTemplateFile: (state, action: PayloadAction<File>) => {
+    setTemplateFile: (state, action: PayloadAction<File | null>) => {
       state.templateFile = action.payload;
     },
   },
@@ -104,5 +104,6 @@ const generateImageSlice = createSlice({
   },
 });
 
-export const { resetState, setImageSource } = generateImageSlice.actions;
+export const { resetState, setImageSource, setTemplateFile } =
+  generateImageSlice.actions;
 export default generateImageSlice.reducer;
