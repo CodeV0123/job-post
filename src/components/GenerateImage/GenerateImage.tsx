@@ -119,19 +119,6 @@ const GenerateImage = () => {
               <p className="text-red-500 mt-4">{message}</p>
             </form>
           </div>
-          {/* Image display temp */}
-          {/* {status === "succeeded" && images.length > 0 && (
-            <div className="mt-6 grid grid-cols-3 gap-4">
-              {images.map((image, index) => (
-                <img
-                  key={index}
-                  src={`data:image/png;base64,${image}`}
-                  alt={`Generated ${index + 1}`}
-                  className="w-[200px] h-[200px] rounded-lg shadow-md"
-                />
-              ))}
-            </div>
-          )} */}
         </div>
         {/* Forward Chevron Icon */}
         {status === "succeeded" && (
