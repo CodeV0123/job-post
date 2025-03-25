@@ -80,16 +80,16 @@ const CreatedJob: React.FC<CreatedJobProps> = ({ jobPost, language }) => {
           </span>
         </div>
         <div className="flex flex-col items-center space-y-4">
-          <div className="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center">
-            {/* <span className="text-white text-sm">1</span> */}
+          <div className="h-7 bg-white rounded-lg w-[60px] flex items-center justify-center">
+            <span className="text-[#5d5c61] text-sm capitalize]">step 1</span>
           </div>
           <div className="w-0.5 h-12 bg-white/30"></div>
-          <div className="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center">
-            {/* <span className="text-white/50 text-sm">2</span> */}
+          <div className="h-7 bg-white rounded-lg w-[60px] flex items-center justify-center">
+            <span className="text-[#5d5c61] text-sm capitalize]">step 2</span>
           </div>
           <div className="w-0.5 h-12 bg-white/30"></div>
-          <div className="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center">
-            {/* <span className="text-white/50 text-sm">3</span> */}
+          <div className="h-7 bg-white rounded-lg w-[60px] flex items-center justify-center">
+            <span className="text-[#5d5c61] text-sm capitalize]">step 3</span>
           </div>
         </div>
       </div>
