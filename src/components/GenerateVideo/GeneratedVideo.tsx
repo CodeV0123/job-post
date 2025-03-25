@@ -7,9 +7,9 @@ const GeneratedVideo = () => {
     (state: RootState) => state.generateVideo
   );
   return (
-    <div>
+    <div className="bg-white rounded-lg shadow-lg p-8 max-w-xl w-full mx-4 relative overflow-hidden">
       {videoResponse && videoResponse.video_path ? (
-        <video src={videoResponse.video_path}></video>
+        <video src={videoResponse.video_path} controls></video>
       ) : (
         <p>No video available</p>
       )}
