@@ -1,4 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { createSelector } from "@reduxjs/toolkit";
+import { RootState } from "../store/store";
 import axios from "axios";
 
 const API_URL = "https://image-job.assemblr.ai/create-job-post";
@@ -28,6 +30,12 @@ export const createJobPost = createAsyncThunk(
   }
 );
 
+export const selectTaglines = createSelector(
+  (state: RootState) => state.createJob.image?.taglines,
+  (taglines) =>
+    taglines && taglines.length > 0 ? taglines : ["No taglines available"]
+);
+
 interface JobPost {
   german?: Record<string, string>;
   english?: Record<string, string>;
@@ -38,9 +46,17 @@ interface Voice {
   english?: { script?: string };
 }
 
+interface Image {
+  image_keyword: string;
+  image_keyword_stockimage: string;
+  Headline: string;
+  taglines: string[];
+}
+
 interface CreateJobState {
   jobPost: JobPost | null;
   voice: Voice | null;
+  image: Image | null;
   language: string;
   status: string;
   error: unknown;
@@ -52,6 +68,7 @@ interface CreateJobState {
 const initialState: CreateJobState = {
   jobPost: null,
   voice: null,
+  image: null,
   language: "german", // default language
   status: "idle",
   error: null as unknown | null,
@@ -81,22 +98,16 @@ const createJobSlice = createSlice({
       .addCase(createJobPost.fulfilled, (state, action) => {
         state.status = "succeeded";
         state.jobPost = action.payload?.job_post || null;
+        state.voice = action.payload?.voice || null;
+        state.image = action.payload?.image || null;
 
-        // Ensure image keywords are stored
+        // Extracting image taglines
         state.image_keyword = action.payload?.image?.image_keyword || "";
         state.image_keyword_stockimage =
           action.payload?.image?.image_keyword_stockimage || "";
-        state.voice = action.payload?.voice || null;
         state.script = action.payload?.voice?.english?.script || "";
 
-        console.log("Extracted image_keyword:", state.image_keyword);
-        console.log(
-          "Extracted image_keyword_stock:",
-          state.image_keyword_stockimage
-        );
-
-        console.log(state.jobPost);
-        console.log(action.payload.job_post);
+        console.log("Extracted image taglines:", state.image?.taglines);
       })
       .addCase(createJobPost.rejected, (state, action) => {
         state.status = "failed";
