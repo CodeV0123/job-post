@@ -6,6 +6,7 @@ import navlogo from "./assets/navlogo.png";
 import ToggleLanguage from "../ToggleLanguage/ToggleLanguage";
 import { useNavigate } from "react-router-dom";
 import GeneratedVideo from "../GenerateVideo/GeneratedVideo";
+import { GeneratedImage } from "../GenerateImage/GeneratedImage";
 
 interface CreatedJobProps {
   jobPost: {
@@ -107,16 +108,6 @@ const CreatedJob: React.FC<CreatedJobProps> = ({ jobPost, language }) => {
             STEP 1
           </h3>
           <div className="bg-white rounded-lg shadow-lg p-8 max-w-xl w-full mx-4 relative overflow-hidden">
-            {/* Language Toggle Button */}
-            {/* <div className="absolute top-4 right-4">
-            <button
-              onClick={() => dispatch(toggleLanguage())}
-              className="px-4 py-2 bg-[#00B0F0] text-white rounded-full hover:bg-[#0091c7] transition-colors duration-300 text-sm"
-            >
-              {language === "german" ? "English" : "Deutsch"}
-            </button>
-          </div> */}
-
             {/* Job Title */}
             <h2 className="text-lg font-semibold text-[#000] mb-4">
               {language === "german"
@@ -189,6 +180,7 @@ const CreatedJob: React.FC<CreatedJobProps> = ({ jobPost, language }) => {
           <h2 className=" text-[#5d5c61] uppercase bg-[#fff] font-bold tracking-[0.95px] text-center border rounded-full text-lg w-[112px] h-[35px] flex justify-center items-center">
             step 2
           </h2>
+          <GeneratedImage />
           <h2 className=" text-[#5d5c61] uppercase bg-[#fff] font-bold tracking-[0.95px] text-center border rounded-full text-lg w-[112px] h-[35px] flex justify-center items-center">
             step 3
           </h2>
