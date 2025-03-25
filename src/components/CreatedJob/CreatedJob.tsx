@@ -36,7 +36,7 @@ const CreatedJob: React.FC<CreatedJobProps> = ({ jobPost, language }) => {
   const formatAsList = (text?: string) => {
     return text
       ? text
-          .split(/(?:\\n▶|\n▶|▶)| ->/)
+          .split(/(?:\\n▶|\n▶|▶)|->| →/)
           .map((item) => item.trim()) // Trim whitespace
           .filter((item) => item !== "") // Remove empty items
           .map((item, index) => (
