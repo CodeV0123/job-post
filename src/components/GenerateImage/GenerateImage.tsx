@@ -4,6 +4,7 @@ import { RootState, AppDispatch, store } from "../../redux/store/store";
 import {
   generateImage,
   setImageSource,
+  setTemplateFile,
 } from "../../redux/slice/GenerateImageSlice";
 import NavBar from "./NavBar";
 import ToggleLanguage from "../ToggleLanguage/ToggleLanguage";
@@ -26,6 +27,10 @@ const GenerateImage = () => {
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0] || null;
     setSelectedFile(file);
+
+    if (file) {
+      dispatch(setTemplateFile(file));
+    }
   };
 
   //   Handle Dropdown Change
