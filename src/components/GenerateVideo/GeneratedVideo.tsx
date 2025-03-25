@@ -1,21 +1,53 @@
-import { RootState } from "../../redux/store/store";
+import { useRef, useState } from "react";
 import { useSelector } from "react-redux";
+import { RootState } from "../../redux/store/store";
 import { selectTaglines } from "../../redux/slice/CreateJobSlice"; // Import memoized selector
+import { PlayIcon, PauseIcon } from "@heroicons/react/24/solid"; // Heroicons for play/pause
 
 const GeneratedVideo = () => {
   const { videoResponse } = useSelector(
     (state: RootState) => state.generateVideo
   );
-  const taglines = useSelector(selectTaglines); // Use memoized selector
+  const taglines = useSelector(selectTaglines);
 
-  console.log("Taglines:", taglines);
+  const videoRef = useRef<HTMLVideoElement | null>(null);
+  const [isPlaying, setIsPlaying] = useState(false);
+
+  const togglePlayPause = () => {
+    if (videoRef.current) {
+      if (isPlaying) {
+        videoRef.current.pause();
+      } else {
+        videoRef.current.play();
+      }
+      setIsPlaying(!isPlaying);
+    }
+  };
 
   return (
     <div className="bg-white rounded-lg shadow-lg p-8 max-w-xl w-full mx-4 relative overflow-hidden">
       <div className="relative">
         {/* Video */}
         {videoResponse?.video_path ? (
-          <video src={videoResponse.video_path} controls className="w-full" />
+          <div className="relative">
+            <video
+              ref={videoRef}
+              src={videoResponse.video_path}
+              className="w-full"
+            />
+
+            {/* Play/Pause Button */}
+            <button
+              onClick={togglePlayPause}
+              className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-black bg-opacity-50 p-3 rounded-full"
+            >
+              {isPlaying ? (
+                <PauseIcon className="w-10 h-10 text-white" />
+              ) : (
+                <PlayIcon className="w-10 h-10 text-white" />
+              )}
+            </button>
+          </div>
         ) : (
           <p>No video available</p>
         )}
@@ -25,7 +57,7 @@ const GeneratedVideo = () => {
           <ul className="list-none">
             {taglines.length > 0 ? (
               taglines.map((tagline, index) => (
-                <li key={index} className="text-lg font-medium flex ">
+                <li key={index} className="text-lg font-medium flex">
                   <svg
                     className="w-10 h-10 text-white mr-2"
                     xmlns="http://www.w3.org/2000/svg"
