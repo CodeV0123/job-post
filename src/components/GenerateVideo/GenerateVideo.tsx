@@ -15,8 +15,9 @@ const GenerateVideo = () => {
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
   const { status } = useSelector((state: RootState) => state.generateVideo);
-  const { images, templateFile } = useSelector(
-    (state: RootState) => state.generateImage
+  const { images } = useSelector((state: RootState) => state.generateImage);
+  const templateFile = useSelector(
+    (state: RootState) => state.generateImage.templateFile
   );
   const script = useSelector(
     (state: RootState) =>
@@ -33,12 +34,6 @@ const GenerateVideo = () => {
       console.log("✅ Template File Set:", templateFile.name);
     }
   }, [templateFile]);
-
-  const handleTemplateUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0] || null;
-    setSelectedTemplate(file);
-    console.log("📂 Manually Selected Template:", file?.name);
-  };
 
   const base64ToBlob = (base64: string, contentType = "image/png") => {
     const byteCharacters = atob(base64);
@@ -111,7 +106,7 @@ const GenerateVideo = () => {
           </h2>
 
           <div className="flex flex-col justify-center items-center mt-10 gap-3 border rounded-[15px] w-[800px] min-h-[350px] bg-[#fff] p-[20px] shadow-lg">
-            <div className="mt-3 flex flex-col w-[60%]">
+            {/* <div className="mt-3 flex flex-col w-[60%]">
               <label className="text-[#324c3d] font-semibold">
                 SELECT TEMPLATE FILE:
               </label>
@@ -121,7 +116,7 @@ const GenerateVideo = () => {
                 onChange={handleTemplateUpload}
                 className="w-full mt-1 p-2 border rounded-full"
               />
-            </div>
+            </div> */}
 
             <div className="mt-3 flex gap-10 w-[60%]">
               <label className="text-[#324c3d] font-semibold">
