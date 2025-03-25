@@ -14,7 +14,7 @@ import { useNavigate } from "react-router-dom";
 const GenerateImage = () => {
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
-  const { images, imageSource, status, error } = useSelector(
+  const { imageSource, status, error } = useSelector(
     (state: RootState) => state.generateImage
   );
 
@@ -120,7 +120,7 @@ const GenerateImage = () => {
             </form>
           </div>
           {/* Image display temp */}
-          {status === "succeeded" && images.length > 0 && (
+          {/* {status === "succeeded" && images.length > 0 && (
             <div className="mt-6 grid grid-cols-3 gap-4">
               {images.map((image, index) => (
                 <img
@@ -131,7 +131,7 @@ const GenerateImage = () => {
                 />
               ))}
             </div>
-          )}
+          )} */}
         </div>
         {/* Forward Chevron Icon */}
         {status === "succeeded" && (
