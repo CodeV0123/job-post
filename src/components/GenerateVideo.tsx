@@ -10,6 +10,7 @@ import { Job } from "../types/job";
 interface GenerateVideoProps {
   generatedImages: string[];
   localJob: Job | null;
+  isEnglish: boolean;
 }
 
 const generateRandomId = () => Math.floor(Math.random() * 100).toString();
@@ -17,6 +18,7 @@ const generateRandomId = () => Math.floor(Math.random() * 100).toString();
 const GenerateVideo: React.FC<GenerateVideoProps> = ({
   generatedImages,
   localJob,
+  isEnglish,
 }) => {
   const dispatch = useDispatch<AppDispatch>();
   const { videoResponse, status, error } = useSelector(
@@ -28,7 +30,7 @@ const GenerateVideo: React.FC<GenerateVideoProps> = ({
     (state: RootState) => state.generateImage
   );
 
-  const isEnglish = useSelector((state: RootState) => state.language.isEnglish);
+  // const isEnglish = useSelector((state: RootState) => state.language.isEnglish);
 
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [message, setMessage] = useState<string | null>(null);

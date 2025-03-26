@@ -8,15 +8,19 @@ import {
 
 interface GenerateImageProps {
   onImagesGenerated: (images: string[]) => void;
+  isEnglish: boolean;
 }
 
-const GenerateImage: React.FC<GenerateImageProps> = ({ onImagesGenerated }) => {
+const GenerateImage: React.FC<GenerateImageProps> = ({
+  onImagesGenerated,
+  isEnglish,
+}) => {
   const dispatch = useDispatch<AppDispatch>();
   const { images, status, error, templateFile } = useSelector(
     (state: RootState) => state.generateImage
   );
   const { job } = useSelector((state: RootState) => state.createJobPost);
-  const isEnglish = useSelector((state: RootState) => state.language.isEnglish);
+  // const isEnglish = useSelector((state: RootState) => state.language.isEnglish);
   // const [templatePath, setTemplatePath] = useState<File | null>(null);
   const [message, setMessage] = useState<string | null>(null);
 
@@ -52,6 +56,7 @@ const GenerateImage: React.FC<GenerateImageProps> = ({ onImagesGenerated }) => {
     const payload = {
       templatePath: templateFile,
       imageKeyword: job.imageKeyword,
+      imageSource: "stock_photo" as "stock_photo" | "ai_image", // or "ai_image" depending on your requirement
     };
 
     dispatch(generateImage(payload));

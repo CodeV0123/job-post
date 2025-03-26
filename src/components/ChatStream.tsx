@@ -6,115 +6,79 @@ import {
   resetChatState,
 } from "../redux/slice/CreateStreamSlice";
 import { updateJobFields } from "../redux/slice/CreateJobPostSlice";
-import { updateTranslatedData } from "../redux/slice/TranslateToEnglishSlice";
+// import { updateTranslatedData } from "../redux/slice/TranslateToEnglishSlice";
 
-const ChatStream: React.FC = () => {
+interface ChatStreamProps {
+  isEnglish: boolean;
+}
+
+const ChatStream: React.FC<ChatStreamProps> = ({ isEnglish }) => {
   const dispatch = useDispatch<AppDispatch>();
   const { chatResponse, status, error } = useSelector(
     (state: RootState) => state.chatStream
   );
-  const { job } = useSelector((state: RootState) => state.createJobPost);
-  const { translatedData, status: translationStatus } = useSelector(
+  const { status: translationStatus } = useSelector(
     (state: RootState) => state.translateToEnglish
   );
+  const { job } = useSelector((state: RootState) => state.createJobPost);
+  // const isEnglish = useSelector((state: RootState) => state.language.isEnglish);
 
   const [prompt, setPrompt] = useState("");
   const [message, setMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
 
-  const isEnglish = useSelector((state: RootState) => state.language.isEnglish);
-
-  const getCurrentJobData = () => {
-    if (isEnglish) {
-      return translatedData || null;
-    }
-    return job;
-  };
-
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Use job data based on language state
-    const currentJob = getCurrentJobData();
-
-    if (!currentJob) {
+    if (!job) {
       setMessage(
         isEnglish
-          ? "Please create a job post or wait for translation!"
-          : "Bitte erstellen Sie einen Job-Post oder warten Sie auf die Übersetzung!"
+          ? "Please create a job post first!"
+          : "Bitte erstellen Sie zuerst einen Job-Post!"
       );
       setTimeout(() => setMessage(""), 5000);
       return;
     }
 
-    dispatch(
-      fetchChatStream({
-        prompt,
-        job_description: currentJob,
-        isEnglish,
-      })
-    )
-      .unwrap()
-      .then((response) => {
-        if (typeof response === "object") {
-          // dispatch(
-          //   updateJobFields({
-          //     payload: response,
-          //     isTranslated: isEnglish,
-          //   })
-          // );
-          if (isEnglish) {
-            // First update the translated data in TranslateToEnglishSlice
-            dispatch(
-              updateTranslatedData({
-                ...translatedData,
-                ...response,
-              })
-            );
+    try {
+      const response = await dispatch(
+        fetchChatStream({
+          prompt,
+          job_description: job,
+          isEnglish,
+        })
+      ).unwrap();
+      console.log("Fetched chat response:", response);
 
-            // Also update the job state to keep it in sync
-            dispatch(updateJobFields(response));
-          } else {
-            dispatch(updateJobFields(response));
-          }
+      // Update job fields based on language
+      if (isEnglish && response.english) {
+        dispatch(updateJobFields(response.english));
+      } else if (!isEnglish && response.german) {
+        dispatch(updateJobFields(response.german));
+      }
 
-          setSuccessMessage(
-            isEnglish
-              ? "Job post updated successfully!"
-              : "Job-Post erfolgreich aktualisiert!"
-          );
-          setTimeout(() => setSuccessMessage(""), 3000);
-          setPrompt("");
-        }
-      })
-      .catch((error) => {
-        console.error("Error fetching chat stream:", error);
-        setMessage(
-          isEnglish
-            ? "Failed to update job post. Please try again."
-            : "Aktualisierung des Job-Posts fehlgeschlagen. Bitte versuchen Sie es erneut."
-        );
-      });
+      setSuccessMessage(
+        isEnglish
+          ? "Job post updated successfully!"
+          : "Job-Post erfolgreich aktualisiert!"
+      );
+      setPrompt("");
+    } catch (error) {
+      console.error("Error:", error);
+      setMessage(
+        isEnglish
+          ? "Failed to update job post. Please try again."
+          : "Aktualisierung des Job-Posts fehlgeschlagen. Bitte versuchen Sie es erneut."
+      );
+    }
   };
+
   const handleReset = () => {
     dispatch(resetChatState());
     setPrompt("");
     setMessage("");
     setSuccessMessage("");
   };
-
-  /*
-  ! Uncomment the following useEffect to debug the current state and also import useEffect from react.
-  */
-  // useEffect(() => {
-  //   console.log("Current state:", {
-  //     isEnglish,
-  //     translatedData,
-  //     job,
-  //     translationStatus,
-  //     currentJob: getCurrentJobData(),
-  //   });
-  // }, [isEnglish, translatedData, job, translationStatus]);
 
   return (
     <div className="max-w-3xl mx-auto mt-10 p-6 bg-white shadow-md rounded-md sm:p-8 lg:max-w-5xl">
@@ -186,6 +150,11 @@ const ChatStream: React.FC = () => {
             {isEnglish ? "Chat Response" : "Chat-Antwort"}
           </h2>
           <p className="mt-2 text-sm text-green-800">{successMessage}</p>
+          {/* <pre className="mt-2 text-sm text-gray-700 whitespace-pre-wrap">
+            {typeof chatResponse === "object"
+              ? JSON.stringify(chatResponse, null, 2)
+              : chatResponse}
+          </pre> */}
         </div>
       )}
 

@@ -7,7 +7,6 @@ import GenerateVideo from "./GenerateVideo";
 import GenerateImage from "./GenerateImage";
 import { FaPlay, FaPen } from "react-icons/fa";
 import { translateToEnglish } from "../redux/slice/TranslateToEnglishSlice";
-import { toggleLanguage } from "../redux/slice/LanguageSlice";
 import { Job } from "../types/job";
 
 const parseField = (field: { items?: unknown[] } | unknown[]) => {
@@ -44,23 +43,16 @@ const CreateJobPost: React.FC = () => {
   const [isEnglish, setIsEnglish] = useState(false);
   const [localJob, setLocalJob] = useState<Job | null>(null);
 
-  // useEffect(() => {
-  //   setIsEnglish(false);
-  //   // If you're using Redux for language state, also reset Redux state
-  //   dispatch(toggleLanguage());
-  // }, [dispatch]); // Include dispatch in the dependency array
-
   useEffect(() => {
     if (job) {
-      setLocalJob(job); // Store the original job when it becomes available
+      setLocalJob(job);
+      console.log("Job data is available:", job);
     }
   }, [job]);
 
   const handleTranslateToEnglish = async () => {
     if (job) {
-      // Ensure job is not null before dispatching
       const response = await dispatch(translateToEnglish(job)).unwrap();
-      // Update localJob with translated data
       if (response.translated_json) {
         setLocalJob(response.translated_json);
       } else {
@@ -76,7 +68,6 @@ const CreateJobPost: React.FC = () => {
     } else {
       handleTranslateToEnglish(); // Translate to English
     }
-    dispatch(toggleLanguage()); // Toggle the language flag
     setIsEnglish((prev) => !prev); // Toggle the language flag
   };
 
@@ -234,26 +225,23 @@ const CreateJobPost: React.FC = () => {
         <div className="mt-6 p-4 bg-gray-50 border border-gray-200 rounded">
           {/* Always show the headline */}
           <h2 className="text-lg font-medium text-blue-700">
-            {/* {localJob.headline} */}
-            {localJob.introductionOfJob}
+            {localJob.headline}
+            {/* {localJob.introductionOfJob} */}
           </h2>
           {/* Conditionally render the rest of the content */}
           {isExpanded ? (
             <>
-              <p className="mt-2 text-gray-700">{localJob.introduction}</p>
-
+              <p className="mt-2 text-gray-700">{localJob.introduction}</p>{" "}
               {/* <h3 className="mt-4 text-md font-semibold text-gray-800">
                 {isEnglish
                   ? "Introduction to the Position"
                   : "Einleitung zur Stelle"}
-              </h3>
-              <p>{localJob.introductionOfJob}</p> */}
-
+              </h3> */}
+              <p className="mt-4">{localJob.introductionOfJob}</p>
               {/* <h3 className="mt-4 text-md font-semibold text-gray-800">
                 {isEnglish ? "Personal Address" : "Persönliche Ansprache"}
               </h3>
               <p>{localJob.personalAddress}</p> */}
-
               {/* Tasks */}
               {localJob.tasks && (
                 <div className="mt-4">
@@ -267,7 +255,6 @@ const CreateJobPost: React.FC = () => {
                   </ul>
                 </div>
               )}
-
               {/* Qualifications */}
               {localJob.qualifications && (
                 <div className="mt-4">
@@ -283,7 +270,6 @@ const CreateJobPost: React.FC = () => {
                   </ul>
                 </div>
               )}
-
               {/* Benefits */}
               {localJob.benefits && (
                 <div className="mt-4">
@@ -472,9 +458,16 @@ const CreateJobPost: React.FC = () => {
           <p className="mt-2 text-sm text-red-800">{error}</p>
         </div>
       )}
-      <GenerateImage onImagesGenerated={handleImageGeneration} />
-      <GenerateVideo generatedImages={generatedImages} localJob={localJob} />
-      <ChatStream />
+      <GenerateImage
+        onImagesGenerated={handleImageGeneration}
+        isEnglish={isEnglish}
+      />
+      <GenerateVideo
+        generatedImages={generatedImages}
+        localJob={localJob}
+        isEnglish={isEnglish}
+      />
+      <ChatStream isEnglish={isEnglish} />
     </div>
   );
 };
