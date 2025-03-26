@@ -63,7 +63,7 @@ const GenerateImage = () => {
           Generate Image
         </h2>
 
-        <div className="flex justify-center items-center mt-6 border rounded-[15px] w-[22rem] h-[13rem]  bg-[#fff] p-[20px] shadow-lg">
+        <div className="flex justify-center items-center mt-6 border rounded-[15px] w-[25rem] h-[14rem]  bg-[#fff] p-[20px] shadow-lg">
           <form
             className="w-full flex flex-col items-center"
             onSubmit={handleSubmit}
