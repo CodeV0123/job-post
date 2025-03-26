@@ -7,6 +7,7 @@ import CreateJob from "./components/CreateJobPost/CreateJob";
 import GenerateImage from "./components/GenerateImage/GenerateImage";
 import GenerateVideo from "./components/GenerateVideo/GenerateVideo";
 import CreatedJob from "./components/CreatedJob/CreatedJob";
+import ChatStream from "./components/ChatStream/ChatStream";
 
 function App() {
   const { jobPost, language } = useSelector(
@@ -18,6 +19,7 @@ function App() {
         <Route path="/" element={<CreateJob />} />
         <Route path="/generate-image" element={<GenerateImage />} />
         <Route path="/generate-video" element={<GenerateVideo />} />
+        <Route path="/chat-stream" element={<ChatStream />} />
         <Route
           path="/created-job"
           element={<CreatedJob jobPost={jobPost || {}} language={language} />}
