@@ -63,6 +63,10 @@ interface CreateJobState {
   image_keyword: string; // Add this
   image_keyword_stockimage: string;
   script: string; // Add this
+  contact_person?: string;
+  closing_date?: string;
+  phone?: string;
+  email?: string;
 }
 
 const initialState: CreateJobState = {
@@ -106,6 +110,12 @@ const createJobSlice = createSlice({
         state.image_keyword_stockimage =
           action.payload?.image?.image_keyword_stockimage || "";
         state.script = action.payload?.voice?.english?.script || "";
+        state.contact_person =
+          action.payload?.voice?.english?.contact?.contact_person || "";
+        state.closing_date =
+          action.payload?.voice?.english?.contact?.closing_date || "";
+        state.phone = action.payload?.voice?.english?.contact?.phone || "";
+        state.email = action.payload?.voice?.english?.contact?.email || "";
 
         console.log("Extracted image taglines:", state.image?.taglines);
       })
