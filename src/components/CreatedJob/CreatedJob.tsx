@@ -7,6 +7,7 @@ import ToggleLanguage from "../ToggleLanguage/ToggleLanguage";
 import { useNavigate } from "react-router-dom";
 import GeneratedVideo from "../GenerateVideo/GeneratedVideo";
 import { GeneratedImage } from "../GenerateImage/GeneratedImage";
+// import CreateJob from "../CreateJobPost/CreateJob";
 
 interface CreatedJobProps {
   jobPost: {
@@ -80,16 +81,16 @@ const CreatedJob: React.FC<CreatedJobProps> = ({ jobPost, language }) => {
           </span>
         </div>
         <div className="flex flex-col items-center space-y-4">
-          <div className="h-7 bg-white rounded-lg w-[60px] flex items-center justify-center">
-            <span className="text-[#5d5c61] text-sm capitalize]">step 1</span>
+          <div className="h-7 bg-[#59f7f2] rounded-lg w-[60px] flex items-center justify-center">
+            <span className="text-[#000] text-sm capitalize">step 1</span>
           </div>
           <div className="w-0.5 h-12 bg-white/30"></div>
           <div className="h-7 bg-white rounded-lg w-[60px] flex items-center justify-center">
-            <span className="text-[#5d5c61] text-sm capitalize]">step 2</span>
+            <span className="text-[#5d5c61] text-sm capitalize">step 2</span>
           </div>
           <div className="w-0.5 h-12 bg-white/30"></div>
           <div className="h-7 bg-white rounded-lg w-[60px] flex items-center justify-center">
-            <span className="text-[#5d5c61] text-sm capitalize]">step 3</span>
+            <span className="text-[#5d5c61] text-sm capitalize">step 3</span>
           </div>
         </div>
       </div>
