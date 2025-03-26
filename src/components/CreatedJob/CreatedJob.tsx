@@ -10,6 +10,7 @@ import { GeneratedImage } from "../GenerateImage/GeneratedImage";
 // import CreateJob from "../CreateJobPost/CreateJob";
 import CreateJob from "../../components/SideBarComponents/CreateJob";
 import GenerateImage from "../../components/SideBarComponents/GenerateImage";
+import GenerateVideo from "../../components/SideBarComponents/GenerateVideo";
 
 interface CreatedJobProps {
   jobPost: {
@@ -97,6 +98,18 @@ const CreatedJob: React.FC<CreatedJobProps> = ({ jobPost, language }) => {
           </div>
           <GenerateImage />
           <span className="w-[70%] h-1.5 bg-[#4f6f90] rounded-full"></span>
+          <div className="h-7 bg-[#59f7f2] rounded-full w-[70px] flex items-center justify-center">
+            <span className="text-[#000] font-semibold text-sm uppercase">
+              step 3
+            </span>
+          </div>
+          <GenerateVideo />
+          <span className="w-[70%] h-1.5 bg-[#4f6f90] rounded-full"></span>
+          <div className="h-7 bg-[#59f7f2] rounded-full w-[85px] flex items-center justify-center">
+            <span className="text-[#000] font-semibold text-sm uppercase">
+              final step
+            </span>
+          </div>
         </div>
       </div>
 
