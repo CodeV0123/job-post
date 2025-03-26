@@ -11,6 +11,7 @@ import { GeneratedImage } from "../GenerateImage/GeneratedImage";
 import CreateJob from "../../components/SideBarComponents/CreateJob";
 import GenerateImage from "../../components/SideBarComponents/GenerateImage";
 import GenerateVideo from "../../components/SideBarComponents/GenerateVideo";
+import ChatStream from "../../components/SideBarComponents/ChatStream";
 
 interface CreatedJobProps {
   jobPost: {
@@ -68,7 +69,7 @@ const CreatedJob: React.FC<CreatedJobProps> = ({ jobPost, language }) => {
     <div className="flex min-h-screen">
       {/* Blue Sidebar */}
 
-      <div className="bg-[#0C2D48] w-[25rem] pt-8 space-y-4">
+      <div className="bg-[#0C2D48] w-[29rem] pt-8 space-y-4">
         <div className="flex items-center justify-between px-2">
           <img
             onClick={() => navigate("/")}
@@ -110,6 +111,7 @@ const CreatedJob: React.FC<CreatedJobProps> = ({ jobPost, language }) => {
               final step
             </span>
           </div>
+          <ChatStream />
         </div>
       </div>
 
