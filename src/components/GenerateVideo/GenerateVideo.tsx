@@ -106,18 +106,6 @@ const GenerateVideo = () => {
           </h2>
 
           <div className="flex flex-col justify-center items-center mt-10 gap-3 border rounded-[15px] w-[800px] min-h-[350px] bg-[#fff] p-[20px] shadow-lg">
-            {/* <div className="mt-3 flex flex-col w-[60%]">
-              <label className="text-[#324c3d] font-semibold">
-                SELECT TEMPLATE FILE:
-              </label>
-              <input
-                type="file"
-                accept=".png,.jpg,.jpeg"
-                onChange={handleTemplateUpload}
-                className="w-full mt-1 p-2 border rounded-full"
-              />
-            </div> */}
-
             <div className="mt-3 flex gap-10 w-[60%]">
               <label className="text-[#324c3d] font-semibold">
                 SELECTED TEMPLATE:
@@ -170,7 +158,7 @@ const GenerateVideo = () => {
         {/* Forward Button */}
         {status === "succeeded" && (
           <button
-            onClick={() => navigate("/created-job")}
+            onClick={() => navigate("/chat-stream")}
             className="absolute right-10 transform -translate-y-1/5 bg-[#fff] p-2 rounded-full"
           >
             <ChevronRightIcon
