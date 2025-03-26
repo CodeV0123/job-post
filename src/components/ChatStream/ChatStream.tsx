@@ -80,7 +80,8 @@ const ChatStream = () => {
             >
               <label htmlFor="prompt" className="text-[#5d5c61] text-lg">
                 <span className="text-[#324c3d] font-semibold">PROMPT:</span>{" "}
-                (Please enter additional details to amend!)
+                (Please prompt for additional details that you would like to
+                amend!)
               </label>
               <input
                 id="prompt"
