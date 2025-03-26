@@ -51,12 +51,12 @@ const CreateJob = () => {
         <h2 className="bg-[#fff] text-[#000] text-xl px-10 capitalize border rounded-full flex justify-center items-center mx-auto shadow-md">
           Create Job Post
         </h2>
-        <div className="flex justify-center w-[22rem] h-[12rem] items-center mt-6 border rounded-[15px]  bg-[#fff] p-[20px] shadow-md">
+        <div className="flex justify-center w-[22rem] h-[13rem] items-center mt-6 border rounded-[15px]  bg-[#fff] p-[20px] shadow-md">
           <form
             onSubmit={handleSubmit}
             className="w-full flex flex-col items-center"
           >
-            <label className="uppercase font-bold text-[#5d5c61] text-center w-full mb-6">
+            <label className="uppercase font-semibold text-[#000] text-center w-full mb-6">
               UPLOAD JOB POST DOCUMENT
             </label>
             {/* <div className="flex justify-center items-center gap-2 mb-8">
