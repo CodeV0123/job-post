@@ -44,6 +44,24 @@ interface CreatedJobProps {
       };
     };
   };
+  voice: {
+    german?: {
+      kontakt: {
+        email?: string;
+        telefon?: string;
+        ansprechpartner?: string;
+        bewerbungsfrist?: string;
+      };
+    };
+    english?: {
+      contact: {
+        email?: string;
+        phone?: string;
+        contact_person?: string;
+        closing_date?: string;
+      };
+    };
+  };
   language: string;
 }
 
@@ -194,6 +212,36 @@ const CreatedJob: React.FC<CreatedJobProps> = ({ jobPost, language }) => {
                     ? jobPost.german?.["Handlungsaufforderung"]
                     : jobPost.english?.["Call to Action"]}
                 </p>
+              </div>
+
+              {/* Contact */}
+              <div className="flex flex-grow">
+                <p>
+                  Contact Person: <br />
+                  {language === "german"
+                    ? jobPost.german?.["kontakt"]?.ansprechpartner ||
+                      "Not available"
+                    : jobPost.english?.["contact"]?.contact_person ||
+                      "Not available"}
+                </p>
+                {/* <p className="text-[#666666] px-1">
+                  -{" "}
+                  {language === "german"
+                    ? jobPost.german?.kontakt.email
+                    : jobPost.english?.contact.email}
+                </p>
+                <p className="text-[#666666] px-1">
+                  -{" "}
+                  {language === "german"
+                    ? jobPost.german?.kontakt.telefon
+                    : jobPost.english?.contact.phone}
+                </p>
+                <p className="text-[#666666] px-1">
+                  -{" "}
+                  {language === "german"
+                    ? jobPost.german?.kontakt.bewerbungsfrist
+                    : jobPost.english?.contact.closing_date}
+                </p> */}
               </div>
               <GeneratedVideo />
             </div>
