@@ -158,7 +158,7 @@ const GenerateVideo = () => {
         {/* Forward Button */}
         {status === "succeeded" && (
           <button
-            onClick={() => navigate("/chat-stream")}
+            onClick={() => navigate("/created-job")}
             className="absolute right-10 transform -translate-y-1/5 bg-[#fff] p-2 rounded-full"
           >
             <ChevronRightIcon
