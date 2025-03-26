@@ -142,7 +142,7 @@ const GenerateVideo = () => {
           Generate Video
         </h2>
 
-        <div className="flex flex-col justify-center items-center mt-6 border rounded-[15px] w-[24rem] min-h-[15rem] bg-white p-6 shadow-lg gap-4">
+        <div className="flex flex-col justify-center items-center mt-6 border rounded-[15px] w-[25rem] min-h-[15rem] bg-white p-6 shadow-lg gap-4">
           {/* Selected Template */}
           <div className="flex flex-row w-[80%]">
             <label className="text-black truncate font-semibold uppercase">
