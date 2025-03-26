@@ -8,6 +8,7 @@ import { useNavigate } from "react-router-dom";
 import GeneratedVideo from "../GenerateVideo/GeneratedVideo";
 import { GeneratedImage } from "../GenerateImage/GeneratedImage";
 // import CreateJob from "../CreateJobPost/CreateJob";
+import CreateJob from "../../components/SideBarComponents/CreateJob";
 
 interface CreatedJobProps {
   jobPost: {
@@ -65,7 +66,7 @@ const CreatedJob: React.FC<CreatedJobProps> = ({ jobPost, language }) => {
     <div className="flex min-h-screen">
       {/* Blue Sidebar */}
 
-      <div className="bg-[#0C2D48] w-[19rem] pt-8 space-y-4">
+      <div className="bg-[#0C2D48] w-[25rem] pt-8 space-y-4">
         <div className="flex items-center justify-between px-2">
           <img
             onClick={() => navigate("/")}
@@ -81,17 +82,19 @@ const CreatedJob: React.FC<CreatedJobProps> = ({ jobPost, language }) => {
           </span>
         </div>
         <div className="flex flex-col items-center space-y-4">
-          <div className="h-7 bg-[#59f7f2] rounded-lg w-[60px] flex items-center justify-center">
-            <span className="text-[#000] text-sm capitalize">step 1</span>
+          <div className="h-7 bg-[#59f7f2] rounded-full w-[70px] flex items-center justify-center">
+            <span className="text-[#000] font-semibold text-sm uppercase">
+              step 1
+            </span>
           </div>
-          <div className="w-0.5 h-12 bg-white/30"></div>
-          <div className="h-7 bg-white rounded-lg w-[60px] flex items-center justify-center">
-            <span className="text-[#5d5c61] text-sm capitalize">step 2</span>
+          <CreateJob />
+          <span className="w-[70%] h-1.5 bg-[#4f6f90] rounded-full"></span>
+          <div className="h-7 bg-[#59f7f2] rounded-full w-[70px] flex items-center justify-center">
+            <span className="text-[#000] font-semibold text-sm uppercase">
+              step 2
+            </span>
           </div>
-          <div className="w-0.5 h-12 bg-white/30"></div>
-          <div className="h-7 bg-white rounded-lg w-[60px] flex items-center justify-center">
-            <span className="text-[#5d5c61] text-sm capitalize">step 3</span>
-          </div>
+          <span className="w-[70%] h-1.5 bg-[#4f6f90] rounded-full"></span>
         </div>
       </div>
 
