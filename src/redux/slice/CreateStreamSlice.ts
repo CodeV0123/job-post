@@ -120,27 +120,35 @@ interface ChatStreamState {
   error: string | null;
 }
 
-const API_URL = "https://image-job.assemblr.ai/chat-stream/";
+const API_URL = "https://image-job.assemblr.ai/chat-stream";
 
 export const fetchChatStream = createAsyncThunk(
   "chatStream/fetch",
   async ({
     prompt,
     job_description,
-    isEnglish,
   }: {
     prompt: string;
     job_description: object;
-    isEnglish: boolean;
   }) => {
-    const response = await axios.get(API_URL, {
-      params: {
-        prompt,
-        job_description: JSON.stringify(job_description),
-        isEnglish: isEnglish ? "true" : "false",
-      },
-    });
-    return response.data as JobPost;
+    try {
+      // Encode job_description as a query string
+      const jobDescriptionQuery = encodeURIComponent(
+        JSON.stringify(job_description)
+      );
+      const promptQuery = encodeURIComponent(prompt);
+
+      // Construct the full GET request URL with query parameters
+      const requestUrl = `${API_URL}?job_description=${jobDescriptionQuery}&prompt=${promptQuery}`;
+
+      // Make the GET request
+      const response = await axios.get(requestUrl);
+
+      return response.data as JobPost;
+    } catch (error) {
+      console.error("Error fetching chat stream:", error);
+      throw error;
+    }
   }
 );
 
@@ -164,7 +172,7 @@ const chatStreamSlice = createSlice({
       .addCase(fetchChatStream.fulfilled, (state, action) => {
         state.status = "succeeded";
         state.chatResponse = action.payload;
-        console.log("Chat stream fulfilled payload:", action.payload);
+        console.log("Chat stream fulfilled payload:", state.chatResponse);
       })
       .addCase(fetchChatStream.rejected, (state, action) => {
         state.status = "failed";
