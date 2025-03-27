@@ -138,14 +138,14 @@ const GenerateVideo = () => {
         </div>
       </div> */}
       <div className="flex flex-col justify-center items-center">
-        <h2 className="bg-white text-black text-xl px-10 capitalize border rounded-full flex justify-center items-center mx-auto shadow-md">
+        <h2 className="bg-white text-black text-base px-10 capitalize border rounded-full flex justify-center items-center mx-auto shadow-md">
           Generate Video
         </h2>
 
         <div className="flex flex-col justify-center items-center mt-6 border rounded-[15px] w-[25rem] min-h-[15rem] bg-white p-6 shadow-lg gap-4">
           {/* Selected Template */}
           <div className="flex flex-row w-[80%]">
-            <label className="text-black truncate font-semibold uppercase">
+            <label className="text-black truncate font-medium uppercase">
               Selected Template:
             </label>
             <p className="text-[#000] truncate">
@@ -155,7 +155,7 @@ const GenerateVideo = () => {
 
           {/* Select Generated Image */}
           <div className="flex flex-col w-[80%]">
-            <label className="text-black font-semibold uppercase">
+            <label className="text-black font-medium uppercase">
               Select Generated Image:
             </label>
             <select
@@ -173,9 +173,7 @@ const GenerateVideo = () => {
 
           {/* Script */}
           <div className="flex flex-row items-center w-[80%]">
-            <label className="text-black font-semibold uppercase">
-              Script:
-            </label>
+            <label className="text-black font-medium uppercase">Script:</label>
             <p className="text-[#000] p-1 text-center truncate">{script}</p>
           </div>
 
@@ -189,7 +187,7 @@ const GenerateVideo = () => {
               {status === "loading" ? "Generating..." : "Submit"}
             </button>
             <button
-              className="w-full bg-[#f2a078] text-white px-4 py-2 rounded-full hover:bg-gray-400 transition"
+              className="w-full bg-[#f2a078] text-white px-4 py-2 rounded-full"
               onClick={() => dispatch(resetVideoState())}
             >
               Reset
