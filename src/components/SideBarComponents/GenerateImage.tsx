@@ -59,7 +59,7 @@ const GenerateImage = () => {
   return (
     <>
       <div className="flex flex-col justify-center items-center">
-        <h2 className="bg-[#fff] text-[#000] text-xl px-10 capitalize border rounded-full flex justify-center items-center mx-auto shadow-md">
+        <h2 className="bg-[#fff] text-[#000] text-base px-10 capitalize border rounded-full flex justify-center items-center mx-auto shadow-md">
           Generate Image
         </h2>
 
@@ -92,10 +92,14 @@ const GenerateImage = () => {
             </div>
             <button
               type="submit"
-              className="px-6 py-3 capitalize w-[300px] mt-6 bg-[#324c3d] text-white font-medium rounded-full text-lg hover:bg-[#283d30] transition-all duration-300"
+              className="py-2 capitalize w-[250px] mt-6 bg-[#324c3d] text-white font-medium rounded-full text-lg hover:bg-[#283d30] transition-all duration-300"
               disabled={status === "loading"}
             >
-              {status === "loading" ? "Generating..." : "Generate"}
+              {status === "loading"
+                ? "Generating..."
+                : status === "succeeded"
+                ? "Generated"
+                : "Generate"}
             </button>
             {status === "failed" && (
               <p className="text-red-500 mt-4">{error}</p>
