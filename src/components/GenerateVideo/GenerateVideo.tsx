@@ -65,7 +65,7 @@ const GenerateVideo = () => {
 
   const handleSubmit = () => {
     if (!selectedImage || !selectedTemplate) {
-      setMessage("❌ Please select both an image and a template.");
+      setMessage("Please select both an image and a template.");
       setTimeout(() => setMessage(null), 3000);
       return;
     }
@@ -106,7 +106,7 @@ const GenerateVideo = () => {
           </h2>
 
           <div className="flex flex-col justify-center items-center mt-10 gap-3 border rounded-[15px] w-[800px] min-h-[350px] bg-[#fff] p-[20px] shadow-lg">
-            <div className="mt-3 flex gap-10 w-[60%]">
+            <div className="mt-3 flex gap-9 w-[60%]">
               <label className="text-[#324c3d] font-semibold">
                 SELECTED TEMPLATE:
               </label>
@@ -115,7 +115,7 @@ const GenerateVideo = () => {
               </p>
             </div>
 
-            <div className="mt-3 flex flex-col w-[60%]">
+            {/* <div className="mt-3 flex flex-col w-[60%]">
               <label className="text-[#324c3d] font-semibold">
                 SELECT GENERATED IMAGE:
               </label>
@@ -130,11 +130,47 @@ const GenerateVideo = () => {
                   </option>
                 ))}
               </select>
+            </div> */}
+
+            <div className="relative w-[60%] group">
+              <label className="text-[#324c3d] font-semibold">
+                SELECT GENERATED IMAGE:{" "}
+                <span className="text-sm italic text-[#777777]">
+                  (hover over selected image for preview)
+                </span>
+              </label>
+              <select
+                className="w-full mt-1 p-2 border rounded-full"
+                onChange={handleImageSelect}
+              >
+                <option value="">Select an image</option>
+                {images.map((image, index) => (
+                  <option key={index} value={image}>
+                    Image {index + 1}
+                  </option>
+                ))}
+              </select>
+
+              {/* Hover Preview (Fixed) */}
+              {selectedImage && (
+                <div className="absolute top-[-70px] right-[-167px] hidden group-hover:block w-[140px] h-[140px] border border-gray-300 rounded-xl shadow-lg overflow-hidden">
+                  <img
+                    src={URL.createObjectURL(selectedImage)}
+                    alt="Selected preview"
+                    className="w-full h-full object-cover"
+                    onError={(e) =>
+                      console.error("🚨 Image failed to load:", e)
+                    }
+                  />
+                </div>
+              )}
             </div>
 
-            <div className="flex gap-12 w-[60%]">
+            <div className="flex flex-wrap w-[60%]">
               <p className="text-[#324c3d] font-semibold">SCRIPT:</p>
-              <p className="text-[#324c3d] font-semibold">{script}</p>
+              <p className="text-[#324c3d] font-medium text-[15px] truncate">
+                {script}
+              </p>
             </div>
 
             <div className="flex gap-[100px] items-center w-[50%] mt-5">
