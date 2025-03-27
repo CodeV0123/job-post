@@ -56,7 +56,7 @@ const CreateJob = () => {
             onSubmit={handleSubmit}
             className="w-full flex flex-col items-center"
           >
-            <label className="uppercase font-semibold text-[#000] text-center w-full mb-6">
+            <label className="uppercase font-medium text-[#000] text-center w-full mb-6">
               UPLOAD JOB POST DOCUMENT
             </label>
             {/* <div className="flex justify-center items-center gap-2 mb-8">
@@ -112,7 +112,7 @@ const CreateJob = () => {
               <button
                 type="button"
                 onClick={handleReset}
-                className="px-6 py-2 bg-[#f2a078] text-[#fff] rounded-full hover:bg-gray-100"
+                className="px-6 py-2 bg-[#f2a078] text-[#fff] rounded-full "
               >
                 Reset
               </button>
