@@ -46,16 +46,16 @@ const ChatStream = () => {
   return (
     <>
       <div className="flex flex-col justify-center items-center">
-        <h2 className="bg-[#fff] text-[#000] text-xl px-10 capitalize border rounded-full flex justify-center items-center mx-auto shadow-md">
+        <h2 className="bg-[#fff] text-[#000] text-base px-10 capitalize border rounded-full flex justify-center items-center mx-auto shadow-md">
           Chat Stream
         </h2>
-        <div className="flex justify-center flex-col items-center mt-10 border rounded-[15px] w-[25rem] h-[14rem]  bg-[#fff] p-6 shadow-lg">
+        <div className="flex justify-center flex-col items-center mt-6 border rounded-[15px] w-[25rem] h-[14rem]  bg-[#fff] p-6 shadow-lg">
           <form
             onSubmit={handleSubmit}
             className="w-full flex flex-col items-center space-y-4"
           >
             <label htmlFor="prompt" className="text-[#5d5c61] flex flex-col">
-              <span className="text-[#000] font-semibold">PROMPT:</span> (Please
+              <span className="text-[#000] font-medium">PROMPT:</span> (Please
               prompt for additional details that you would like to amend!)
             </label>
             <input
@@ -72,14 +72,18 @@ const ChatStream = () => {
                 className="bg-[#3a7384] text-white px-6 py-2 rounded-full hover:bg-green-800 transition-colors"
                 disabled={status === "loading"}
               >
-                {status === "loading" ? "Submitting..." : "SUBMIT"}
+                {status === "loading"
+                  ? "Submitting..."
+                  : status === "succeeded"
+                  ? "Submitted"
+                  : "Submit"}
               </button>
               <button
                 type="button"
                 onClick={handleReset}
-                className="bg-[#f2a078] text-[#fff] px-6 py-2 rounded-full hover:bg-gray-400 transition-colors"
+                className="bg-[#f2a078] text-[#fff] px-6 py-2 rounded-full"
               >
-                RESET
+                Reset
               </button>
             </div>
             {status === "failed" && (
