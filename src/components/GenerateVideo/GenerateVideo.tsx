@@ -27,6 +27,7 @@ const GenerateVideo = () => {
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const [selectedTemplate, setSelectedTemplate] = useState<File | null>(null);
   const [message, setMessage] = useState<string | null>(null);
+  const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
   useEffect(() => {
     if (templateFile) {
@@ -34,6 +35,13 @@ const GenerateVideo = () => {
       console.log("✅ Template File Set:", templateFile.name);
     }
   }, [templateFile]);
+
+  useEffect(() => {
+    if (status === "succeeded") {
+      setSuccessMessage("Video generated successfully!");
+      setTimeout(() => setSuccessMessage(null), 3000);
+    }
+  }, [status]);
 
   const base64ToBlob = (base64: string, contentType = "image/png") => {
     const byteCharacters = atob(base64);
@@ -65,10 +73,11 @@ const GenerateVideo = () => {
 
   const handleSubmit = () => {
     if (!selectedImage || !selectedTemplate) {
-      setMessage("❌ Please select both an image and a template.");
+      setMessage("Please select both an image and a template.");
       setTimeout(() => setMessage(null), 3000);
       return;
     }
+    setSuccessMessage(null);
 
     dispatch(
       generateVideo({
@@ -106,7 +115,7 @@ const GenerateVideo = () => {
           </h2>
 
           <div className="flex flex-col justify-center items-center mt-10 gap-3 border rounded-[15px] w-[800px] min-h-[350px] bg-[#fff] p-[20px] shadow-lg">
-            <div className="mt-3 flex gap-10 w-[60%]">
+            <div className="mt-3 flex gap-9 w-[60%]">
               <label className="text-[#324c3d] font-semibold">
                 SELECTED TEMPLATE:
               </label>
@@ -115,7 +124,7 @@ const GenerateVideo = () => {
               </p>
             </div>
 
-            <div className="mt-3 flex flex-col w-[60%]">
+            {/* <div className="mt-3 flex flex-col w-[60%]">
               <label className="text-[#324c3d] font-semibold">
                 SELECT GENERATED IMAGE:
               </label>
@@ -130,11 +139,47 @@ const GenerateVideo = () => {
                   </option>
                 ))}
               </select>
+            </div> */}
+
+            <div className="relative w-[60%] group">
+              <label className="text-[#324c3d] font-semibold">
+                SELECT GENERATED IMAGE:{" "}
+                <span className="text-sm italic text-[#777777]">
+                  (hover over selected image for preview)
+                </span>
+              </label>
+              <select
+                className="w-full mt-1 p-2 border rounded-full"
+                onChange={handleImageSelect}
+              >
+                <option value="">Select an image</option>
+                {images.map((image, index) => (
+                  <option key={index} value={image}>
+                    Image {index + 1}
+                  </option>
+                ))}
+              </select>
+
+              {/* Hover Preview (Fixed) */}
+              {selectedImage && (
+                <div className="absolute top-[-70px] right-[-167px] hidden group-hover:block w-[140px] h-[140px] border border-gray-300 rounded-xl shadow-lg overflow-hidden">
+                  <img
+                    src={URL.createObjectURL(selectedImage)}
+                    alt="Selected preview"
+                    className="w-full h-full object-cover"
+                    onError={(e) =>
+                      console.error("🚨 Image failed to load:", e)
+                    }
+                  />
+                </div>
+              )}
             </div>
 
-            <div className="flex gap-12 w-[60%]">
+            <div className="flex flex-wrap w-[60%]">
               <p className="text-[#324c3d] font-semibold">SCRIPT:</p>
-              <p className="text-[#324c3d] font-semibold">{script}</p>
+              <p className="text-[#324c3d] font-medium text-[15px] truncate">
+                {script}
+              </p>
             </div>
 
             <div className="flex gap-[100px] items-center w-[50%] mt-5">
@@ -143,7 +188,11 @@ const GenerateVideo = () => {
                 onClick={handleSubmit}
                 disabled={status === "loading"}
               >
-                {status === "loading" ? "Generating..." : "SUBMIT"}
+                {status === "loading"
+                  ? "Generating..."
+                  : status === "succeeded"
+                  ? "Generated..."
+                  : "SUBMIT"}
               </button>
               <button
                 className="bg-[#a9b7aa] text-[#fff] px-6 py-2 rounded-full ml-3 hover:bg-gray-400 transition"
@@ -152,7 +201,11 @@ const GenerateVideo = () => {
                 RESET
               </button>
             </div>
-            <p className="text-red-500 mt-4">{message}</p>
+            {message && <p className="text-red-500 text-sm">{message}</p>}
+            {successMessage && (
+              <p className="text-green-500 text-sm">{successMessage}</p>
+            )}
+            {/* <p className="text-red-500 mt-4">{message}</p> */}
           </div>
         </div>
         {/* Forward Button */}

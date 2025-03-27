@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import {
@@ -22,6 +22,14 @@ const CreateJob = () => {
   const [file, setFile] = useState<File | null>(null);
   const [message, setMessage] = useState<string | null>(null);
   const [fileName, setFileName] = useState<string>("No file chosen");
+  const [successMessage, setSuccessMessage] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (status === "succeeded") {
+      setSuccessMessage("Job post uploaded successfully!");
+      setTimeout(() => setSuccessMessage(null), 3000);
+    }
+  }, [status]);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
@@ -37,6 +45,7 @@ const CreateJob = () => {
       setTimeout(() => setMessage(null), 3000);
       return;
     }
+    setSuccessMessage(null);
 
     const formData = new FormData();
     formData.append("file", file);
@@ -98,7 +107,11 @@ const CreateJob = () => {
                   disabled={status === "loading"}
                   className="px-6 py-2 bg-[#8bbee0] text-white font-medium rounded-full hover:bg-blue-700 disabled:bg-blue-300"
                 >
-                  {status === "loading" ? "Uploading..." : "Submit"}
+                  {status === "loading"
+                    ? "Uploading..."
+                    : status === "succeeded"
+                    ? "Submitted"
+                    : "Submit"}
                 </button>
                 <button
                   type="button"
@@ -108,7 +121,18 @@ const CreateJob = () => {
                   Reset
                 </button>
               </div>
-              <p className="mt-4 text-center text-sm text-red-800">{message}</p>
+              {/* <p className="mt-4 text-center text-sm text-red-800">{message}</p> */}
+              {message && (
+                <p className="text-red-500 mt-4 text-sm text-center">
+                  {" "}
+                  {message}
+                </p>
+              )}
+              {successMessage && (
+                <p className="text-green-500 mt-4 text-sm text-center">
+                  {successMessage}
+                </p>
+              )}
             </form>
           </div>
         </div>

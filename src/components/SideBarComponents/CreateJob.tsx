@@ -48,7 +48,7 @@ const CreateJob = () => {
     <div>
       {/* Upload Section */}
       <div className="flex flex-col items-center">
-        <h2 className="bg-[#fff] text-[#000] text-xl px-10 capitalize border rounded-full flex justify-center items-center mx-auto shadow-md">
+        <h2 className="bg-[#fff] text-[#000] text-base px-10 capitalize border rounded-full flex justify-center items-center mx-auto shadow-md">
           Create Job Post
         </h2>
         <div className="flex justify-center w-[25rem] h-[14rem] items-center mt-6 border rounded-[15px]  bg-[#fff] p-[20px] shadow-md">
@@ -56,7 +56,7 @@ const CreateJob = () => {
             onSubmit={handleSubmit}
             className="w-full flex flex-col items-center"
           >
-            <label className="uppercase font-semibold text-[#000] text-center w-full mb-6">
+            <label className="uppercase font-medium text-[#000] text-center w-full mb-6">
               UPLOAD JOB POST DOCUMENT
             </label>
             {/* <div className="flex justify-center items-center gap-2 mb-8">
@@ -101,14 +101,18 @@ const CreateJob = () => {
               <button
                 type="submit"
                 disabled={status === "loading"}
-                className="px-6 py-2 bg-[#3a7384] text-white font-medium rounded-full hover:bg-[#84a98c] disabled:bg-[#ccd5ae]"
+                className="px-6 py-2 bg-[#3a7384] text-white rounded-full hover:bg-[#84a98c] disabled:bg-[#ccd5ae]"
               >
-                {status === "loading" ? "Uploading..." : "Submit"}
+                {status === "loading"
+                  ? "Uploading..."
+                  : status === "succeeded"
+                  ? "Uploaded"
+                  : "Submit"}
               </button>
               <button
                 type="button"
                 onClick={handleReset}
-                className="px-6 py-2 bg-[#f2a078] text-[#fff] font-medium rounded-full hover:bg-gray-100"
+                className="px-6 py-2 bg-[#f2a078] text-[#fff] rounded-full "
               >
                 Reset
               </button>
