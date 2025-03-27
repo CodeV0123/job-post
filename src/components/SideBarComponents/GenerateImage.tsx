@@ -68,7 +68,7 @@ const GenerateImage = () => {
             className="w-full flex flex-col items-center"
             onSubmit={handleSubmit}
           >
-            <label className="uppercase font-semibold text-[#000] mb-6">
+            <label className="uppercase font-medium text-[#000] mb-6">
               Upload Template File
             </label>
             <div className="flex justify-between items-center w-full gap-4">
@@ -92,7 +92,7 @@ const GenerateImage = () => {
             </div>
             <button
               type="submit"
-              className="py-2 capitalize w-[250px] mt-6 bg-[#324c3d] text-white font-medium rounded-full text-lg hover:bg-[#283d30] transition-all duration-300"
+              className="py-2 capitalize w-[200px] mt-6 bg-[#324c3d] text-white font-medium rounded-full text-lg hover:bg-[#283d30] transition-all duration-300"
               disabled={status === "loading"}
             >
               {status === "loading"
