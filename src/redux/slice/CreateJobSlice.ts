@@ -51,6 +51,7 @@ interface Image {
   image_keyword_stockimage: string;
   Headline: string;
   taglines: string[];
+  website: string;
 }
 
 interface CreateJobState {
@@ -68,6 +69,7 @@ interface CreateJobState {
   phone?: string;
   email?: string;
   location?: string;
+  website?: string;
 }
 
 const initialState: CreateJobState = {
@@ -108,6 +110,7 @@ const createJobSlice = createSlice({
 
         // Extracting image taglines
         state.image_keyword = action.payload?.image?.image_keyword || "";
+        state.website = action.payload?.image?.website || "";
         state.image_keyword_stockimage =
           action.payload?.image?.image_keyword_stockimage || "";
         state.script = action.payload?.voice?.english?.script || "";
