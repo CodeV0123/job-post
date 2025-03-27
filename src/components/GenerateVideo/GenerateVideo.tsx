@@ -27,6 +27,7 @@ const GenerateVideo = () => {
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const [selectedTemplate, setSelectedTemplate] = useState<File | null>(null);
   const [message, setMessage] = useState<string | null>(null);
+  const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
   useEffect(() => {
     if (templateFile) {
@@ -34,6 +35,13 @@ const GenerateVideo = () => {
       console.log("✅ Template File Set:", templateFile.name);
     }
   }, [templateFile]);
+
+  useEffect(() => {
+    if (status === "succeeded") {
+      setSuccessMessage("Video generated successfully!");
+      setTimeout(() => setSuccessMessage(null), 3000);
+    }
+  }, [status]);
 
   const base64ToBlob = (base64: string, contentType = "image/png") => {
     const byteCharacters = atob(base64);
@@ -69,6 +77,7 @@ const GenerateVideo = () => {
       setTimeout(() => setMessage(null), 3000);
       return;
     }
+    setSuccessMessage(null);
 
     dispatch(
       generateVideo({
@@ -179,7 +188,11 @@ const GenerateVideo = () => {
                 onClick={handleSubmit}
                 disabled={status === "loading"}
               >
-                {status === "loading" ? "Generating..." : "SUBMIT"}
+                {status === "loading"
+                  ? "Generating..."
+                  : status === "succeeded"
+                  ? "Generated..."
+                  : "SUBMIT"}
               </button>
               <button
                 className="bg-[#a9b7aa] text-[#fff] px-6 py-2 rounded-full ml-3 hover:bg-gray-400 transition"
@@ -188,7 +201,11 @@ const GenerateVideo = () => {
                 RESET
               </button>
             </div>
-            <p className="text-red-500 mt-4">{message}</p>
+            {message && <p className="text-red-500 mt-4">{message}</p>}
+            {successMessage && (
+              <p className="text-green-600">{successMessage}</p>
+            )}
+            {/* <p className="text-red-500 mt-4">{message}</p> */}
           </div>
         </div>
         {/* Forward Button */}
