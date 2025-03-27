@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState, AppDispatch, store } from "../../redux/store/store";
 import {
@@ -22,6 +22,14 @@ const GenerateImage = () => {
   // Local State for File Upload (DO NOT store file in Redux)
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [message, setMessage] = useState<string | null>(null);
+  const [successMessage, setSuccessMessage] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (status === "succeeded") {
+      setSuccessMessage("Image generated successfully!");
+      setTimeout(() => setSuccessMessage(null), 3000);
+    }
+  }, [status]);
 
   // Handle File Selection
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -59,6 +67,7 @@ const GenerateImage = () => {
       setTimeout(() => setMessage(null), 3000);
       return;
     }
+    setSuccessMessage(null);
     dispatch(generateImage({ templatePath: selectedFile, imageSource }));
   };
 
@@ -116,12 +125,21 @@ const GenerateImage = () => {
                 className="px-6 py-3 capitalize w-[300px] mt-6 bg-[#324c3d] text-white font-medium rounded-full text-lg hover:bg-[#283d30] transition-all duration-300"
                 disabled={status === "loading"}
               >
-                {status === "loading" ? "Generating..." : "Generate"}
+                {status === "loading"
+                  ? "Generating..."
+                  : status === "succeeded"
+                  ? "Generated"
+                  : "Generate"}
               </button>
               {status === "failed" && (
-                <p className="text-red-500 mt-4">{error}</p>
+                <p className="text-red-500 mt-2 text-sm">{error}</p>
               )}
-              <p className="text-red-500 mt-4">{message}</p>
+              {message && (
+                <p className="text-red-500 mt-2 text-sm">{message}</p>
+              )}
+              {successMessage && (
+                <p className="text-green-500 mt-2 text-sm">{successMessage}</p>
+              )}
             </form>
           </div>
         </div>
