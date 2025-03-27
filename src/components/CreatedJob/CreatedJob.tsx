@@ -99,9 +99,9 @@ const CreatedJob: React.FC<CreatedJobProps> = ({ jobPost, language }) => {
             onClick={() => navigate("/")}
             src={navlogo}
             alt="Logo"
-            className="mb-4 cursor-pointer w-15 h-10 px-2 "
+            className="cursor-pointer w-[110px] h-[110] px-2 "
           />
-          <span className="text-sm">
+          <span>
             <ToggleLanguage
               colorScheme={language === "english" ? "pink" : "green"}
               textColor={language === "english" ? "text-white" : "text-white"}
@@ -115,7 +115,7 @@ const CreatedJob: React.FC<CreatedJobProps> = ({ jobPost, language }) => {
             </span>
           </div>
           <CreateJob />
-          <span className="w-[70%] h-1.5 bg-[#4f6f90] rounded-full"></span>
+          <span className="w-[70%] h-1.5 bg-[#4f6f90] rounded-full my-4"></span>
           <div className="h-7 bg-[#59f7f2] rounded-full w-[70px] flex items-center justify-center">
             <span className="text-[#000] font-semibold text-sm uppercase">
               step 2
@@ -149,7 +149,7 @@ const CreatedJob: React.FC<CreatedJobProps> = ({ jobPost, language }) => {
         className="flex-1 flex items-center justify-center"
       >
         <div className="flex flex-col items-center space-y-8 mt-11">
-          <h3 className="text-[#5d5c61] uppercase bg-[#fff] font-bold tracking-[0.95px] text-center border rounded-full text-lg w-[112px] h-[35px] flex justify-center items-center">
+          <h3 className="text-[#5d5c61] uppercase bg-[#fff] font-medium  text-center border rounded-full text-base w-[90px] h-[30px] flex justify-center items-center">
             STEP 1
           </h3>
           <div className="bg-white rounded-lg  shadow-lg p-8 max-w-xl w-full mx-4 relative overflow-hidden">
@@ -228,11 +228,11 @@ const CreatedJob: React.FC<CreatedJobProps> = ({ jobPost, language }) => {
               <GeneratedVideo />
             </div>
           </div>
-          <h2 className=" text-[#5d5c61] uppercase bg-[#fff] font-bold tracking-[0.95px] text-center border rounded-full text-lg w-[112px] h-[35px] flex justify-center items-center">
+          <h2 className=" text-[#5d5c61] uppercase bg-[#fff] font-medium  text-center border rounded-full text-base w-[90px] h-[30px] flex justify-center items-center">
             step 2
           </h2>
           <GeneratedImage />
-          <h2 className=" text-[#5d5c61] uppercase bg-[#fff] font-bold tracking-[0.95px] text-center border rounded-full text-lg w-[112px] h-[35px] flex justify-center items-center">
+          <h2 className=" text-[#5d5c61] uppercase bg-[#fff] font-medium  text-center border rounded-full text-base w-[90px] h-[30px] flex justify-center items-center">
             step 3
           </h2>
           <GeneratedVideo />
