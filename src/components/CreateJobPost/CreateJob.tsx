@@ -123,13 +123,13 @@ const CreateJob = () => {
               </div>
               {/* <p className="mt-4 text-center text-sm text-red-800">{message}</p> */}
               {message && (
-                <p className="text-red-800 mt-4 text-sm text-center">
+                <p className="text-red-500 mt-4 text-sm text-center">
                   {" "}
                   {message}
                 </p>
               )}
               {successMessage && (
-                <p className="text-green-800 mt-4 text-sm text-center">
+                <p className="text-green-500 mt-4 text-sm text-center">
                   {successMessage}
                 </p>
               )}
