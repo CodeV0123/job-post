@@ -71,7 +71,7 @@ const CreatedJob: React.FC<CreatedJobProps> = ({ jobPost, language }) => {
   // const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const { contact_person, phone, email, location } = useSelector(
+  const { contact_person, phone, email, location, website } = useSelector(
     (state: RootState) => state.createJob
   );
 
@@ -215,6 +215,7 @@ const CreatedJob: React.FC<CreatedJobProps> = ({ jobPost, language }) => {
                     ? jobPost.german?.["Handlungsaufforderung"]
                     : jobPost.english?.["Call to Action"]}
                 </p>
+                <p>{website || ""}</p>
                 <p>{location || "Not available"}</p>
               </div>
 
