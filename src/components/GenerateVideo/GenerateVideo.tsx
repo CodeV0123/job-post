@@ -201,7 +201,7 @@ const GenerateVideo = () => {
                 RESET
               </button>
             </div>
-            {message && <p className="text-red-500 mt-4">{message}</p>}
+            {message && <p className="text-red-800 mt-4">{message}</p>}
             {successMessage && (
               <p className="text-green-600">{successMessage}</p>
             )}
