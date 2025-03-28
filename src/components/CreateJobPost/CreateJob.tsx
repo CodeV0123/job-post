@@ -131,12 +131,12 @@ const CreateJob = () => {
         {status === "succeeded" && (
           <button
             onClick={() => navigate("/generate-image")}
-            className="fixed right-1 sm:right-10 bottom-10 bg-white p-2 rounded-full shadow-lg"
+            className="fixed bottom-0 sm:bottom-0 right-[45%] sm:right-12 bg-gradient-to-r from-[#8bbee0] to-[#5d5c61] text-white p-3 sm:p-4 rounded-full shadow-xl transition-transform duration-300 ease-in-out hover:scale-110 hover:shadow-2xl animate-bounce"
           >
             <ChevronRightIcon
-              className="w-6 h-6 sm:w-8 sm:h-8"
+              className="w-7 h-7 sm:w-9 sm:h-9"
               strokeWidth={3}
-              stroke="#5d5c61"
+              stroke="white"
             />
           </button>
         )}
