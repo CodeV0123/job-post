@@ -1,7 +1,9 @@
 import navlogo from "./assets/Vector.png";
 import { useNavigate } from "react-router-dom";
 
-const NavBar = () => {
+import { ReactNode } from "react";
+
+const NavBar = ({ children }: { children: ReactNode }) => {
   const navigate = useNavigate();
   return (
     <nav className="flex justify-between items-center bg-[#fff] p-3 ">
@@ -11,6 +13,7 @@ const NavBar = () => {
         src={navlogo}
         alt="navbar image"
       />
+      {children}
     </nav>
   );
 };
