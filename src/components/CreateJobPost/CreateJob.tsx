@@ -61,7 +61,7 @@ const CreateJob = () => {
       >
         {/* Upload Section */}
         <div className="flex flex-col items-center w-full max-w-[800px]">
-          <h1 className="text-[#5d5c61] uppercase bg-white font-bold tracking-wide text-xl sm:text-xl border rounded-full px-6 py-2">
+          <h1 className="text-[#5d5c61] uppercase bg-white font-bold tracking-wide text-xl sm:text-xl border rounded-full px-5 py-0.5">
             STEP 1
           </h1>
           <h2 className="bg-white text-[#5d5c61] text-xl sm:text-2xl md:text-3xl font-bold mt-5 border rounded-xl w-full max-w-[560px] h-[50px] flex justify-center items-center shadow-md">
