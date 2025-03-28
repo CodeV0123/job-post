@@ -1,22 +1,16 @@
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import {
-  resetState,
-  createJobPost,
-  // toggleLanguage,
-} from "../../redux/slice/CreateJobSlice";
+import { resetState, createJobPost } from "../../redux/slice/CreateJobSlice";
 import { RootState, store } from "../../redux/store/store";
 import bgimage from "./assets/cjp_bgimage.png";
 import NavBar from "./NavBar";
 import { ChevronRightIcon } from "@heroicons/react/24/solid";
-// import CreatedJob from "../CreatedJob/CreatedJob";
 
 const CreateJob = () => {
   const dispatch = useDispatch<typeof store.dispatch>();
   const navigate = useNavigate();
 
-  // Get Redux state
   const { status } = useSelector((state: RootState) => state.createJob);
 
   const [file, setFile] = useState<File | null>(null);
@@ -62,37 +56,35 @@ const CreateJob = () => {
     <div>
       <NavBar />
       <div
-        className="flex flex-col justify-center items-center h-[90vh] p-4"
-        style={{
-          backgroundImage: `url(${bgimage})`,
-          backgroundSize: "cover",
-          backgroundRepeat: "no-repeat",
-        }}
+        className="flex flex-col justify-center items-center min-h-screen px-4 sm:px-6 py-8 bg-cover bg-no-repeat"
+        style={{ backgroundImage: `url(${bgimage})` }}
       >
         {/* Upload Section */}
-        <div className="flex flex-col items-center">
-          <h1 className="text-[#5d5c61] uppercase bg-[#fff] font-bold tracking-[0.95px] text-center border rounded-full text-xl w-[112px] h-[35px] flex justify-center items-center">
+        <div className="flex flex-col items-center w-full max-w-[800px]">
+          <h1 className="text-[#5d5c61] uppercase bg-white font-bold tracking-wide text-xl sm:text-xl border rounded-full px-6 py-2">
             STEP 1
           </h1>
-          <h2 className="bg-[#fff] text-[#5d5c61] text-3xl capitalize font-bold mt-5 border rounded-[15px] w-[560px] h-[50px] flex justify-center items-center mx-auto shadow-md">
+          <h2 className="bg-white text-[#5d5c61] text-xl sm:text-2xl md:text-3xl font-bold mt-5 border rounded-xl w-full max-w-[560px] h-[50px] flex justify-center items-center shadow-md">
             Create Job Post
           </h2>
-          <div className="flex justify-center items-center mt-10 border rounded-[15px] w-[800px] h-[240px] bg-[#fff] p-[20px] shadow-md">
+          <div className="flex justify-center items-center mt-10 border rounded-2xl w-full max-w-[800px] min-h-[240px] bg-white p-4 sm:p-6 shadow-md">
             <form
               onSubmit={handleSubmit}
               className="w-full flex flex-col items-center"
             >
-              <label className="uppercase font-bold text-[#5d5c61] text-center w-full mb-6">
+              <label className="uppercase font-bold text-[#5d5c61] text-center w-full mb-4 sm:mb-6">
                 UPLOAD JOB POST DOCUMENT
               </label>
-              <div className="flex justify-center items-center gap-2 mb-8">
+              <div className="flex flex-col sm:flex-row justify-center items-center gap-2 sm:gap-4 mb-6">
                 <label
                   htmlFor="file"
                   className="bg-gray-200 hover:bg-gray-300 text-[#5d5c61] py-2 px-4 rounded-full cursor-pointer text-sm"
                 >
                   Choose File
                 </label>
-                <span className="text-[#777777]">{fileName}</span>
+                <span className="text-[#777777] text-sm sm:text-base">
+                  {fileName}
+                </span>
                 <input
                   type="file"
                   id="file"
@@ -105,7 +97,7 @@ const CreateJob = () => {
                 <button
                   type="submit"
                   disabled={status === "loading"}
-                  className="px-6 py-2 bg-[#8bbee0] text-white font-medium rounded-full hover:bg-blue-700 disabled:bg-blue-300"
+                  className="px-4 sm:px-6 py-2 bg-[#8bbee0] text-white font-medium rounded-full hover:bg-blue-700 disabled:bg-blue-300"
                 >
                   {status === "loading"
                     ? "Uploading..."
@@ -116,15 +108,13 @@ const CreateJob = () => {
                 <button
                   type="button"
                   onClick={handleReset}
-                  className="px-6 py-2 bg-[#e9deef] text-[#73737f] font-medium rounded-full hover:bg-gray-100"
+                  className="px-4 sm:px-6 py-2 bg-[#e9deef] text-[#73737f] font-medium rounded-full hover:bg-gray-100"
                 >
                   Reset
                 </button>
               </div>
-              {/* <p className="mt-4 text-center text-sm text-red-800">{message}</p> */}
               {message && (
                 <p className="text-red-500 mt-4 text-sm text-center">
-                  {" "}
                   {message}
                 </p>
               )}
@@ -141,10 +131,10 @@ const CreateJob = () => {
         {status === "succeeded" && (
           <button
             onClick={() => navigate("/generate-image")}
-            className="absolute right-10 transform -translate-y-1/5 bg-[#fff] p-2 rounded-full"
+            className="fixed right-1 sm:right-10 bottom-10 bg-white p-2 rounded-full shadow-lg"
           >
             <ChevronRightIcon
-              className="w-8 h-8"
+              className="w-6 h-6 sm:w-8 sm:h-8"
               strokeWidth={3}
               stroke="#5d5c61"
             />
