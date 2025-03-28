@@ -24,12 +24,27 @@ const ChatStream = () => {
   );
   console.log("ChatStream Component chatResponse:", chatResponse);
 
+  const [successMessage, setSuccessMessage] = useState<string | null>(null);
+
   const jobDescription = useSelector(
     (state: RootState) => state.createJob.jobPost
   );
   console.log("Job Description before dispatch:", jobDescription);
 
   console.log(chatResponse);
+
+  useEffect(() => {
+    if (status === "succeeded") {
+      navigate("/created-job");
+    }
+  }, [status, navigate]);
+
+  useEffect(() => {
+    if (status === "succeeded") {
+      setSuccessMessage("Chat stream submitted successfully!");
+      setTimeout(() => setSuccessMessage(null), 3000);
+    }
+  }, [status]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -43,12 +58,6 @@ const ChatStream = () => {
       fetchChatStream({ prompt, job_description: jobDescription || {} })
     );
   };
-
-  useEffect(() => {
-    if (status === "succeeded") {
-      navigate("/created-job");
-    }
-  }, [status, navigate]);
 
   const handleReset = () => {
     setPrompt("");
@@ -91,13 +100,17 @@ const ChatStream = () => {
                 placeholder="Enter your request"
                 className="w-[70%] px-4 py-2 text-center border rounded-full text-[#5d5c61]"
               />
-              <div className="flex justify-end space-x-4">
+              <div className="flex justify-end space-x-8">
                 <button
                   type="submit"
                   className="bg-[#324c3d] text-white px-6 py-2 rounded-full hover:bg-green-800 transition-colors"
                   disabled={status === "loading"}
                 >
-                  {status === "loading" ? "Submitting..." : "SUBMIT"}
+                  {status === "loading"
+                    ? "Submitting..."
+                    : status === "succeeded"
+                    ? "Submitted"
+                    : "SUBMIT"}
                 </button>
                 <button
                   type="button"
@@ -110,7 +123,10 @@ const ChatStream = () => {
               {status === "failed" && (
                 <p className="text-red-500 mt-4">{error}</p>
               )}
-              <p className="text-red-500 mt-4">{message}</p>
+              {message && <p className="text-red-500 mt-4">{message}</p>}
+              {successMessage && (
+                <p className="text-green-500 mt-4">{successMessage}</p>
+              )}
             </form>
           </div>
           {/* {status === "succeeded" && chatResponse && (
