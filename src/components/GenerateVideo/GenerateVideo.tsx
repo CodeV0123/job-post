@@ -96,134 +96,141 @@ const GenerateVideo = () => {
 
   return (
     <>
-      <NavBar />
+      <NavBar>
+        <div className="block sm:hidden">
+          <ToggleLanguage colorScheme="green" textColor="text-gray-700" />
+        </div>
+      </NavBar>
       <div
-        className="flex justify-center items-center h-[90vh]"
-        style={{
-          backgroundImage: `url(${bgimage})`,
-          backgroundSize: "cover",
-          backgroundRepeat: "no-repeat",
-        }}
+        className="flex justify-center items-center min-h-screen p-4 bg-cover bg-no-repeat"
+        style={{ backgroundImage: `url(${bgimage})` }}
       >
-        <div className="flex flex-col justify-center items-center">
-          <h1 className="text-[#5d5c61] uppercase bg-[#fff] font-bold tracking-[0.95px] text-center border rounded-full text-xl w-[112px] h-[35px] flex justify-center items-center">
-            Step 3
-          </h1>
+        <div className="w-full max-w-4xl px-4">
+          <div className="flex flex-col items-center">
+            <h1 className="text-[#5d5c61] uppercase bg-[#fff] font-bold tracking-wide text-center border rounded-full text-sm sm:text-xl w-[100px] sm:w-[112px] h-[30px] sm:h-[35px] flex justify-center items-center">
+              Step 3
+            </h1>
 
-          <h2 className="bg-[#fff] text-[#5d5c61] capitalize text-3xl font-bold mt-5 border rounded-[15px] w-[560px] h-[50px] flex justify-center items-center mx-auto shadow-md">
-            Generate Video
-          </h2>
+            <h2 className="bg-[#fff] text-[#5d5c61] capitalize text-xl sm:text-3xl font-bold mt-5 border rounded-lg sm:rounded-[15px] w-full sm:w-[560px] h-[40px] sm:h-[50px] flex justify-center items-center mx-auto shadow-md">
+              Generate Video
+            </h2>
 
-          <div className="flex flex-col justify-center items-center mt-10 gap-3 border rounded-[15px] w-[800px] min-h-[350px] bg-[#fff] p-[20px] shadow-lg">
-            <div className="mt-3 flex gap-9 w-[60%]">
-              <label className="text-[#324c3d] font-semibold">
-                SELECTED TEMPLATE:
-              </label>
-              <p className="text-[#324c3d] font-semibold">
-                {selectedTemplate?.name || "No template selected"}
-              </p>
-            </div>
+            <div className="w-full max-w-[800px] mt-10 border rounded-[15px] bg-[#fff] p-4 sm:p-[20px] shadow-lg">
+              <div className="flex flex-col sm:flex-row items-start sm:items-center mb-4 gap-2 sm:gap-9">
+                <label className="text-[#324c3d] font-semibold">
+                  SELECTED TEMPLATE:
+                </label>
+                <p className="text-[#324c3d] font-semibold text-sm sm:text-base truncate">
+                  {selectedTemplate?.name || "No template selected"}
+                </p>
+              </div>
 
-            {/* <div className="mt-3 flex flex-col w-[60%]">
-              <label className="text-[#324c3d] font-semibold">
-                SELECT GENERATED IMAGE:
-              </label>
-              <select
-                className="w-full mt-1 p-2 border rounded-full"
-                onChange={handleImageSelect}
-              >
-                <option value="">Select an image</option>
-                {images.map((image, index) => (
-                  <option key={index} value={image}>
-                    Image {index + 1}
-                  </option>
-                ))}
-              </select>
-            </div> */}
+              <div className="relative w-full sm:w-[60%] mb-4 group">
+                <label className="text-[#324c3d] font-semibold block mb-1">
+                  SELECT GENERATED IMAGE:{" "}
+                </label>
+                <select
+                  className="w-full p-2 border rounded-full text-sm"
+                  onChange={handleImageSelect}
+                >
+                  <option value="">Select an image</option>
+                  {images.map((image, index) => (
+                    <option key={index} value={image}>
+                      Image {index + 1}
+                    </option>
+                  ))}
+                </select>
 
-            <div className="relative w-[60%] group">
-              <label className="text-[#324c3d] font-semibold">
-                SELECT GENERATED IMAGE:{" "}
-                <span className="text-sm italic text-[#777777]">
-                  (hover over selected image for preview)
-                </span>
-              </label>
-              <select
-                className="w-full mt-1 p-2 border rounded-full"
-                onChange={handleImageSelect}
-              >
-                <option value="">Select an image</option>
-                {images.map((image, index) => (
-                  <option key={index} value={image}>
-                    Image {index + 1}
-                  </option>
-                ))}
-              </select>
+                {/* Hover Preview */}
+                {/* Hover Preview */}
+                {selectedImage && (
+                  <>
+                    {/* Default hover preview for medium & large screens */}
+                    <div className="hidden sm:block absolute top-[-50px] right-[-312px] group-hover:block w-[230px] h-[230px] border border-gray-300 rounded-xl shadow-lg overflow-hidden">
+                      <img
+                        src={URL.createObjectURL(selectedImage)}
+                        alt="Selected preview"
+                        className="w-full h-full object-cover"
+                        onError={(e) =>
+                          console.error("🚨 Image failed to load:", e)
+                        }
+                      />
+                    </div>
 
-              {/* Hover Preview (Fixed) */}
-              {selectedImage && (
-                <div className="absolute top-[-70px] right-[-167px] hidden group-hover:block w-[140px] h-[140px] border border-gray-300 rounded-xl shadow-lg overflow-hidden">
-                  <img
-                    src={URL.createObjectURL(selectedImage)}
-                    alt="Selected preview"
-                    className="w-full h-full object-cover"
-                    onError={(e) =>
-                      console.error("🚨 Image failed to load:", e)
-                    }
-                  />
+                    {/* Image preview for small screens */}
+                    <div className="block sm:hidden fixed top-[110px] left-1 w-[120px] h-[120px] border border-gray-300 rounded-full shadow-lg overflow-hidden p-2">
+                      <img
+                        src={URL.createObjectURL(selectedImage)}
+                        alt="Selected preview"
+                        className="w-full h-full object-cover"
+                        onError={(e) =>
+                          console.error("🚨 Image failed to load:", e)
+                        }
+                      />
+                    </div>
+                  </>
+                )}
+              </div>
+
+              <div className="mb-4 w-full sm:w-[60%]">
+                <div className="flex items-center gap-2">
+                  <p className="text-[#324c3d] font-semibold">SCRIPT:</p>
+                  <p className="text-[#324c3d] font-medium text-xs sm:text-sm truncate">
+                    {script}
+                  </p>
                 </div>
+              </div>
+
+              <div className="flex flex-col sm:flex-row  gap-4 mt-5">
+                <button
+                  className="bg-[#324c3d] text-white px-6 py-2 rounded-full hover:bg-green-800 transition w-full sm:w-auto"
+                  onClick={handleSubmit}
+                  disabled={status === "loading"}
+                >
+                  {status === "loading"
+                    ? "Generating..."
+                    : status === "succeeded"
+                    ? "Generated"
+                    : "SUBMIT"}
+                </button>
+                <button
+                  className="bg-[#a9b7aa] text-[#fff] px-6 py-2 rounded-full hover:bg-gray-400 transition w-full sm:w-auto"
+                  onClick={() => dispatch(resetVideoState())}
+                >
+                  RESET
+                </button>
+              </div>
+
+              {message && (
+                <p className="text-red-500 text-sm mt-4">{message}</p>
+              )}
+              {successMessage && (
+                <p className="text-green-500 text-sm mt-4">{successMessage}</p>
               )}
             </div>
-
-            <div className="flex flex-wrap w-[60%]">
-              <p className="text-[#324c3d] font-semibold">SCRIPT:</p>
-              <p className="text-[#324c3d] font-medium text-[15px] truncate">
-                {script}
-              </p>
-            </div>
-
-            <div className="flex gap-[100px] items-center w-[50%] mt-5">
-              <button
-                className="bg-[#324c3d] text-white px-6 py-2 rounded-full hover:bg-green-800 transition"
-                onClick={handleSubmit}
-                disabled={status === "loading"}
-              >
-                {status === "loading"
-                  ? "Generating..."
-                  : status === "succeeded"
-                  ? "Generated..."
-                  : "SUBMIT"}
-              </button>
-              <button
-                className="bg-[#a9b7aa] text-[#fff] px-6 py-2 rounded-full ml-3 hover:bg-gray-400 transition"
-                onClick={() => dispatch(resetVideoState())}
-              >
-                RESET
-              </button>
-            </div>
-            {message && <p className="text-red-500 text-sm">{message}</p>}
-            {successMessage && (
-              <p className="text-green-500 text-sm">{successMessage}</p>
-            )}
-            {/* <p className="text-red-500 mt-4">{message}</p> */}
           </div>
+
+          {/* Forward Chevron Icon */}
+          {status === "succeeded" && (
+            <button
+              onClick={() => navigate("/created-job")}
+              className="fixed right-[40%] bottom-4 sm:right-10 sm:top-[100px] sm:bottom-auto 
+               bg-gradient-to-r from-[#8bbee0] to-[#5d5c61] text-white 
+               p-3 sm:p-4 rounded-full shadow-xl transition-transform duration-300 
+               ease-in-out hover:scale-110 hover:shadow-2xl animate-bounce"
+            >
+              <ChevronRightIcon
+                className="w-7 h-7 sm:w-9 sm:h-9"
+                strokeWidth={3}
+                stroke="white"
+              />
+            </button>
+          )}
         </div>
-        {/* Forward Button */}
-        {status === "succeeded" && (
-          <button
-            onClick={() => navigate("/created-job")}
-            className="absolute right-10 transform -translate-y-1/5 bg-[#fff] p-2 rounded-full"
-          >
-            <ChevronRightIcon
-              className="w-8 h-8"
-              strokeWidth={3}
-              stroke="#5d5c61"
-            />
-          </button>
-        )}
       </div>
 
-      <div className="absolute bottom-5 right-5">
+      {/* Toggle Language Button - hidden on small screens */}
+      <div className="hidden sm:block fixed bottom-5 right-5">
         <ToggleLanguage colorScheme="green" textColor="text-white" />
       </div>
     </>
