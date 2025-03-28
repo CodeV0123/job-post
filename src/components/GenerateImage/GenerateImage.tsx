@@ -19,7 +19,6 @@ const GenerateImage = () => {
     (state: RootState) => state.generateImage
   );
 
-  // Local State for File Upload (DO NOT store file in Redux)
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [message, setMessage] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
@@ -31,22 +30,18 @@ const GenerateImage = () => {
     }
   }, [status]);
 
-  // Handle File Selection
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0] || null;
     setSelectedFile(file);
-
     if (file) {
       dispatch(setTemplateFile(file));
     }
   };
 
-  //   Handle Dropdown Change
   const handleSourceChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     dispatch(setImageSource(event.target.value as "stock_photo" | "ai_image"));
   };
 
-  // Handle Submit
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
     if (!selectedFile) {
@@ -73,25 +68,26 @@ const GenerateImage = () => {
 
   return (
     <>
-      <NavBar />
+      <NavBar>
+        {/* Add ToggleLanguage to NavBar for small screens */}
+        <div className="block sm:hidden">
+          <ToggleLanguage colorScheme="green" textColor="text-gray-700" />
+        </div>
+      </NavBar>
       <div
-        className="flex justify-center items-center h-[90vh]"
-        style={{
-          backgroundImage: `url(${bgimage})`,
-          backgroundSize: "cover",
-          backgroundRepeat: "no-repeat",
-        }}
+        className="flex justify-center items-center min-h-screen p-4 bg-cover bg-no-repeat"
+        style={{ backgroundImage: `url(${bgimage})` }}
       >
-        <div className="flex flex-col justify-center items-center">
-          <h1 className="text-[#5d5c61] uppercase bg-[#fff] font-bold tracking-[0.95px] text-center border rounded-full text-xl w-[112px] h-[35px] flex justify-center items-center">
+        <div className="flex flex-col justify-center items-center w-full max-w-4xl p-4">
+          <h1 className="text-[#5d5c61] bg-[#fff] uppercase font-bold tracking-wide text-center border rounded-full text-lg sm:text-xl w-[100px] sm:w-[112px] h-[30px] sm:h-[35px] flex justify-center items-center">
             Step 2
           </h1>
 
-          <h2 className="bg-[#fff] text-[#5d5c61] capitalize text-3xl font-bold mt-5 border rounded-[15px] w-[560px] h-[50px] flex justify-center items-center mx-auto shadow-md">
+          <h2 className="bg-white text-[#5d5c61] capitalize text-2xl sm:text-3xl font-bold mt-5 border rounded-lg sm:rounded-[15px] w-full sm:w-[500px] h-[50px] flex justify-center items-center mx-auto shadow-md">
             Generate Image
           </h2>
 
-          <div className="flex justify-center items-center mt-10 border rounded-[15px] w-[800px] h-[270px] bg-[#fff] p-[20px] shadow-lg">
+          <div className="flex justify-center items-center mt-10 border rounded-2xl w-full max-w-[800px] min-h-[240px] bg-white p-4 sm:p-6 shadow-md">
             <form
               className="w-full flex flex-col items-center"
               onSubmit={handleSubmit}
@@ -102,18 +98,15 @@ const GenerateImage = () => {
               <input
                 type="file"
                 accept=".jpg,.png,.jpeg,.svg,.webp"
-                className="w-[30%] text-sm text-[#5d5c61] file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-gray-200 file:text-[#5d5c61] hover:file:bg-gray-300"
+                className="w-full sm:w-[60%] md:w-[50%] text-sm text-[#5d5c61] file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-gray-200 file:text-[#5d5c61] hover:file:bg-gray-300"
                 onChange={handleFileChange}
               />
 
-              <div className="relative w-[30%] mt-4">
-                {/* <label className="uppercase font-bold text-[#5d5c61] text-sm mb-2 w-full block text-center">
-                  Select Image Source
-                </label> */}
+              <div className="relative w-full sm:w-[60%] md:w-[50%] mt-4">
                 <select
                   value={imageSource}
                   onChange={handleSourceChange}
-                  className="block w-full px-4 py-2 border border-gray-300 bg-white rounded-lg shadow-sm focus:ring-2 focus:ring-[#5d5c61] focus:outline-none"
+                  className="block w-full px-4 py-2 border border-gray-300 bg-white rounded-xl shadow-sm focus:ring-2 focus:ring-[#5d5c61] focus:outline-none"
                 >
                   <option value="stock_photo">Stock Photo</option>
                   <option value="ai_image">AI Image</option>
@@ -122,7 +115,7 @@ const GenerateImage = () => {
 
               <button
                 type="submit"
-                className="px-6 py-3 capitalize w-[300px] mt-6 bg-[#324c3d] text-white font-medium rounded-full text-lg hover:bg-[#283d30] transition-all duration-300"
+                className="px-6 py-3 capitalize w-full sm:w-[300px] mt-6 bg-[#324c3d] text-white font-medium rounded-full text-lg hover:bg-[#283d30] transition-all duration-300"
                 disabled={status === "loading"}
               >
                 {status === "loading"
@@ -143,11 +136,12 @@ const GenerateImage = () => {
             </form>
           </div>
         </div>
+
         {/* Forward Chevron Icon */}
         {status === "succeeded" && (
           <button
             onClick={() => navigate("/generate-video")}
-            className="absolute right-10 transform -translate-y-1/5 bg-[#fff] p-2 rounded-full"
+            className="absolute right-5 sm:right-10 bottom-5 bg-white p-2 rounded-full shadow-md"
           >
             <ChevronRightIcon
               className="w-8 h-8"
@@ -156,8 +150,9 @@ const GenerateImage = () => {
             />
           </button>
         )}
-        {/* Toggle Language Button - Positioned at Bottom Right */}
-        <div className="absolute bottom-5 right-5">
+
+        {/* Toggle Language Button - hidden on small screens */}
+        <div className="hidden sm:block absolute bottom-5 right-5">
           <ToggleLanguage colorScheme="green" textColor="text-white" />
         </div>
       </div>
