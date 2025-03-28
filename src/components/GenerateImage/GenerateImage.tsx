@@ -141,12 +141,15 @@ const GenerateImage = () => {
         {status === "succeeded" && (
           <button
             onClick={() => navigate("/generate-video")}
-            className="absolute right-5 sm:right-10 bottom-5 bg-white p-2 rounded-full shadow-md"
+            className="fixed right-[40%] bottom-4 sm:right-10 sm:top-[100px] sm:bottom-auto 
+               bg-gradient-to-r from-[#8bbee0] to-[#5d5c61] text-white 
+               p-3 sm:p-4 rounded-full shadow-xl transition-transform duration-300 
+               ease-in-out hover:scale-110 hover:shadow-2xl animate-bounce"
           >
             <ChevronRightIcon
-              className="w-8 h-8"
+              className="w-7 h-7 sm:w-9 sm:h-9"
               strokeWidth={3}
-              stroke="#5d5c61"
+              stroke="white"
             />
           </button>
         )}
