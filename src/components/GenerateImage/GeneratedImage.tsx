@@ -8,7 +8,7 @@ export const GeneratedImage = () => {
   );
   if (status !== "succeeded" || images.length === 0) return null;
   return (
-    <div className="mt-6 grid grid-cols-2 gap-4 bg-white rounded-lg shadow-lg p-6 max-w-xl w-full mx-4 relative overflow-hidden">
+    <div className="mt-6 grid grid-cols-2 gap-4 bg-white rounded-lg shadow-lg p-3 max-w-xl w-full mx-4 relative overflow-hidden">
       {images.map((image, index) => (
         <img
           key={index}
