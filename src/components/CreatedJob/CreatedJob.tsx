@@ -362,7 +362,9 @@ const CreatedJob: React.FC<CreatedJobProps> = ({ jobPost, language }) => {
             <div className="space-y-4 md:space-y-6">
               {/* Responsibilities */}
               <div>
-                <h3 className="text-sm md:text-sm mb-3">Responsibilities:</h3>
+                <h3 className="text-sm md:text-sm mb-3">
+                  {language === "english" ? "Responsibilities:" : "Aufgaben:"}
+                </h3>
                 <ul className="list-disc list-inside text-xs md:text-sm">
                   {formatAsList(
                     language === "german"
@@ -374,7 +376,11 @@ const CreatedJob: React.FC<CreatedJobProps> = ({ jobPost, language }) => {
 
               {/* Qualifications */}
               <div>
-                <h3 className="text-sm md:text-sm mb-3">Qualifications:</h3>
+                <h3 className="text-sm md:text-sm mb-3">
+                  {language === "english"
+                    ? "Qualifications:"
+                    : "Qualifikationen:"}
+                </h3>
                 <ul className="list-disc list-inside text-xs md:text-sm">
                   {formatAsList(
                     language === "german"
@@ -386,7 +392,9 @@ const CreatedJob: React.FC<CreatedJobProps> = ({ jobPost, language }) => {
 
               {/* Benefits */}
               <div>
-                <h3 className="text-sm md:text-sm mb-3">Benefits:</h3>
+                <h3 className="text-sm md:text-sm mb-3">
+                  {language === "english" ? "Benefits:" : "Vorteile:"}
+                </h3>
                 <ul className="list-disc list-inside text-xs md:text-sm">
                   {formatAsList(
                     language === "german"
@@ -399,7 +407,11 @@ const CreatedJob: React.FC<CreatedJobProps> = ({ jobPost, language }) => {
               {/* Application */}
               <div className="flex flex-col mb-2 text-xs md:text-sm">
                 <h3 className="text-sm md:text-sm mb-1">
-                  Interested? <br /> Then apply now!
+                  {language === "english" ? "Interested?" : "Interessiert?"}{" "}
+                  <br />{" "}
+                  {language === "english"
+                    ? "Then apply now!"
+                    : "Dann bewerben Sie sich jetzt!"}
                 </h3>
                 <p className="text-[#666666]">
                   {language === "german"
@@ -412,7 +424,11 @@ const CreatedJob: React.FC<CreatedJobProps> = ({ jobPost, language }) => {
 
               {/* Contact Details Section */}
               <div className="mt-2 text-xs md:text-sm">
-                <h3 className="text-sm md:text-sm">Contact Person:</h3>
+                <h3 className="text-sm md:text-sm">
+                  {language === "english"
+                    ? "Contact Person:"
+                    : "Ansprechpartner:"}
+                </h3>
                 <p>{contact_person || ""}</p>
                 <p>Phone: {phone || "Not available"}</p>
                 <p>Email: {email || "Not available"}</p>
