@@ -20,6 +20,8 @@ const GeneratedVideo = () => {
     (state: RootState) => state.createJob.location || "Location Not Available"
   );
 
+  const { language } = useSelector((state: RootState) => state.createJob);
+
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
 
@@ -61,7 +63,8 @@ const GeneratedVideo = () => {
             {/* Overlay at Bottom */}
             <div className="absolute bottom-0 left-0 w-full bg-red-700 text-white p-3 sm:p-4">
               <h1 className="text-lg sm:text-xl font-bold">
-                Job Title: {jobTitle}
+                {language === "english" ? "Job Title:" : "Berufsbezeichnung"}{" "}
+                {jobTitle}
               </h1>
               <p className="text-sm sm:text-base">({location})</p>
 
@@ -88,13 +91,21 @@ const GeneratedVideo = () => {
                     </li>
                   ))
                 ) : (
-                  <p className="text-sm">No taglines available</p>
+                  <p className="text-sm">
+                    {language === "english"
+                      ? "No taglines available"
+                      : "Keine Slogans verfügbar"}
+                  </p>
                 )}
               </ul>
             </div>
           </div>
         ) : (
-          <p className="text-center text-sm sm:text-base">No video available</p>
+          <p className="text-center text-sm sm:text-base">
+            {language === "english"
+              ? "No video available"
+              : "Kein Video verfügbar"}
+          </p>
         )}
       </div>
     </div>
