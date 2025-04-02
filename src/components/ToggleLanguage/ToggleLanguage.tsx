@@ -17,7 +17,15 @@ const ToggleLanguage = ({
   return (
     <div className="flex flex-col items-center">
       <span className={`font-semibold text-center text-sm mb-2 ${textColor}`}>
-        TOGGLE <br /> LANGUAGE
+        {language === "english" ? (
+          <>
+            TOGGLE <br /> LANGUAGE
+          </>
+        ) : (
+          <>
+            SPRACHE <br /> UMSCHALTEN
+          </>
+        )}
       </span>
       <div
         className={`relative w-24 h-8 flex items-center rounded-full cursor-pointer transition-all duration-300 ${

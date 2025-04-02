@@ -12,6 +12,7 @@ const ChatStream = () => {
   const dispatch = useDispatch<AppDispatch>();
 
   const { status, error } = useSelector((state: RootState) => state.chatStream);
+  const { language } = useSelector((state: RootState) => state.createJob);
 
   const chatResponse = useSelector(
     (state: RootState) => state.chatStream.chatResponse
@@ -28,7 +29,11 @@ const ChatStream = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!prompt.trim()) {
-      setMessage("Please enter a prompt!");
+      setMessage(
+        language === "english"
+          ? "Please enter a prompt!"
+          : "Bitte geben Sie eine Eingabeaufforderung ein!"
+      );
       setTimeout(() => setMessage(null), 3000);
       return;
     }
@@ -47,7 +52,7 @@ const ChatStream = () => {
     <>
       <div className="flex flex-col justify-center items-center">
         <h2 className="bg-[#fff] text-[#000] text-base px-10 capitalize border rounded-full flex justify-center items-center mx-auto shadow-md">
-          Chat Stream
+          {language === "english" ? "Chat Stream" : "Chat Stream (DE)"}
         </h2>
         <div className="flex justify-center flex-col items-center mt-6 border rounded-[15px] w-[25rem] h-[14rem]  bg-[#fff] p-6 shadow-lg">
           <form
@@ -55,8 +60,12 @@ const ChatStream = () => {
             className="w-full flex flex-col items-center space-y-4"
           >
             <label htmlFor="prompt" className="text-[#5d5c61] flex flex-col">
-              <span className="text-[#000] font-medium">PROMPT:</span> (Please
-              prompt for additional details that you would like to amend!)
+              <span className="text-[#000] font-medium">
+                {language === "english" ? "PROMPT:" : "PROMPT:"}
+              </span>{" "}
+              {language === "english"
+                ? "(Please prompt for additional details that you would like to amend!)"
+                : "(Bitte geben Sie zusätzliche Angaben an, die Sie ändern möchten!)"}
             </label>
             <input
               id="prompt"
@@ -73,17 +82,23 @@ const ChatStream = () => {
                 disabled={status === "loading"}
               >
                 {status === "loading"
-                  ? "Submitting..."
+                  ? language === "english"
+                    ? "Submitting..."
+                    : "Einreichen..."
                   : status === "succeeded"
-                  ? "Submitted"
-                  : "Submit"}
+                  ? language === "english"
+                    ? "Submitted"
+                    : "Eingereicht"
+                  : language === "english"
+                  ? "Submit"
+                  : "Einreichen"}
               </button>
               <button
                 type="button"
                 onClick={handleReset}
                 className="bg-[#f2a078] text-[#fff] px-6 py-2 rounded-full"
               >
-                Reset
+                {language === "english" ? "Reset" : "Zurücksetzen"}
               </button>
             </div>
             {status === "failed" && (

@@ -19,6 +19,8 @@ const GenerateVideo = () => {
       state.createJob?.voice?.english?.script || "No voice script provided"
   );
 
+  const { language } = useSelector((state: RootState) => state.createJob);
+
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const [selectedTemplate, setSelectedTemplate] = useState<File | null>(null);
   const [message, setMessage] = useState<string | null>(null);
@@ -60,7 +62,11 @@ const GenerateVideo = () => {
 
   const handleSubmit = () => {
     if (!selectedImage || !selectedTemplate) {
-      setMessage("❌ Please select both an image and a template.");
+      setMessage(
+        language === "english"
+          ? "Please select both an image and a template."
+          : "Bitte wählen Sie sowohl ein Bild als auch eine Vorlage aus"
+      );
       setTimeout(() => setMessage(null), 3000);
       return;
     }
@@ -139,14 +145,16 @@ const GenerateVideo = () => {
       </div> */}
       <div className="flex flex-col justify-center items-center">
         <h2 className="bg-white text-black text-base px-10 capitalize border rounded-full flex justify-center items-center mx-auto shadow-md">
-          Generate Video
+          {language === "english" ? "Generate Video" : "Video generieren"}
         </h2>
 
         <div className="flex flex-col justify-center items-center mt-6 border rounded-[15px] w-[25rem] min-h-[15rem] bg-white p-6 shadow-lg gap-4">
           {/* Selected Template */}
           <div className="flex flex-row w-[80%]">
             <label className="text-black truncate font-medium uppercase">
-              Selected Template:
+              {language === "english"
+                ? "Selected Template:"
+                : "Ausgewählte Vorlage:"}
             </label>
             <p className="text-[#000] truncate">
               {selectedTemplate?.name || "No template selected"}
@@ -156,13 +164,19 @@ const GenerateVideo = () => {
           {/* Select Generated Image */}
           <div className="flex flex-col w-[80%]">
             <label className="text-black font-medium uppercase">
-              Select Generated Image:
+              {language === "english"
+                ? "Select Generated Image:"
+                : "Wählen Sie das generierte Bild aus:"}
             </label>
             <select
               className="w-full mt-1 p-2 border rounded-full focus:ring-1 focus:ring-gray-400 outline-none"
               onChange={handleImageSelect}
             >
-              <option value="">Select an image</option>
+              <option value="">
+                {language === "english"
+                  ? "Select an image"
+                  : "Wählen Sie ein Bild aus"}
+              </option>
               {images.map((image, index) => (
                 <option key={index} value={image}>
                   Image {index + 1}
@@ -173,7 +187,9 @@ const GenerateVideo = () => {
 
           {/* Script */}
           <div className="flex flex-row items-center w-[80%]">
-            <label className="text-black font-medium uppercase">Script:</label>
+            <label className="text-black font-medium uppercase">
+              {language === "english" ? "Script:" : "Skript"}
+            </label>
             <p className="text-[#000] p-1 text-center truncate">{script}</p>
           </div>
 
@@ -184,13 +200,23 @@ const GenerateVideo = () => {
               onClick={handleSubmit}
               disabled={status === "loading"}
             >
-              {status === "loading" ? "Generating..." : "Submit"}
+              {status === "loading"
+                ? language === "english"
+                  ? "Generating..."
+                  : "Generierung..."
+                : status === "succeeded"
+                ? language === "english"
+                  ? "Generated"
+                  : "Generiert"
+                : language === "english"
+                ? "Submit"
+                : "Einreichen"}
             </button>
             <button
               className="w-full bg-[#f2a078] text-white px-4 py-2 rounded-full"
               onClick={() => dispatch(resetVideoState())}
             >
-              Reset
+              {language === "english" ? "Reset" : "Zurücksetzen"}
             </button>
           </div>
 

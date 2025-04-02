@@ -13,6 +13,8 @@ const GenerateImage = () => {
     (state: RootState) => state.generateImage
   );
 
+  const { language } = useSelector((state: RootState) => state.createJob);
+
   // Local State for File Upload (DO NOT store file in Redux)
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [message, setMessage] = useState<string | null>(null);
@@ -39,7 +41,11 @@ const GenerateImage = () => {
       setTimeout(() => {
         setMessage(null);
       }, 3000);
-      setMessage("Please upload a template file.");
+      setMessage(
+        language === "english"
+          ? "Please upload a template file."
+          : "Bitte laden Sie eine Vorlagendatei hoch."
+      );
       return;
     }
     const state = store.getState() as RootState;
@@ -49,7 +55,11 @@ const GenerateImage = () => {
         : state.createJob.image_keyword_stockimage;
 
     if (!imageKeyword) {
-      setMessage("Error: Image Keyword is required.");
+      setMessage(
+        language === "english"
+          ? "Error: Image Keyword is required."
+          : "Fehler: Bild-Keyword ist erforderlich."
+      );
       setTimeout(() => setMessage(null), 3000);
       return;
     }
@@ -60,7 +70,7 @@ const GenerateImage = () => {
     <>
       <div className="flex flex-col justify-center items-center">
         <h2 className="bg-[#fff] text-[#000] text-base px-10 capitalize border rounded-full flex justify-center items-center mx-auto shadow-md">
-          Generate Image
+          {language === "english" ? "Generate Image" : "Bild generieren"}
         </h2>
 
         <div className="flex justify-center items-center mt-6 border rounded-[15px] w-[25rem] h-[14rem]  bg-[#fff] p-[20px] shadow-lg">
@@ -69,7 +79,9 @@ const GenerateImage = () => {
             onSubmit={handleSubmit}
           >
             <label className="uppercase font-medium text-[#000] mb-6">
-              Upload Template File
+              {language === "english"
+                ? "Upload Template File"
+                : "Vorlagendatei hochladen"}
             </label>
             <div className="flex justify-between items-center w-full gap-4">
               {/* File Input */}
@@ -86,8 +98,12 @@ const GenerateImage = () => {
                 onChange={handleSourceChange}
                 className="w-[48%] px-4 py-2 border border-gray-300 bg-white rounded-full shadow-sm focus:ring-2 focus:ring-[#5d5c61] focus:outline-none cursor-pointer"
               >
-                <option value="stock_photo">Stock Photo</option>
-                <option value="ai_image">AI Image</option>
+                <option value="stock_photo">
+                  {language === "english" ? "Stock Photo" : "Stockfoto"}
+                </option>
+                <option value="ai_image">
+                  {language === "english" ? "AI Image" : "KI-Bild"}
+                </option>
               </select>
             </div>
             <button
@@ -96,10 +112,16 @@ const GenerateImage = () => {
               disabled={status === "loading"}
             >
               {status === "loading"
-                ? "Generating..."
+                ? language === "english"
+                  ? "Generating..."
+                  : "Generierung..."
                 : status === "succeeded"
-                ? "Generated"
-                : "Generate"}
+                ? language === "english"
+                  ? "Generated"
+                  : "Generiert"
+                : language === "english"
+                ? "Generate"
+                : "Generieren"}
             </button>
             {status === "failed" && (
               <p className="text-red-500 mt-4">{error}</p>
