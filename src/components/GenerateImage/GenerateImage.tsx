@@ -27,10 +27,14 @@ const GenerateImage = () => {
 
   useEffect(() => {
     if (status === "succeeded") {
-      setSuccessMessage("Image generated successfully!");
+      setSuccessMessage(
+        language === "english"
+          ? "Image generated successfully!"
+          : "Bild erfolgreich generiert!"
+      );
       setTimeout(() => setSuccessMessage(null), 3000);
     }
-  }, [status]);
+  }, [status, language]);
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0] || null;
