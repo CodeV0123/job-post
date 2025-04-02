@@ -19,6 +19,8 @@ const GenerateImage = () => {
     (state: RootState) => state.generateImage
   );
 
+  const { language } = useSelector((state: RootState) => state.createJob);
+
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [message, setMessage] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
@@ -48,7 +50,11 @@ const GenerateImage = () => {
       setTimeout(() => {
         setMessage(null);
       }, 3000);
-      setMessage("Please upload a template file.");
+      setMessage(
+        language === "english"
+          ? "Please upload a template file."
+          : "Bitte laden Sie eine Vorlagendatei hoch."
+      );
       return;
     }
     const state = store.getState() as RootState;
@@ -58,7 +64,11 @@ const GenerateImage = () => {
         : state.createJob.image_keyword_stockimage;
 
     if (!imageKeyword) {
-      setMessage("Error: Image Keyword is required.");
+      setMessage(
+        language === "english"
+          ? "Error: Image Keyword is required."
+          : "Fehler: Bild-Keyword ist erforderlich."
+      );
       setTimeout(() => setMessage(null), 3000);
       return;
     }
@@ -80,11 +90,11 @@ const GenerateImage = () => {
       >
         <div className="flex flex-col justify-center items-center w-full max-w-4xl p-4">
           <h1 className="text-[#5d5c61] bg-[#fff] uppercase font-bold tracking-wide text-center border rounded-full text-lg sm:text-xl w-[100px] sm:w-[112px] h-[30px] sm:h-[35px] flex justify-center items-center">
-            Step 2
+            {language === "english" ? "STEP 2" : "SCHRITT 2"}
           </h1>
 
           <h2 className="bg-white text-[#5d5c61] capitalize text-2xl sm:text-3xl font-bold mt-5 border rounded-lg sm:rounded-[15px] w-full sm:w-[500px] h-[50px] flex justify-center items-center mx-auto shadow-md">
-            Generate Image
+            {language === "english" ? "Generate Image" : "Bild Generieren"}
           </h2>
 
           <div className="flex justify-center items-center mt-10 border rounded-2xl w-full max-w-[800px] min-h-[240px] bg-white p-4 sm:p-6 shadow-md">
@@ -93,14 +103,31 @@ const GenerateImage = () => {
               onSubmit={handleSubmit}
             >
               <label className="uppercase font-bold text-[#5d5c61] text-lg mb-4">
-                Upload Template File
+                {language === "english"
+                  ? "Upload Template File"
+                  : "Vorlagen-Datei Hochladen"}
               </label>
-              <input
-                type="file"
-                accept=".jpg,.png,.jpeg,.svg,.webp"
-                className="w-full sm:w-[60%] md:w-[50%] text-sm text-[#5d5c61] file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-gray-200 file:text-[#5d5c61] hover:file:bg-gray-300"
-                onChange={handleFileChange}
-              />
+
+              <div className="relative w-full sm:w-[60%] md:w-[50%]">
+                <input
+                  type="file"
+                  accept=".jpg,.png,.jpeg,.svg,.webp"
+                  id="fileInput"
+                  className="hidden"
+                  onChange={handleFileChange}
+                />
+
+                <label
+                  htmlFor="fileInput"
+                  className="w-full text-sm text-[#5d5c61] flex items-center justify-between px-4 py-2 border border-gray-300 bg-gray-200 rounded-full shadow-sm cursor-pointer hover:bg-gray-300"
+                >
+                  {selectedFile
+                    ? selectedFile.name
+                    : language === "english"
+                    ? "No file chosen"
+                    : "Keine Datei ausgewählt"}
+                </label>
+              </div>
 
               <div className="relative w-full sm:w-[60%] md:w-[50%] mt-4">
                 <select
@@ -108,8 +135,12 @@ const GenerateImage = () => {
                   onChange={handleSourceChange}
                   className="block w-full px-4 py-2 border border-gray-300 bg-white rounded-xl shadow-sm focus:ring-2 focus:ring-[#5d5c61] focus:outline-none"
                 >
-                  <option value="stock_photo">Stock Photo</option>
-                  <option value="ai_image">AI Image</option>
+                  <option value="stock_photo">
+                    {language === "english" ? "Stock Photo" : "Stockfoto"}
+                  </option>
+                  <option value="ai_image">
+                    {language === "english" ? "AI Image" : "KI-Bild"}
+                  </option>
                 </select>
               </div>
 
@@ -119,10 +150,16 @@ const GenerateImage = () => {
                 disabled={status === "loading"}
               >
                 {status === "loading"
-                  ? "Generating..."
+                  ? language === "english"
+                    ? "Generating..."
+                    : "Generierung..."
                   : status === "succeeded"
-                  ? "Generated"
-                  : "Generate"}
+                  ? language === "english"
+                    ? "Generated"
+                    : "Generiert"
+                  : language === "english"
+                  ? "Generate"
+                  : "Generieren"}
               </button>
               {status === "failed" && (
                 <p className="text-red-500 mt-2 text-sm">{error}</p>
