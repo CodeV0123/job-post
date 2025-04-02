@@ -35,7 +35,7 @@ const GeneratedVideo = () => {
   };
 
   return (
-    <div className="relative w-full max-w-lg mx-auto rounded-lg shadow-lg overflow-hidden">
+    <div className="relative w-full max-w-2xl mx-auto rounded-lg shadow-lg overflow-hidden">
       {/* Video Section */}
       <div className="relative">
         {videoResponse?.video_path ? (
@@ -43,33 +43,35 @@ const GeneratedVideo = () => {
             <video
               ref={videoRef}
               src={videoResponse.video_path}
-              className="w-full h-auto"
+              className="w-full max-w-full h-auto rounded-lg"
             />
 
-            {/* Play/Pause Button (Above Everything) */}
+            {/* Play/Pause Button */}
             <button
               onClick={togglePlayPause}
-              className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-30"
+              className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-40 hover:bg-opacity-50 transition duration-300"
             >
               {isPlaying ? (
-                <PauseIcon className="w-14 h-14 text-white opacity-90" />
+                <PauseIcon className="w-12 h-12 sm:w-14 sm:h-14 text-white opacity-90" />
               ) : (
-                <PlayIcon className="w-14 h-14 text-white opacity-90" />
+                <PlayIcon className="w-12 h-12 sm:w-14 sm:h-14 text-white opacity-90" />
               )}
             </button>
 
-            {/* Red Overlay at Bottom */}
-            <div className="absolute bottom-1 left-0 w-full bg-red-700 text-white p-4">
-              <h1 className="text-xl font-bold">JobTitle: {jobTitle} </h1>
-              <p className="font-normal">({location})</p>
+            {/* Overlay at Bottom */}
+            <div className="absolute bottom-0 left-0 w-full bg-red-700 text-white p-3 sm:p-4">
+              <h1 className="text-lg sm:text-xl font-bold">
+                Job Title: {jobTitle}
+              </h1>
+              <p className="text-sm sm:text-base">({location})</p>
 
               {/* Taglines */}
-              <ul className="list-none space-y-1 mt-2 text-base">
+              <ul className="list-none space-y-1 mt-2 text-sm sm:text-base">
                 {taglines.length > 0 ? (
                   taglines.map((tagline, index) => (
                     <li key={index} className="flex items-center">
                       <svg
-                        className="w-5 h-5 text-white mr-2"
+                        className="w-4 h-4 sm:w-5 sm:h-5 text-white mr-2"
                         xmlns="http://www.w3.org/2000/svg"
                         fill="none"
                         viewBox="0 0 24 24"
@@ -86,13 +88,13 @@ const GeneratedVideo = () => {
                     </li>
                   ))
                 ) : (
-                  <p>No taglines available</p>
+                  <p className="text-sm">No taglines available</p>
                 )}
               </ul>
             </div>
           </div>
         ) : (
-          <p className="text-center">No video available</p>
+          <p className="text-center text-sm sm:text-base">No video available</p>
         )}
       </div>
     </div>

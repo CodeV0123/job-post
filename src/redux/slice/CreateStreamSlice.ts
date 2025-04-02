@@ -1,4 +1,4 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import axios from "axios";
 
 interface JobField {
@@ -163,6 +163,9 @@ const chatStreamSlice = createSlice({
   initialState,
   reducers: {
     resetChatState: () => initialState,
+    setChatResponse: (state, action: PayloadAction<JobPost | null>) => {
+      state.chatResponse = action.payload;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -181,5 +184,5 @@ const chatStreamSlice = createSlice({
   },
 });
 
-export const { resetChatState } = chatStreamSlice.actions;
+export const { resetChatState, setChatResponse } = chatStreamSlice.actions;
 export default chatStreamSlice.reducer;

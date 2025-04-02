@@ -1,23 +1,20 @@
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import {
-  resetState,
-  createJobPost,
-  // toggleLanguage,
-} from "../../redux/slice/CreateJobSlice";
+import { resetState, createJobPost } from "../../redux/slice/CreateJobSlice";
 import { RootState, store } from "../../redux/store/store";
 import bgimage from "./assets/cjp_bgimage.png";
 import NavBar from "./NavBar";
 import { ChevronRightIcon } from "@heroicons/react/24/solid";
-// import CreatedJob from "../CreatedJob/CreatedJob";
+// import ToggleLanguage from "../ToggleLanguage/ToggleLanguage";
 
 const CreateJob = () => {
   const dispatch = useDispatch<typeof store.dispatch>();
   const navigate = useNavigate();
 
-  // Get Redux state
-  const { status } = useSelector((state: RootState) => state.createJob);
+  const { status, language } = useSelector(
+    (state: RootState) => state.createJob
+  );
 
   const [file, setFile] = useState<File | null>(null);
   const [message, setMessage] = useState<string | null>(null);
@@ -26,10 +23,16 @@ const CreateJob = () => {
 
   useEffect(() => {
     if (status === "succeeded") {
-      setSuccessMessage("Job post uploaded successfully!");
-      setTimeout(() => setSuccessMessage(null), 3000);
+      setSuccessMessage(
+        language === "german"
+          ? "Job Post erfolgreich erstellt!"
+          : "Job Post created successfully!"
+      );
+      setTimeout(() => {
+        setSuccessMessage(null);
+      }, 3000);
     }
-  }, [status]);
+  }, [status, language]);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
@@ -41,7 +44,11 @@ const CreateJob = () => {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!file) {
-      setMessage("Please select a file to upload");
+      setMessage(
+        language === "english"
+          ? "Please select a file to upload"
+          : "Bitte wählen Sie eine Datei zum Hochladen aus"
+      );
       setTimeout(() => setMessage(null), 3000);
       return;
     }
@@ -62,37 +69,39 @@ const CreateJob = () => {
     <div>
       <NavBar />
       <div
-        className="flex flex-col justify-center items-center h-[90vh] p-4"
-        style={{
-          backgroundImage: `url(${bgimage})`,
-          backgroundSize: "cover",
-          backgroundRepeat: "no-repeat",
-        }}
+        className="flex flex-col justify-center items-center min-h-screen px-4 sm:px-6 py-8 bg-cover bg-no-repeat"
+        style={{ backgroundImage: `url(${bgimage})` }}
       >
         {/* Upload Section */}
-        <div className="flex flex-col items-center">
-          <h1 className="text-[#5d5c61] uppercase bg-[#fff] font-bold tracking-[0.95px] text-center border rounded-full text-xl w-[112px] h-[35px] flex justify-center items-center">
-            STEP 1
+        <div className="flex flex-col items-center w-full max-w-[800px]">
+          <h1 className="text-[#5d5c61] uppercase bg-white font-bold tracking-wide text-xl sm:text-xl border rounded-full px-5 py-0.5">
+            {language === "english" ? "STEP 1" : "SCHRITT 1"}
           </h1>
-          <h2 className="bg-[#fff] text-[#5d5c61] text-3xl capitalize font-bold mt-5 border rounded-[15px] w-[560px] h-[50px] flex justify-center items-center mx-auto shadow-md">
-            Create Job Post
+          <h2 className="bg-white text-[#5d5c61] text-xl sm:text-2xl md:text-3xl font-bold mt-5 border rounded-xl w-full max-w-[560px] h-[50px] flex justify-center items-center shadow-md">
+            {language === "english"
+              ? "Create Job Post"
+              : "Job-Beitrag erstellen"}
           </h2>
-          <div className="flex justify-center items-center mt-10 border rounded-[15px] w-[800px] h-[240px] bg-[#fff] p-[20px] shadow-md">
+          <div className="flex justify-center items-center mt-10 border rounded-2xl w-full max-w-[800px] min-h-[240px] bg-white p-4 sm:p-6 shadow-md">
             <form
               onSubmit={handleSubmit}
               className="w-full flex flex-col items-center"
             >
-              <label className="uppercase font-bold text-[#5d5c61] text-center w-full mb-6">
-                UPLOAD JOB POST DOCUMENT
+              <label className="uppercase font-bold text-[#5d5c61] text-center w-full mb-4 sm:mb-6">
+                {language === "english"
+                  ? "UPLOAD JOB POST DOCUMENT"
+                  : "JOB-DOKUMENT HOCHLADEN"}
               </label>
-              <div className="flex justify-center items-center gap-2 mb-8">
+              <div className="flex flex-col sm:flex-row justify-center items-center gap-2 sm:gap-4 mb-6">
                 <label
                   htmlFor="file"
                   className="bg-gray-200 hover:bg-gray-300 text-[#5d5c61] py-2 px-4 rounded-full cursor-pointer text-sm"
                 >
-                  Choose File
+                  {language === "english" ? "Choose File" : "Datei auswählen"}
                 </label>
-                <span className="text-[#777777]">{fileName}</span>
+                <span className="text-[#777777] text-sm sm:text-base">
+                  {fileName}
+                </span>
                 <input
                   type="file"
                   id="file"
@@ -105,26 +114,30 @@ const CreateJob = () => {
                 <button
                   type="submit"
                   disabled={status === "loading"}
-                  className="px-6 py-2 bg-[#8bbee0] text-white font-medium rounded-full hover:bg-blue-700 disabled:bg-blue-300"
+                  className="px-4 sm:px-6 py-2 bg-[#8bbee0] text-white font-medium rounded-full hover:bg-blue-700 disabled:bg-blue-300"
                 >
                   {status === "loading"
-                    ? "Uploading..."
+                    ? language === "english"
+                      ? "Uploading..."
+                      : "Wird hochgeladen..."
                     : status === "succeeded"
-                    ? "Submitted"
-                    : "Submit"}
+                    ? language === "english"
+                      ? "Submitted"
+                      : "Eingereicht"
+                    : language === "english"
+                    ? "Submit"
+                    : "Einreichen"}
                 </button>
                 <button
                   type="button"
                   onClick={handleReset}
-                  className="px-6 py-2 bg-[#e9deef] text-[#73737f] font-medium rounded-full hover:bg-gray-100"
+                  className="px-4 sm:px-6 py-2 bg-[#e9deef] text-[#73737f] font-medium rounded-full hover:bg-gray-100"
                 >
-                  Reset
+                  {language === "english" ? "Reset" : "Zurücksetzen"}
                 </button>
               </div>
-              {/* <p className="mt-4 text-center text-sm text-red-800">{message}</p> */}
               {message && (
                 <p className="text-red-500 mt-4 text-sm text-center">
-                  {" "}
                   {message}
                 </p>
               )}
@@ -141,12 +154,12 @@ const CreateJob = () => {
         {status === "succeeded" && (
           <button
             onClick={() => navigate("/generate-image")}
-            className="absolute right-10 transform -translate-y-1/5 bg-[#fff] p-2 rounded-full"
+            className="fixed bottom-0 sm:bottom-0 right-[45%] sm:right-12 bg-gradient-to-r from-[#8bbee0] to-[#5d5c61] text-white p-3 sm:p-4 rounded-full shadow-xl transition-transform duration-300 ease-in-out hover:scale-110 hover:shadow-2xl animate-bounce"
           >
             <ChevronRightIcon
-              className="w-8 h-8"
+              className="w-7 h-7 sm:w-9 sm:h-9"
               strokeWidth={3}
-              stroke="#5d5c61"
+              stroke="white"
             />
           </button>
         )}

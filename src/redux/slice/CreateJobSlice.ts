@@ -1,4 +1,4 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import { createSelector } from "@reduxjs/toolkit";
 import { RootState } from "../store/store";
 import axios from "axios";
@@ -39,6 +39,7 @@ export const selectTaglines = createSelector(
 interface JobPost {
   german?: Record<string, string>;
   english?: Record<string, string>;
+  updated_job_post?: Partial<JobPost>;
 }
 
 interface Voice {
@@ -51,6 +52,7 @@ interface Image {
   image_keyword_stockimage: string;
   Headline: string;
   taglines: string[];
+  website: string;
 }
 
 interface CreateJobState {
@@ -68,6 +70,7 @@ interface CreateJobState {
   phone?: string;
   email?: string;
   location?: string;
+  website?: string;
 }
 
 const initialState: CreateJobState = {
@@ -94,6 +97,14 @@ const createJobSlice = createSlice({
     toggleLanguage: (state) => {
       state.language = state.language === "german" ? "english" : "german";
     },
+    setJobPost: (state, action: PayloadAction<JobPost | null>) => {
+      state.jobPost = action.payload;
+    },
+    updateJobPost: (state, action: PayloadAction<Partial<JobPost>>) => {
+      if (state.jobPost) {
+        state.jobPost = { ...state.jobPost, ...action.payload }; // Merge updated fields
+      }
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -108,6 +119,7 @@ const createJobSlice = createSlice({
 
         // Extracting image taglines
         state.image_keyword = action.payload?.image?.image_keyword || "";
+        state.website = action.payload?.image?.website || "";
         state.image_keyword_stockimage =
           action.payload?.image?.image_keyword_stockimage || "";
         state.script = action.payload?.voice?.english?.script || "";
@@ -129,5 +141,6 @@ const createJobSlice = createSlice({
   },
 });
 
-export const { resetState, toggleLanguage } = createJobSlice.actions;
+export const { resetState, toggleLanguage, setJobPost, updateJobPost } =
+  createJobSlice.actions;
 export default createJobSlice.reducer;
