@@ -24,6 +24,8 @@ const GenerateVideo = () => {
       state.createJob?.voice?.english?.script || "No voice script provided"
   );
 
+  const { language } = useSelector((state: RootState) => state.createJob);
+
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const [selectedTemplate, setSelectedTemplate] = useState<File | null>(null);
   const [message, setMessage] = useState<string | null>(null);
@@ -38,10 +40,14 @@ const GenerateVideo = () => {
 
   useEffect(() => {
     if (status === "succeeded") {
-      setSuccessMessage("Video generated successfully!");
+      setSuccessMessage(
+        language === "english"
+          ? "Video generated successfully!"
+          : "Video erfolgreich generiert!"
+      );
       setTimeout(() => setSuccessMessage(null), 3000);
     }
-  }, [status]);
+  }, [status, language]);
 
   const base64ToBlob = (base64: string, contentType = "image/png") => {
     const byteCharacters = atob(base64);
@@ -73,7 +79,11 @@ const GenerateVideo = () => {
 
   const handleSubmit = () => {
     if (!selectedImage || !selectedTemplate) {
-      setMessage("Please select both an image and a template.");
+      setMessage(
+        language === "english"
+          ? "Please select both an image and a template."
+          : "Bitte wählen Sie sowohl ein Bild als auch eine Vorlage aus."
+      );
       setTimeout(() => setMessage(null), 3000);
       return;
     }
@@ -108,32 +118,43 @@ const GenerateVideo = () => {
         <div className="w-full max-w-4xl px-4">
           <div className="flex flex-col items-center">
             <h1 className="text-[#5d5c61] uppercase bg-[#fff] font-bold tracking-wide text-center border rounded-full text-sm sm:text-xl w-[100px] sm:w-[112px] h-[30px] sm:h-[35px] flex justify-center items-center">
-              Step 3
+              {language === "english" ? "STEP 3" : "SCHRITT 3"}
             </h1>
 
             <h2 className="bg-[#fff] text-[#5d5c61] capitalize text-xl sm:text-3xl font-bold mt-5 border rounded-lg sm:rounded-[15px] w-full sm:w-[560px] h-[40px] sm:h-[50px] flex justify-center items-center mx-auto shadow-md">
-              Generate Video
+              {language === "english" ? "Generate Video" : "Video generieren"}
             </h2>
 
             <div className="w-full max-w-[800px] mt-10 border rounded-[15px] bg-[#fff] p-4 sm:p-[20px] shadow-lg">
               <div className="flex flex-col sm:flex-row items-start sm:items-center mb-4 gap-2 sm:gap-9">
                 <label className="text-[#324c3d] font-semibold">
-                  SELECTED TEMPLATE:
+                  {language === "english"
+                    ? "SELECTED TEMPLATE:"
+                    : "AUSGEWÄHLTE VORLAGE:"}
                 </label>
                 <p className="text-[#324c3d] font-semibold text-sm sm:text-base truncate">
-                  {selectedTemplate?.name || "No template selected"}
+                  {selectedTemplate?.name ||
+                    (language === "english"
+                      ? "No template selected"
+                      : "Keine Vorlage ausgewählt")}
                 </p>
               </div>
 
               <div className="relative w-full sm:w-[60%] mb-4 group">
                 <label className="text-[#324c3d] font-semibold block mb-1">
-                  SELECT GENERATED IMAGE:{" "}
+                  {language === "english"
+                    ? "SELECT GENERATED IMAGE:"
+                    : "GENERIERTE BILDER:"}
                 </label>
                 <select
                   className="w-full p-2 border rounded-full text-sm"
                   onChange={handleImageSelect}
                 >
-                  <option value="">Select an image</option>
+                  <option value="">
+                    {language === "english"
+                      ? "Select an image"
+                      : "Wählen Sie ein Bild aus"}
+                  </option>
                   {images.map((image, index) => (
                     <option key={index} value={image}>
                       Image {index + 1}
@@ -174,7 +195,9 @@ const GenerateVideo = () => {
 
               <div className="mb-4 w-full sm:w-[60%]">
                 <div className="flex items-center gap-2">
-                  <p className="text-[#324c3d] font-semibold">SCRIPT:</p>
+                  <p className="text-[#324c3d] font-semibold">
+                    {language === "english" ? "SCRIPT:" : "SKRIPT:"}
+                  </p>
                   <p className="text-[#324c3d] font-medium text-xs sm:text-sm truncate">
                     {script}
                   </p>
@@ -188,16 +211,22 @@ const GenerateVideo = () => {
                   disabled={status === "loading"}
                 >
                   {status === "loading"
-                    ? "Generating..."
+                    ? language === "english"
+                      ? "Generating..."
+                      : "Generierung..."
                     : status === "succeeded"
-                    ? "Generated"
-                    : "SUBMIT"}
+                    ? language === "english"
+                      ? "Generated"
+                      : "Generiert"
+                    : language === "english"
+                    ? "Submit"
+                    : "Einreichen"}
                 </button>
                 <button
                   className="bg-[#a9b7aa] text-[#fff] px-6 py-2 rounded-full hover:bg-gray-400 transition w-full sm:w-auto"
                   onClick={() => dispatch(resetVideoState())}
                 >
-                  RESET
+                  {language === "english" ? "Reset" : "Zurücksetzen"}
                 </button>
               </div>
 
