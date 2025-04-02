@@ -286,23 +286,23 @@ const CreatedJob: React.FC<CreatedJobProps> = ({ jobPost, language }) => {
           </span>
         </div>
         <div className="flex flex-col items-center space-y-4">
-          <div className="h-7 bg-[#59f7f2] rounded-full w-[70px] flex items-center justify-center">
+          <div className="h-7 bg-[#59f7f2] rounded-full w-[90px] flex items-center justify-center">
             <span className="text-[#000] font-semibold text-sm uppercase">
-              step 1
+              {language === "english" ? "step 1" : "Schritt 1"}
             </span>
           </div>
           <CreateJob />
           <span className="w-[70%] h-1.5 bg-[#4f6f90] rounded-full my-4"></span>
-          <div className="h-7 bg-[#59f7f2] rounded-full w-[70px] flex items-center justify-center">
+          <div className="h-7 bg-[#59f7f2] rounded-full w-[90px] flex items-center justify-center">
             <span className="text-[#000] font-semibold text-sm uppercase">
-              step 2
+              {language === "english" ? "step 2" : "Schritt 2"}
             </span>
           </div>
           <GenerateImage />
           <span className="w-[70%] h-1.5 bg-[#4f6f90] rounded-full"></span>
-          <div className="h-7 bg-[#59f7f2] rounded-full w-[70px] flex items-center justify-center">
+          <div className="h-7 bg-[#59f7f2] rounded-full w-[90px] flex items-center justify-center">
             <span className="text-[#000] font-semibold text-sm uppercase">
-              step 3
+              {language === "english" ? "step 3" : "Schritt 3"}
             </span>
           </div>
           <GenerateVideo />
