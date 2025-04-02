@@ -307,9 +307,13 @@ const CreatedJob: React.FC<CreatedJobProps> = ({ jobPost, language }) => {
           </div>
           <GenerateVideo />
           <span className="w-[70%] h-1.5 bg-[#4f6f90] rounded-full"></span>
-          <div className="h-7 bg-[#59f7f2] rounded-full w-[85px] flex items-center justify-center">
-            <span className="text-[#000] font-semibold text-sm uppercase">
-              final step
+          <div
+            className={`h-7 bg-[#59f7f2] rounded-full flex items-center justify-center px-3 ${
+              language === "english" ? "w-[100px]" : "w-[120px]"
+            }`}
+          >
+            <span className="text-[#000] font-semibold text-sm uppercase whitespace-nowrap">
+              {language === "english" ? "final step" : "letzter schritt"}
             </span>
           </div>
           <ChatStream />
