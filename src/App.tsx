@@ -9,6 +9,7 @@ import GenerateVideo from "./components/GenerateVideo/GenerateVideo";
 import CreatedJob from "./components/CreatedJob/CreatedJob";
 import ChatStream from "./components/ChatStream/ChatStream";
 
+
 function App() {
   const { jobPost, language } = useSelector(
     (state: RootState) => state.createJob
